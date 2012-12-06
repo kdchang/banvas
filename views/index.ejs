@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <form action="./save" method="post">
+    	Username<input type="text" name='username'>
+	Password<input type="password" name='password'>
+	<button>Submit</button>
+    </form>
+  </body>
+</html>
