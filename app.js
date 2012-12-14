@@ -32,11 +32,13 @@ app.configure('development', function(){
 });
 
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
+console.log(databaseUrl);
 mongoose.connect(databaseUrl);
 
-app.get('/', function(req,res){
-	res.render('index',{title:'test'});
-});
+app.get('/',routes.index);
+/*function(req,res){
+	res.render('index');
+});*/
 
 var cookie = {};
 var randomString = function(){

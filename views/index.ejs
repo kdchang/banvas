@@ -1,22 +1,79 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Banvas</title>
+	<link href="/stylesheets/index.css" rel="stylesheet">
+</head>
+<body>
+	<div class= "header">
+	<form name="input" class= "searchbar">
+		<input type="text" name="search" class="search">
+		<input type="submit" value="Search" class="search">
+		<span class= "login">login
+			<ul>
+				<li>Username:<input type="text" name="Username"></li>
+				<li>Password:<input type="password" name="Password"></li>
+				<li><input type="submit" value="Log in"></li>
+				<a href="#register">register now</a>
+			</ul>
+		</span>
+	</form>
+	</div>
+	<div class= "container">
+	</div>
+</body>
+<script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.9.2.custom.js"></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+<script type="text/javascript" src="/js/index.js"></script>
+<script type="text/template" id="register-view">
+	<h1>Register</h1>
+	<form id='Register'>
+		<label>Email Address</label>
+		<input type='text' /><br>
+		<label>First Name</label>
+		<input type='text' /><br>
+		<label>Last Name</label>
+		<input type='text' /><br>
+		<label>Password</label>
+		<input type='password '/><br>
+		<label>Check Password</label>
+		<input type='password '/><br>
+		<a href="#index">Back to Index</a>
+	</form>
+</script>
+<script type="text/template" id="index-view">
+	<div class= "slide">
+	<ul>
+		<li><button type="button" value="first" class="focus">o</button></li>
+		<li><button type="button" value="second">o</button></li>
+		<li><button type="button" value="third">o</button></li>
+		<li><button type="button" value="forth">o</button></li>
+		<li><button type="button" value="fifth">o</button></li>
+	</ul>
+	<div class="first slider top">1111111</div>
+	<div class="second slider">2222222</div>
+	<div class="third slider">3333333</div>
+	<div class="forth slider">4444444</div>
+	<div class="fifth slider">5555555</div>
+	</div>
 
-    <form action="./save" method="post">
-    	Username<input type="text" name='username'>
-	Password<input type="password" name='password'>
-	dx<input type='textbox' name='dx'>
-	<button>Submit</button>
-    </form>
-
-    <form action='./list' method='post'>
-    	<button>Get list</button>
-    </form>
-  </body>
+	<ul class= "box">
+	<li>
+		<span></span>
+		<span id= "banvas">Create<br>Your Banvas</span>
+	</li>
+	<span></span>
+	<li>
+		<span></span>
+		<span id= "qr">Create<br>Your QR-Code</span>
+	</li>
+	<li>
+		<span></span>
+		<span id= "intern">Find<br>Intern & Jobs</span>
+	</li>
+	</ul>
+</script>
 </html>
