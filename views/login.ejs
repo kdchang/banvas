@@ -12,7 +12,7 @@
     <div class='dlogin'>
       <form class='login'>
       Email<input type="text" name='email' value='ddmail2009@gmail.com'>
-      Password<input type="password" name='password' value='default'>
+      Password<input type="password" name='password' value='asd'>
       <button id='login'>Submit</button>
       </form>
     </div>
@@ -39,9 +39,59 @@
       </form>
     </div>
 
-    <script>
+    <button id='www'>FB</button>
+    <button id='FBpush'>FBPUSH</button>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '471817496195401', // App ID from the App Dashboard
+      channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File for x-domain communication
+      status     : true, // check the login status upon init?
+      cookie     : true, // set sessions cookies to allow your server to access the session?
+      xfbml      : true  // parse XFBML tags on this page?
+    });
+
+  };
+
+  (function(d, debug){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document, /*debug*/ false));
+
       var token = null;
       var id = null;
+
+      var temp = {};
+      $('#www').click(function(){
+        FB.login(function(response) {
+          if (response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me?fields=bio,birthday,education,work', function(response) {
+              console.log(response);
+              console.log(response['education']);
+              for (i in response['education']){
+                if( response['education'][i]['type'] == 'College' || response['education'][i]['type'] == 'Graduate School' ){
+                  console.log(response['education'][i]['school']['name'])
+                  temp['School'] = response['education'][i]['school']['name'];
+                }
+              }
+              temp['Job_exp'] = JSON.stringify(response['work'][0]);
+            });
+          } else console.log('User cancelled login or did not fully authorize.');
+        });
+      })
+
+      $('#FBpush').click(function(){
+        console.log('FBpush!!!');
+        temp['token'] = token;
+        $.post('/'+id+'/modify', temp, function(message){
+          console.log(message);
+        })
+      })
 
       $('.modify').submit(function(){
         try{

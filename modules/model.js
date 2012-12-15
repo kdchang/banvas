@@ -20,6 +20,7 @@ var schema   = new mongoose.Schema({
     phone        : {type:String},
     register_date: {type:Date, default: Date.now },
     statistic    : {type:Number},
+    collect      : {type:Array},
     _id          : {select: false},
     __v          : {select: false}
 },{

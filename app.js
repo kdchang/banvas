@@ -136,18 +136,34 @@ app.post('/:id/status', function(req, res){
 app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-            accountdb.findOneAndUpdate({'id':req.params.id}).exec(function(err,data){
+            var tmp = new accountdb(req.body);
+            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp.toObject()}).exec(function(err,data){
                 if(err) throw err;
-                var tmp = new accountdb(req.body);
-                console.log(data);
-                console.log(tmp.toObject());
-                data.update({"$set":tmp}, function(err, data){
-                    console.log(err||data);
-                })
+                console.log('pushed!!!');
+                console.log(tmp);
+                res.end(JSON.stringify({err:err_code.SUCCESS}));
             })
+            res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
         }
         else res.end(JSON.stringify({err:status}));
     });
+})
+
+app.post('/:id/save', function(req, res){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS){
+            accountdb.findOne({'id':req.params.id}).exec(function(err, data){
+                if(err) throw err;
+                console.log(data);
+                data.collect.push(req.body.id);
+                account = new accountdb(data);
+                account.save();
+                res.end(JSON.stringify({err:err_code.SUCCESS}));
+            })
+            res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+        }
+        else res.end(JSON.stringify({err:status}));
+    })
 })
 
 var check_login = function( req, callback ){
@@ -165,6 +181,7 @@ var check_login = function( req, callback ){
 
 app.get('/', routes.index );
 app.get('/login', routes.login )
+app.get('/test', routes.test)
 
 var randomString = function(){
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
