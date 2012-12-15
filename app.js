@@ -65,9 +65,10 @@ app.post('/signup', function(req, res){
                 // req.session.item = {signup_token: randomString(), signup_data: req.body};
                 req.session.item = {signup_token: 'default', signup_data: req.body};
                 mail.server.send(mail.message(req.session.item.signup_data['email'], req.session.item.signup_token), function(err, data){
-                    console.log(err||data);
+                    if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
+                    else res.end(JSON.stringify({err:err_code.SUCCESS}));
+                    console.log(data);
                 })
-                res.end(JSON.stringify({err:err_code.SUCCESS}));
             }
         })
     }
@@ -133,10 +134,10 @@ app.post('/:id/status', function(req, res){
 app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-            var tmp = new accountdb(req.body);
-            console.log(tmp);
             accountdb.findOneAndUpdate({'id':req.params.id}).exec(function(err,data){
                 if(err) throw err;
+                var tmp = new accountdb(req.body);
+                console.log(tmp);
                 console.log(data);
             })
         }
