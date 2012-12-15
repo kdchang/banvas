@@ -6,7 +6,9 @@ var express = require('express')
     , fs = require('fs')
     , err_code = require('./define/err');
 
+// var databaseUrl = process.env.DATABASE_URL || 'mongodb://test:test@ds045557.mongolab.com:45557/final' ||'mongodb://localhost/test';
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
+console.log(databaseUrl);
 mongoose.connect(databaseUrl);
 var accountdb = require('./modules/model');
 var mail = require('./modules/mail_server');
@@ -171,7 +173,6 @@ var randomString = function(){
     }
     return result;
 }
-
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

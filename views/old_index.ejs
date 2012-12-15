@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <form action="./save" method="post">
+    	Username<input type="text" name='username'>
+	Password<input type="password" name='password'>
+	dx<input type='textbox' name='dx'>
+	email<input type='textbox' name='email'>
+	<button>Submit</button>
+    </form>
+
+    <form action='./list' method='post'>
+    	<button>Get list</button>
+    </form>
+  </body>
+</html>

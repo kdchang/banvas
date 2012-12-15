@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html lang= 'en-US'>
+	<head>
+		<meta charset="UTF-8">
+		<title>Banvas-Kai Di</title>
+		<link href="css/no-theme/jquery-ui-1.9.2.custom.css" rel="stylesheet">
+		<link href="css/user.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class= "header">
+			<form name="input" class= "searchbar">
+				<input type="text" name="search" class="search">
+				<input type="submit" value="Search" class="search">
+				<span class= "account">Kai Di Chung
+					<ul>
+						<li>Account Setting</li>
+						<li class="edit">Edit</li>
+						<li>Share</li>
+						<li>Help</li>
+						<li>Log Out</li>
+					</ul>
+				</span>
+			</form>
+		</div>  
+		<div class="person">
+			<img class="head" src="https://dl.dropbox.com/u/59382545/CCSP_matetrial/kaidi.jpg">
+			<span class="id">
+				<h1 class="name static">Kai Di Chung</h1>
+				<span>School:</span><p class="static">Nation Taiwan University</p><br>
+				<p class="static">Information Management, Data Mining/ Machine Learming, Taipei, Taiwan</p><br><span>Intro:</span><p class="intro static">This is Introduction </p>
+			</span>
+		</div>
+		<div>
+			<a href="http://www.facebook.com/wallymath">
+				<img class="icon social" src="https://dl.dropbox.com/u/59382545/CCSP_matetrial/Facebook-skins-post.png"  >     
+			</a>                        
+		</div>
+		<div>
+
+			<img class="icon" src="https://dl.dropbox.com/u/59382545/CCSP_matetrial/ntu-logo.gif" >
+			<p class="static">Nation Taiwan University<br>
+			Information Management, Data Mining/ Machine Learming,                Taipei, Taiwan       
+			</p>
+		</div>
+		<div>
+			<img class="icon" src="https://dl.dropbox.com/u/59382545/CCSP_matetrial/TFSH.jpg" >
+			<p class="static">Taichung First Senior High School</p>             
+		</div>
+		<div>
+			<h1>Skill</h1>
+			<ul>
+				<li class="static">PHP</li>
+				<li class="static">Design</li>
+				<li class="static">C</li>
+			</ul>
+		</div>
+		<div>
+			<h1>Timeline</h1>
+			<div class = "scroller-pane">
+				<div class = "scroller">
+					<ul class="timeline">
+						<li class= "point up" id="po_1"><div class= "content">text</div></li> 
+						<li class= "point down" id="po_2"><div class= "content">text</div></li>
+					</ul>
+				</div>                                            
+			</div>            
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
+	<script type="text/javascript" src="js/user.js"></script>
+</html>
