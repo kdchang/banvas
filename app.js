@@ -139,8 +139,11 @@ app.post('/:id/modify', function(req, res){
             accountdb.findOneAndUpdate({'id':req.params.id}).exec(function(err,data){
                 if(err) throw err;
                 var tmp = new accountdb(req.body);
-                console.log(tmp);
                 console.log(data);
+                console.log(tmp.toObject());
+                data.update({"$set":tmp}, function(err, data){
+                    console.log(err||data);
+                })
             })
         }
         else res.end(JSON.stringify({err:status}));

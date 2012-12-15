@@ -44,4 +44,5 @@ schema.virtual('first_name').set(function(name){
 schema.virtual('last_name').set(function(name){
 	this.name.last = name;
 })
+
 module.exports = mongoose.model('Banvas', schema);
