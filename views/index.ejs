@@ -12,9 +12,9 @@
 		<input type="submit" value="Search" class="search">
 		<span class= "login">login
 			<ul>
-				<li>Username:<input type="text" name="Username"></li>
-				<li>Password:<input type="password" name="Password"></li>
-				<li><input type="submit" value="Log in"></li>
+				<li>Email:<input id="email" type="text" name="Email"></li>
+				<li>Password:<input id ="password" type="password" name="Password"></li>
+				<li><input id="submit" type="submit" value="Log in"></li>
 				<a href="#register">register now</a>
 			</ul>
 		</span>
@@ -30,17 +30,21 @@
 <script type="text/javascript" src="/js/index.js"></script>
 <script type="text/template" id="register-view">
 	<h1>Register</h1>
-	<form id='Register'>
+	<form class='reg' id='Register'>
 		<label>Email Address</label>
-		<input type='text' /><br>
+		<input id='email' type='text' /><br>
 		<label>First Name</label>
-		<input type='text' /><br>
+		<input id='first' type='text' /><br>
 		<label>Last Name</label>
-		<input type='text' /><br>
+		<input id='last' type='text' /><br>
 		<label>Password</label>
-		<input type='password '/><br>
+		<input id='reg_pass' type='password'/><br>
 		<label>Check Password</label>
-		<input type='password '/><br>
+		<input id='con_pass' type='password'/><br>
+		<label>Your Personal Page ID: </label>
+		<input id='id' type='text'><br>
+		<div id="error"></div>
+		<input id='register' type='submit' value='Register'/><br>
 		<a href="#index">Back to Index</a>
 	</form>
 </script>
