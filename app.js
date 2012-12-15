@@ -1,15 +1,27 @@
 var express = require('express')
     , routes = require('./routes')
-    , user = require('./routes/user')
     , http = require('http')
     , path = require('path')
     , mongoose = require('mongoose')
-    , fs = require('fs');
+    , fs = require('fs')
+    , err_code = require('./define/err');
 
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 mongoose.connect(databaseUrl);
 var accountdb = require('./modules/model');
-var mail_server = require('./modules/mail_server');
+var mail = require('./modules/mail_server');
+
+// var ss = new accountdb({id:"default"});
+// accountdb
+//     .find({email:'ddmail2009@gmail.com'})
+//     .sort('register_date')
+//     .exec(function(err, account){
+//     if(err) throw err;
+//     console.log('find');
+//     console.log(account);
+// });
+
+var mongoStore = require('connect-mongo')(express);
 
 var app = express();
 app.configure(function(){
@@ -24,7 +36,15 @@ app.configure(function(){
     }));
     app.use(express.methodOverride());
     app.use(express.cookieParser('your secret here'));
-    app.use(express.session());
+    app.use(express.session({
+        secret: 'Banvas',
+        store: new mongoStore({
+            host: '127.0.0.1',
+            db: 'test',
+            collection: 'mysession'
+        }),
+        maxAge: new Date(Date.now() + 3600000)
+    }));
     app.use(app.router);
     app.use(require('less-middleware')({ src: __dirname + '/public' }));
     app.use(express.static(path.join(__dirname, 'public')));
@@ -34,113 +54,111 @@ app.configure('development', function(){
     app.use(express.errorHandler());
 });
 
-var objectcheck = function(obj){
-    for (i in obj) if (obj[i] == null) return false;
-    return true;
-}
-
-var message = function(email, token){
-    return {
-        text: "Welcome to Banvas!!!\n Please enter the following link to complete signup!!!\n"+
-            "http://localhost:3000/signup/confirmation?token="+token,
-            from: "Banvas <ddmail2009@gmail.com>",
-            to: email,
-            cc: null,
-        subject: "Welcome to Banvas",
-    };
-};
-
-var queue = {}
 app.post('/signup', function(req, res){
-    response = { 'status':'NCK', 'email':null, 'first_name':null, 'last_name':null, 'id':null, 'password':null };
-    for (i in req.body) response[i] = req.body[i];
-
-    if( !objectcheck(response) ){
-        response.status = 'NCK'
-        res.end(JSON.stringify(response));
-    }
-    else{
-        accountdb.find({'email':req.body.email}).exec(function(err, data){
+    var data = req.body;
+    if( data.email && data.password && data.first_name && data.last_name && data.id ){
+        accountdb.findOne({email:req.body.email}).exec(function(err,data){
             if(err) throw err;
-            console.log(data);
-            if( data.length > 0 ){
-                response.status = 'NCK'
-                res.end(JSON.stringify(response));
-            }
+            if( data )
+                res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
-                response.status = 'ACK';
-                var token = null;
-                for(i in queue){
-                    if( JSON.stringify(response) == queue[i] ){
-                        token = i
-                    }
-                }
-                if( token == null ){
-                    /*
-                    while(true){
-                        token = randomString();
-                        if(queue[token]) break;
-                    }
-                    */
-                    token = 'default';
-                }
-                queue[token] = JSON.stringify(response);
-                mail_server.send(message(response.email, token));
-                res.end(JSON.stringify(response));
+                // req.session.item = {signup_token: randomString(), signup_data: req.body};
+                req.session.item = {signup_token: 'default', signup_data: req.body};
+                mail.server.send(mail.message(req.session.item.signup_data['email'], req.session.item.signup_token), function(err, data){
+                    console.log(err||data);
+                })
+                res.end(JSON.stringify({err:err_code.SUCCESS}));
             }
-        });
+        })
     }
+    else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
 });
 
 app.get('/signup/confirmation', function(req, res){
-    var token = req.query.token;
-    var response = {'status':'NCK'};
-    
-    console.log(queue);
-    console.log(token);
-    console.log(JSON.parse(queue[token]));
-
-    if(queue[token] != null){
-        response['status'] = 'ACK';
-        var tmp = new accountdb(JSON.parse(queue[token]));
-        tmp.save();
-        queue[token] = null;
+    if( req.session.item.signup_token && req.session.item.signup_data ){
+        if( req.session.item.signup_token == req.query.token ){
+            var account = new accountdb(req.session.item.signup_data);
+            account.save(function(err, data){
+                if(err) throw err;
+                console.log(data);
+            });
+            req.session.item = {};
+            res.end(JSON.stringify({err:err_code.SUCCESS}));
+        }
+        else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
     }
-    console.log(queue);
-    res.end(JSON.stringify(response));
+    else res.end(JSON.stringify({err:err_code.CONFIRM_ERR}));
 });
 
-
-var session = {};
 app.post('/login', function(req,res){
-    var response = {'status':'NCK', 'email':null, 'password':null};
-    for (i in response) response[i] = req.body[i];
-
-    if( req.body['email'] && req.body['password'] ){
-        accountdb.find( {email: req.body}, function(err,data){
-            var response = {'status':'ACK'};
-            response['id'] = data['id'];
-
-            var token = null;
-            while(true){
-                token = randomString();
-                if(!session[token])break;
+    if( req.body.email && req.body.password ){
+        accountdb.findOne( {email: req.body.email, password:req.body.password}, function(err,data){
+            if( data ){
+                var token = randomString();
+                req.session.item = {log_token: token, log_data: data};
+                res.end(JSON.stringify({err:err_code.SUCCESS, id:data.id, token:token}));
             }
-            response['token'] = token;
-
-            res.end(JSON.stringify(response))
-        })
+            else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+        });
     }
-    else{
-        res.end(JSON.stringify({'status':'NCK'}));
-    }
+    else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
 });
 
+app.post('/logout', function(req, res){
+    if( req.session.item.log_token ){
+        if( req.body.token ){
+            if( req.session.item.log_token == req.body.token ){
+                req.session.item = {};
+                res.end(JSON.stringify({err:err_code.SUCCESS}));
+            }
+            else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
+        }
+        else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
+    }
+    else res.end(JSON.stringify({err:err_code.NOT_LOGIN}))
+})
 
+app.post('/:id/status', function(req, res){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS ){
+            accountdb.find({id: req.params.id}, function(err,data){
+                if(err) throw err;
+                res.end(JSON.stringify({err:status, data:data}));
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    })
+})
 
-app.get('/', function(req,res){
-    res.render('index',{title:'test'});
-});
+app.post('/:id/modify', function(req, res){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS ){
+            var tmp = new accountdb(req.body);
+            console.log(tmp);
+            accountdb.findOneAndUpdate({'id':req.params.id}).exec(function(err,data){
+                if(err) throw err;
+                console.log(data);
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    });
+})
+
+var check_login = function( req, callback ){
+    if( req.session.item.log_token ){
+        if( req.body.token ){
+            if( req.session.item.log_token == req.body.token ){
+                callback(err_code.SUCCESS);
+            }
+            else callback(err_code.TOKEN_UNMATCH);
+        }
+        else callback(err_code.DATA_INCOM);
+    }
+    else callback(err_code.NOT_LOGIN);
+}
+
+app.get('/', routes.index );
+app.get('/login', routes.login )
 
 var randomString = function(){
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
