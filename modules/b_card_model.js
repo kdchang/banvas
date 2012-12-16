@@ -16,7 +16,6 @@ var schema   = new mongoose.Schema({
     TimeLine     : {type:String},
     Job_exp      : {type:String},
     Image_pkt    : {type:String},
-    user_url     : {type:String},
     phone        : {type:String},
     modify_date  : {type:Date, default: Date.now },
     register_date: {type:Date},

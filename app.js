@@ -102,17 +102,13 @@ app.post('/login', function(req,res){
 });
 
 app.post('/logout', function(req, res){
-    if( req.session.item.log_token ){
-        if( req.body.token ){
-            if( req.session.item.log_token == req.body.token ){
-                req.session.item = {};
-                res.end(JSON.stringify({err:err_code.SUCCESS}));
-            }
-            else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
+    check_login(req, function(status){
+        if(status == err_code.SUCCESS || status == err_code.PERMISSION_DENIED){
+            req.session.item = {};
+            res.end(JSON.stringify({err:err_code.SUCCESS}));
         }
-        else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
-    }
-    else res.end(JSON.stringify({err:err_code.NOT_LOGIN}))
+        else res.end(JSON.stringify({err:status}));
+    });
 })
 
 app.post('/:id/status', function(req, res){
@@ -133,7 +129,6 @@ app.post('/:id/modify', function(req, res){
         if( status == err_code.SUCCESS ){
             var tmp = new accountdb(req.body);
             console.log(tmp);
-
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp.toObject()}).exec(function(err,data){
                 if(err) throw err;
 
@@ -229,7 +224,9 @@ var check_login = function( req, callback ){
     if( req.session.item.log_token ){
         if( req.body.token ){
             if( req.session.item.log_token == req.body.token ){
-                callback(err_code.SUCCESS);
+                if( req.params.id && req.params.id == req.session.item.log_data.id )
+                    callback(err_code.SUCCESS);
+                else callback(err_code.PERMISSION_DENIED);
             }
             else callback(err_code.TOKEN_UNMATCH);
         }

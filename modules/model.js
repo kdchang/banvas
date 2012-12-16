@@ -21,6 +21,8 @@ var schema   = new mongoose.Schema({
     register_date: {type:Date},
     statistic    : {type:Number},
     collect      : {type:String},
+},{
+    _id: false
 });
 
 schema.virtual('name.full').get(function(){
