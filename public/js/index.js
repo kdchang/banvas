@@ -11,8 +11,20 @@ var auditspace = Backbone.View.extend({
 		var login_obj={email: $('input#email:first').val(), password: $('input#password:first').val()};
 		console.log(login_obj);
 		$.post('/login',login_obj,function(data){
-			console.log(data);
+			var re_status=JSON.parse(data);
+			console.log(re_status);
+			switch(re_status.err){
+				case 0:
+					console.log('Log in success');
+					setCookie("Banvas_token",re_status.token,100);
+					setCookie("Banvas_id",re_status.id,100);
+					window.location.replace('/user');	
+					break;
+				default:
+					console.log('Log in error');
+			}
 		})
+
 	},
 	register:function(event){
 		event.preventDefault();
@@ -56,6 +68,13 @@ var workspace = Backbone.Router.extend({
 					});
 				}
 });
+function setCookie(c_name,value,exdays)
+{
+	var exdate = new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}
 new auditspace();
 new workspace();
 Backbone.history.start();

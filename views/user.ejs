@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang= 'en-US'>
+	<head>
+		<meta charset="UTF-8">
+		<title>Banvas-Kai Di</title>
+		<link href="stylesheets/no-theme/jquery-ui-1.9.2.custom.css" rel="stylesheet">
+		<link href="stylesheets/user.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class= "header">
+			<form name="input" class= "searchbar">
+				<input type="text" name="search" class="search">
+				<input type="submit" value="Search" class="search">
+				<span class= "account">Kai Di Chung
+					<ul>
+						<li>Account Setting</li>
+						<li class="edit">Edit</li>
+						<li>Share</li>
+						<li>Help</li>
+						<li>Log Out</li>
+					</ul>
+				</span>
+			</form>
+		</div>  
+		<div class="person block">
+			<img class="head" src='/uploads/<%= head_url %>'>
+			<button class="head_change">+</button>
+			<span class="id">
+				<h1 class="name static">Kai Di Chung</h1>
+				<span>School:</span><p class="school static">Nation Taiwan University</p><br>
+				<p class="static">Information Management, Data Mining/ Machine Learming, Taipei, Taiwan</p><br><span>Intro:</span><p class="intro static">This is Introduction </p>
+			</span>
+		</div>
+		<div class="block">
+			<a href="http://www.facebook.com/wallymath">
+				<img class="icon social" src="https://dl.dropbox.com/u/59382545/CCSP_matetrial/Facebook-skins-post.png"  >     
+			</a>                        
+		</div>
+		<div class="block">
+
+			<img class="icon" src="/material/ntulogo.jpg" >
+			<p class="static">Nation Taiwan University</p><br>
+			<p class="static">Information Management, Data Mining/ Machine Learming</p>
+		</div>
+		<div class="block">
+			<img class="icon" src="/material/TFSH.jpg" >
+			<p class="static">Taichung First Senior High School</p>             
+		</div>
+		<div class="block">
+			<h1>Skill</h1>
+			<ul>
+				<li class="static">PHP</li>
+				<li class="static">Design</li>
+				<li class="static">C</li>
+			</ul>
+		</div>
+		<div id="timeline">
+			<h1>Timeline</h1>
+				<div id="timeline-embed"></div>
+		</div>
+		<button id="add_time_event">Add Timeline Event</button>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
+	<script type="text/javascript" src="js/jquery-qr-plugin.js"></script>
+	<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+	<script type="text/javascript" src="js/storyjs-embed.js"></script>
+	<script type="text/javascript" src="js/user.js"></script>
+	<script type="text/template" id= "add_time_form">
+	<div>
+		<form id="add_event">
+			<label>Event Name</label>
+			<input type="text" id="headline"></input><br>
+			<label>Start Date</label>
+			<input type="text" id="startDate"></input><br>
+			<label>End Date</label>
+			<input type="text" id="endDate"></input><br>
+			<label>Description</label>
+			<input type="text" id="text"></input><br>
+			<label>URL</label>
+			<input type="text" id="url"></input><br>
+		</form>
+	</div>
+	</script>
+</html>
