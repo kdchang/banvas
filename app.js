@@ -147,8 +147,8 @@ app.post('/:id/modify', function(req, res){
 app.post('/:id/collection_list', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-            var tmp = new accountdb(req.body);
-            check_person(req).exec(function(err, data){
+            console.log(req.session.item.log_data);
+            accountdb.findOne({'id':req.params.id},{collect:1}).exec(function(err, data){
                 if(err) throw err;
                 console.log(data);
                 if(data){
@@ -167,7 +167,18 @@ app.post('/:id/save', function(req, res){
             accountdb.findOne({'id':req.params.id}).exec(function(err, data){
                 if(err) throw err;
                 if(data){
-                    data.collect.push(req.body.id);
+                    if(data.collect){
+                        var collect = data.collect.split(',');
+                        var add = req.body.id.split(',');
+                        for(i in add){
+                            collect.push(add[i]);
+                        }
+                        data.collect = collect;
+                    }
+                    else{
+                        data.collect = req.body.id;            
+                    }
+
                     data.save(function(err, data){
                         if(err) throw err;
                         else res.end(JSON.stringify({err:err_code.SUCCESS}));
@@ -186,8 +197,6 @@ app.post('/:id/b-card_save', function(req, res){
             var bcard = new bcardb(req.body);
             bcard.email = req.session.item.log_data.email;
             bcard.password = req.session.item.log_data.password;
-            console.log(bcard);
-            console.log(req.session.item);
             bcardb.update({email:bcard.email},{$set:bcard.toObject()}).exec(function(err,data){
                 if(err) throw err;
                 if(data){
