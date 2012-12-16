@@ -16,11 +16,14 @@ var schema   = new mongoose.Schema({
     TimeLine     : {type:String},
     Job_exp      : {type:String},
     Image_pkt    : {type:String},
+    user_url     : {type:String},
     phone        : {type:String},
     modify_date  : {type:Date, default: Date.now },
     register_date: {type:Date},
     statistic    : {type:Number},
     collect      : {type:String},
+},{
+    _id: false
 });
 
 schema.virtual('name.full').get(function(){
@@ -41,4 +44,14 @@ schema.virtual('last_name').set(function(name){
 	this.name.last = name;
 })
 
-module.exports = mongoose.model('Banvas', schema);
+schema.methods.find = function(req, callback){
+    console.log(req);
+    return this.model('B_Card').findOne(req, {'_id':0, '__v':0}, callback);
+}
+
+schema.methods.findAll = function(req, callback){
+    console.log(req);
+    return this.model('B_Card').find(req, {_id:0, __v:0}, callback);
+}
+
+module.exports = mongoose.model('B_Card', schema);

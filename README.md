@@ -65,9 +65,19 @@ API
 STATUS number
 ====================================================
 0                    : success
+
 1                    : not log in 
+
 2                    : data provided is not complete
+
 3                    : data corrupted
+
 4                    : session token not match
+
 5                    : user find error, may occured in register or login 
+
 6                    : confirm error, the link may registered before or time expired
+
+7                    : mail error, can't send email to the email address
+
+8                    : DB save error, can't save data to DB

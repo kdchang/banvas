@@ -11,17 +11,8 @@ var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 console.log(databaseUrl);
 mongoose.connect(databaseUrl);
 var accountdb = require('./modules/model');
+var bcardb = require('./modules/b_card_model');
 var mail = require('./modules/mail_server');
-
-// var ss = new accountdb({id:"default"});
-// accountdb
-//     .find({email:'ddmail2009@gmail.com'})
-//     .sort('register_date')
-//     .exec(function(err, account){
-//     if(err) throw err;
-//     console.log('find');
-//     console.log(account);
-// });
 
 var mongoStore = require('connect-mongo')(express);
 
@@ -61,8 +52,7 @@ app.post('/signup', function(req, res){
     if( data.email && data.password && data.first_name && data.last_name && data.id ){
         accountdb.findOne({email:req.body.email}).exec(function(err,data){
             if(err) throw err;
-            if( data )
-                res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+            if( data ) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
                 // req.session.item = {signup_token: randomString(), signup_data: req.body};
                 req.session.item = {signup_token: 'default', signup_data: req.body};
@@ -81,12 +71,16 @@ app.get('/signup/confirmation', function(req, res){
     if( req.session.item.signup_token && req.session.item.signup_data ){
         if( req.session.item.signup_token == req.query.token ){
             var account = new accountdb(req.session.item.signup_data);
+            account.register_date = Date.now();
             account.save(function(err, data){
                 if(err) throw err;
-                console.log(data);
+                else{
+                    console.log(data);
+                    req.session.item = {};
+                    res.end(JSON.stringify({err:err_code.SUCCESS}));
+                }
             });
-            req.session.item = {};
-            res.end(JSON.stringify({err:err_code.SUCCESS}));
+            
         }
         else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
     }
@@ -95,7 +89,7 @@ app.get('/signup/confirmation', function(req, res){
 
 app.post('/login', function(req,res){
     if( req.body.email && req.body.password ){
-        accountdb.findOne( {email: req.body.email, password:req.body.password}, function(err,data){
+        accountdb.findOne( {email: req.body.email, password:req.body.password},{'password':1,'email':1, 'id':1}, function(err,data){
             if( data ){
                 var token = randomString();
                 req.session.item = {log_token: token, log_data: data};
@@ -126,7 +120,8 @@ app.post('/:id/status', function(req, res){
         if( status == err_code.SUCCESS ){
             accountdb.find({id: req.params.id}, function(err,data){
                 if(err) throw err;
-                res.end(JSON.stringify({err:status, data:data}));
+                if(data) res.end(JSON.stringify({err:status, data:data}));
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
         }
         else res.end(JSON.stringify({err:status}));
@@ -137,33 +132,97 @@ app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             var tmp = new accountdb(req.body);
+            console.log(tmp);
+
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp.toObject()}).exec(function(err,data){
                 if(err) throw err;
-                console.log('pushed!!!');
-                console.log(tmp);
-                res.end(JSON.stringify({err:err_code.SUCCESS}));
+
+                if(data){
+                    res.end(JSON.stringify({err:err_code.SUCCESS}));
+                }
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
-            res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
         }
         else res.end(JSON.stringify({err:status}));
     });
-})
+});
+
+
+
+app.post('/:id/collection_list', function(req, res){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS ){
+            var tmp = new accountdb(req.body);
+            check_person(req).exec(function(err, data){
+                if(err) throw err;
+                console.log(data);
+                if(data){
+                    res.end(JSON.stringify({err:err_code.SUCCESS, collection: data.collect}));
+                }
+                else res.end(JSON.stringify({err:err_code.PERMISSION_DENIED}));
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    });
+});
 
 app.post('/:id/save', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS){
             accountdb.findOne({'id':req.params.id}).exec(function(err, data){
                 if(err) throw err;
-                console.log(data);
-                data.collect.push(req.body.id);
-                account = new accountdb(data);
-                account.save();
-                res.end(JSON.stringify({err:err_code.SUCCESS}));
+                if(data){
+                    data.collect.push(req.body.id);
+                    data.save(function(err, data){
+                        if(err) throw err;
+                        else res.end(JSON.stringify({err:err_code.SUCCESS}));
+                    });
+                }
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
-            res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
         }
         else res.end(JSON.stringify({err:status}));
-    })
+    });
+});
+
+app.post('/:id/b-card_save', function(req, res){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS){
+            var bcard = new bcardb(req.body);
+            bcard.email = req.session.item.log_data.email;
+            bcard.password = req.session.item.log_data.password;
+            console.log(bcard);
+            console.log(req.session.item);
+            bcardb.update({email:bcard.email},{$set:bcard.toObject()}).exec(function(err,data){
+                if(err) throw err;
+                if(data){
+                    console.log(data);
+                }
+                else{
+                    bcard.save(function(err, data){
+                        if(err) throw err
+                    });
+                }
+                res.end(JSON.stringify({err:err_code.SUCCESS}));
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    });
+});
+
+app.post('/:id/b-card_load', function(req, res){
+   check_login(req, function(status){
+        if( status == err_code.SUCCESS){
+            bcardb().find({email:req.session.item.log_data.email}).exec(function(err,data){
+                if(err) throw err;
+                if(data){
+                    res.end(JSON.stringify({err:err_code.SUCCESS, collect:data}));
+                }
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    }); 
 })
 
 var check_login = function( req, callback ){
@@ -177,6 +236,14 @@ var check_login = function( req, callback ){
         else callback(err_code.DATA_INCOM);
     }
     else callback(err_code.NOT_LOGIN);
+}
+
+var permission_check = function(req, callback){
+    var email = req.session.item.log_data.email;
+    var password = req.session.item.log_data.password;
+    console.log("query = ");
+    console.log({email:email,password:password,id:req.params.id});
+    return accountdb.findOne({id:req.params.id, email:email, password:password}, callback);
 }
 
 app.get('/', routes.index );
@@ -193,6 +260,7 @@ var randomString = function(){
     }
     return result;
 }
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

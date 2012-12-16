@@ -6,3 +6,5 @@ exports.TOKEN_UNMATCH = 4
 exports.USER_FIND_ERROR = 5
 exports.CONFIRM_ERR = 6
 exports.MAIL_ERROR = 7
+exports.DB_SAVE_ERROR = 8
+exports.PERMISSION_DENIED = 9
