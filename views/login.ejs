@@ -41,8 +41,24 @@
 
     <button id='www'>FB</button>
     <button id='FBpush'>FBPUSH</button>
+    <button id="collect">COLLECTION</button><br/>
+
+    <input type="text" name='id' id='save_list'>
+    <button id='collect_save'>collection SAVE</button>
 
 <script>
+  $('#collect_save').click(function(){
+    $.post('/'+id+'/save', {token:token, id:$('#save_list').val()},function(data){
+      console.log(data);
+    }, 'text');
+  })
+
+  $("#collect").click(function(){
+    $.post('/'+id+'/collection_list', {token:token}, function(data){
+      console.log(data);
+    }, 'text');
+  })
+
   window.fbAsyncInit = function() {
     FB.init({
       appId      : '471817496195401', // App ID from the App Dashboard

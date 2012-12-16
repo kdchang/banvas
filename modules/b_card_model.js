@@ -43,14 +43,4 @@ schema.virtual('last_name').set(function(name){
 	this.name.last = name;
 })
 
-schema.methods.find = function(req, callback){
-    console.log(req);
-    return this.model('B_Card').findOne(req, {'_id':0, '__v':0}, callback);
-}
-
-schema.methods.findAll = function(req, callback){
-    console.log(req);
-    return this.model('B_Card').find(req, {_id:0, __v:0}, callback);
-}
-
 module.exports = mongoose.model('B_Card', schema);

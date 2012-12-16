@@ -115,32 +115,14 @@ app.post('/logout', function(req, res){
         }
         else res.end(JSON.stringify({err:status}));
     });
-})
+});
 
 app.post('/:id/status', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-            accountdb.find({id: req.params.id}, function(err,data){
+            accountdb.find({id: req.params.id},{_id:0,__v:0}, function(err,data){
                 if(err) throw err;
                 if(data) res.end(JSON.stringify({err:status, data:data}));
-                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-            })
-        }
-        else res.end(JSON.stringify({err:status}));
-    })
-})
-
-app.post('/:id/modify', function(req, res){
-    check_login(req, function(status){
-        if( status == err_code.SUCCESS ){
-            var tmp = new accountdb(req.body);
-            console.log(tmp);
-            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp.toObject()}).exec(function(err,data){
-                if(err) throw err;
-
-                if(data){
-                    res.end(JSON.stringify({err:err_code.SUCCESS}));
-                }
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
         }
@@ -148,7 +130,32 @@ app.post('/:id/modify', function(req, res){
     });
 });
 
+var trim = function(account, constraint){
+    delete account._v;
+    delete account._id;
+    delete account.register_date;
 
+    for( i in constraint){
+        console.log(constraint[i]);
+        delete account[constraint[i]];
+    }
+}
+
+app.post('/:id/modify', function(req, res){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS ){
+            var tmp = (new accountdb(req.body)).toObject();
+            console.log(tmp);
+            trim(tmp, ['email', 'password','collect']);
+            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
+                if(err) throw err;
+                if(data) res.end(JSON.stringify({err:err_code.SUCCESS, update:tmp}));
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    });
+});
 
 app.post('/:id/collection_list', function(req, res){
     check_login(req, function(status){
@@ -157,9 +164,7 @@ app.post('/:id/collection_list', function(req, res){
             accountdb.findOne({'id':req.params.id},{collect:1}).exec(function(err, data){
                 if(err) throw err;
                 console.log(data);
-                if(data){
-                    res.end(JSON.stringify({err:err_code.SUCCESS, collection: data.collect}));
-                }
+                if(data) res.end(JSON.stringify({err:err_code.SUCCESS, collection: data.collect}));
                 else res.end(JSON.stringify({err:err_code.PERMISSION_DENIED}));
             })
         }
@@ -167,28 +172,26 @@ app.post('/:id/collection_list', function(req, res){
     });
 });
 
+// var array_only_num = function(input){
+//     output = input.replace(/ /gm, "")
+//     output = output.match(/(,[0-9]+,|,[0-9]+$|^[0-9]+,)/gm)
+//     for (i in output){
+//         output[i] = output[i].replace(/,/gm, "")
+//     }
+//     return output
+// }
+
 app.post('/:id/save', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS){
-            accountdb.findOne({'id':req.params.id}).exec(function(err, data){
+            console.log(req.body.id);
+            console.log(req.body.id.split(','));
+            console.log(array_only_num(req.body.id));
+            accountdb.find({'id':{$in:req.body.id.split(',')}},{_id:0,id:1}).exec(function(err, data){
                 if(err) throw err;
-                if(data){
-                    if(data.collect){
-                        var collect = data.collect.split(',');
-                        var add = req.body.id.split(',');
-                        for(i in add){
-                            collect.push(add[i]);
-                        }
-                        data.collect = collect;
-                    }
-                    else{
-                        data.collect = req.body.id;            
-                    }
-
-                    data.save(function(err, data){
-                        if(err) throw err;
-                        else res.end(JSON.stringify({err:err_code.SUCCESS}));
-                    });
+                console.log(data);
+                if(data.length>0){
+                    res.end(JSON.stringify({err:err_code.SUCCESS, save:data}));
                 }
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
@@ -234,6 +237,31 @@ app.post('/:id/b-card_load', function(req, res){
         else res.end(JSON.stringify({err:status}));
     }); 
 })
+
+// app.post('/:id/configure_pull', function(req, res){
+//     check_login(req, function(status){
+//         if( status == err_code.SUCCESS){
+
+//         }
+//         else res.end(JSON.stringify({err:status}));
+//     });
+// });
+
+// app.post('/:id/configure_push', function(req, res){
+//    check_login(req, function(status){
+//         if( status == err_code.SUCCESS){
+//             bcardb().find({email:req.session.item.log_data.email}).exec(function(err,data){
+//                 if(err) throw err;
+//                 if(data){
+//                     res.end(JSON.stringify({err:err_code.SUCCESS, collect:data}));
+//                 }
+//                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+//             })
+//         }
+//         else res.end(JSON.stringify({err:status}));
+//     }); 
+// })
+
 
 var check_login = function( req, callback ){
     if( req.session.item.log_token ){
