@@ -6,7 +6,9 @@ var express = require('express')
     , fs = require('fs')
     , err_code = require('./define/err');
 
-// var databaseUrl = 'mongodb://banvas_ccsp:banvas_ccsp@ds035557.mongolab.com:35557/banvas'
+console.log(process.env.APP_URL);
+console.log(process.env.DATABASE_URL);
+
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 console.log(databaseUrl);
 mongoose.connect(databaseUrl);
@@ -52,8 +54,7 @@ app.post('/signup', function(req, res){
             if(err) throw err;
             if( data ) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
-                // req.session.item = {signup_token: randomString(), signup_data: req.body};
-                req.session.item = {signup_token: 'default', signup_data: req.body};
+                req.session.item = {signup_token: randomString(), signup_data: req.body};
                 mail.server.send(mail.message(req.session.item.signup_data['email'], req.session.item.signup_token), function(err, data){
                     if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
                     else res.end(JSON.stringify({err:err_code.SUCCESS}));

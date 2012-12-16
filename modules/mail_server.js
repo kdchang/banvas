@@ -11,7 +11,7 @@ exports.server = email.server.connect({
 exports.message =  function(email, token){
     return {
         text: "Welcome to Banvas!!!\n Please enter the following link to complete signup!!!\n"+
-                "http://localhost:3000/signup/confirmation?token="+token,
+                process.env.APP_URL+"/signup/confirmation?token="+token,
         from: "Banvas <banvastest@gmail.com>",
         to: email,
         cc: null,
