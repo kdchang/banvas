@@ -6,7 +6,7 @@ var express = require('express')
     , fs = require('fs')
     , err_code = require('./define/err');
 
-// var databaseUrl = process.env.DATABASE_URL || 'mongodb://test:test@ds045557.mongolab.com:45557/final' ||'mongodb://localhost/test';
+// var databaseUrl = 'mongodb://banvas_ccsp:banvas_ccsp@ds035557.mongolab.com:35557/banvas'
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 console.log(databaseUrl);
 mongoose.connect(databaseUrl);
@@ -32,10 +32,7 @@ app.configure(function(){
     app.use(express.session({
         secret: 'Banvas',
         store: new mongoStore({
-            host: databaseUrl,
-            // port:
-            db: 'test',
-            collection: 'mysession'
+            url: databaseUrl
         }),
         maxAge: new Date(Date.now() + 3600000)
     }));
@@ -69,7 +66,7 @@ app.post('/signup', function(req, res){
 });
 
 app.get('/signup/confirmation', function(req, res){
-    if( req.session.item.signup_token && req.session.item.signup_data ){
+    if( req.session.item && req.session.item.signup_token && req.session.item.signup_data ){
         if( req.session.item.signup_token == req.query.token ){
             var account = new accountdb(req.session.item.signup_data);
             account.register_date = Date.now();
