@@ -32,7 +32,8 @@ app.configure(function(){
     app.use(express.session({
         secret: 'Banvas',
         store: new mongoStore({
-            host: '127.0.0.1',
+            host: databaseUrl,
+            // port:
             db: 'test',
             collection: 'mysession'
         }),
