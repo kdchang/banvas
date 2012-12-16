@@ -2,35 +2,64 @@ var eventnum = 0,i,id=2;
 //$("div").qrcode("http://www.google.com.tw");
 var Banvas_id = getCookie('Banvas_id'),
 	Banvas_token = getCookie('Banvas_token');
-console.log(Banvas_id);
 $.post('/'+Banvas_id+'/status',{"token": Banvas_token},function(data){
 	console.log(data);
 	var info = JSON.parse(data);
 	if(info.err!=0)
-		window.location.replace('/index');
+		window.location.replace('/');
 	else{
-		if(info.data[0].name){
-			$('.id h1.name').html(info.data[0].name.first+' '+info.data[0].name.last);
-		}
+		if(info.data[0].name)
+		$('.name').html(info.data[0].name.first+' '+info.data[0].name.last);
+		$('.school').html(info.data[0].School);
+		$('.intro').html(info.data[0].Intro);
+		$('.skill').html(info.data[0].Skill);
+		$('.position').html(info.data[0].Position);
+		console.log(info.data[0].Image_pkt);
+		var img_url=JSON.parse(info.data[0].Image_pkt);
+		$('img.head').attr('src','/uploads/'+img_url.head_url);
+		$('a.FB').attr('href',info.data[0].linked.Facebook);
 	}
 })
-$(".head_change").click(function(){
-	$("<form method='post' action='/"+Banvas_id+"/mod_img' ENCTYPE=\"multipart/form-data\"><input type='file' name='file' /><input name='token' type='hidden' value='"+Banvas_token+"'/><input type='hidden' name='title' value='head'/> <button>送出</button></form>").dialog();
-});
 $(".edit").click(edit_mode);
 function edit_mode(){
 		$(this).html("Done").removeClass("edit").click(function(){
 			save();
 			$(this).html("Edit").addClass("edit").unbind('.click');
 			$(".static").unbind('click');
-			$(".edit").bind('click',edit_mode);
-			$.post('/'+Banvas_id+'/modify',{"token": Banvas_token,"description": $('school').html(),"test":"test"},function(data){
+			$('.temp').remove();
+			var post_data = {"token": Banvas_token,"School": $('.school:first').html(),"Intro":$('.intro').html(),"Skill":$('.skill').html(),"Position":$('.position:first').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'}};
+			$.post('/'+Banvas_id+'/modify',post_data,function(data){
 				console.log(data);
 			});
 			console.log('Posting new data....');
+			console.log(post_data);
+			$(this).unbind('click').bind('click',edit_mode);
 		});
 		$(".static").click(edit).change(save).end();
-}
+		$('<button class="temp head_change">+</button>').insertAfter('img.head').click(function(){
+			$("<form method='post' action='/"+Banvas_id+"/mod_img' ENCTYPE=\"multipart/form-data\"><input type='file' name='file' /><input name='token' type='hidden' value='"+Banvas_token+"'/><input type='hidden' name='title' value='head'/> <button>送出</button></form>").dialog();
+});
+		$('<button class="temp" style="float : right;">-</button>').appendTo('li.static').click(function(event){
+			event.stopPropagation();
+			$(this).parent('li').remove();	
+		});
+		$('<button class="temp">+</button>').appendTo('.skill_header').click(function(){
+			$('<li class="static">default</li>').appendTo('ul.skill').click(edit).change(save).end();
+		});
+		$('<button class="temp" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(function(){
+			$("<form><label>Facebook:</label><input type='text' id='FB_url'/><br><label>Blog:</label><input type='text' id='Blog_url'/><br><label>LinkedIn:</label><input type='text' id='Linked_url'/></form>").dialog({
+				buttons: {
+					"Set": function(){
+						$('a.FB').attr('href',$('#FB_url').val());
+						$( this ).dialog( "close" );
+					},
+					"Cancel": function(){
+						$( this ).dialog( "close" );
+					}
+				}
+			});
+		});
+};
 $('#scroll-right').on('mouseup mouseleave',function(){
 	window.clearInterval(i);
 }).mousedown(function(){

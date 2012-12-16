@@ -8,19 +8,22 @@ var schema   = new mongoose.Schema({
     	last : {type:String, require:true}
     },
     id           : {type:String, require:true},
-    linked       : {type:{Facebook:String, Blogger:String, Linkedin:String}, require:true},
-    Position     : {type:String},
-    Intro        : {type:String},
-    School       : {type:String},
-    Skill        : {type:String},
-    TimeLine     : {type:String},
-    Job_exp      : {type:String},
-    Image_pkt    : {type:String},
-    phone        : {type:String},
+    linked       : {type:{Facebook:String, Blogger:String, Linkedin:String}, require:true,default:{Facebook:"#",Blogger:"#",Linkedin:"#"}},
+    Position     : {type:String, default:'default'},
+    Intro        : {type:String, default:'default'},
+    School       : {type:String, default:'default'},
+    Skill        : {type:String, default:'default'},
+    TimeLine     : {type:String, default:'default'},
+    Job_exp      : {type:String, default:'default'},
+    Image_pkt    : {type:String, default:'default'},
+    phone        : {type:String, default:'default'},
     modify_date  : {type:Date, default: Date.now },
     register_date: {type:Date},
-    statistic    : {type:Number},
-    collect      : {type:String},
+    statistic    : {type:Number, default: 0},
+    collect      : {type:String, default:'default'},
+	},{
+		_id: false
+	
 });
 
 schema.virtual('name.full').get(function(){

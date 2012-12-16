@@ -76,7 +76,7 @@ app.get('/signup/confirmation', function(req, res){
                 else{
                     console.log(data);
                     req.session.item = {};
-                    res.end(JSON.stringify({err:err_code.SUCCESS}));
+                    res.redirect('/user');
                 }
             });
             
@@ -113,29 +113,30 @@ app.post('/logout', function(req, res){
     }
     else res.end(JSON.stringify({err:err_code.NOT_LOGIN}))
 })
-
+var head_url = 'default';
 app.post('/:id/status', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             accountdb.find({id: req.params.id}, function(err,data){
                 if(err) throw err;
-                if(data) res.end(JSON.stringify({err:status, data:data}));
+                if(data) {
+					if(data.head_url)	head_url = data.head_url;
+					res.end(JSON.stringify({err:status, data:data}));
+				}
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
         }
         else res.end(JSON.stringify({err:status}));
     })
 })
-
 app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-            var tmp = new accountdb(req.body);
-            console.log(tmp);
-
-            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp.toObject()}).exec(function(err,data){
+            //var tmp = new accountdb(req.body);
+            console.log(req.body);
+            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:req.body })/*{$set:tmp.toObject()})*/.exec(function(err,data){
                 if(err) throw err;
-
+				console.log(data);
                 if(data){
                     res.end(JSON.stringify({err:err_code.SUCCESS}));
                 }
@@ -146,19 +147,16 @@ app.post('/:id/modify', function(req, res){
     });
 });
 var prefix = __dirname + '/public/uploads/';
-var head_url = 'default';
 app.post('/:id/mod_img', function(req, res) {
 	console.log(req.body);
 	if(!req.body.title) throw new Error('no title');
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-            var tmp = new accountdb(req.body);
-            accountdb.findOneAndUpdate({'id':req.params.id}).exec(function(err,data){
+			head_url = req.files.file.path.replace(prefix, '');
+            accountdb.findOneAndUpdate({'id':req.params.id},{$set:{Image_pkt:JSON.stringify({"head_url":head_url})} }).exec(function(err,data){
                 if(err) throw err;
                 console.log(data);
             });
-			head_url = req.files.file.path.replace(prefix, '');
-			console.log(head_url);	
 			res.redirect('/user');
 		}
         else res.end(JSON.stringify({err:status}));
