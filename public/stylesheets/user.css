@@ -89,6 +89,9 @@ img.icon{
     height : 60px;
     width : 60px;
 }
+ul.skill li{
+	height : 25px;
+}
 div#timeline{
 	width: 100%;
 }
