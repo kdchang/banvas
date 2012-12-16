@@ -8,7 +8,6 @@ var express = require('express')
 
 console.log(process.env.APP_URL);
 console.log(process.env.DATABASE_URL);
-
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 console.log(databaseUrl);
 mongoose.connect(databaseUrl);
@@ -156,7 +155,25 @@ app.post('/:id/modify', function(req, res){
         else res.end(JSON.stringify({err:status}));
     });
 });
-
+var prefix = __dirname + '/public/uploads/';
+var head_url = 'default';
+app.post('/:id/mod_img', function(req, res) {
+	console.log(req.body);
+	if(!req.body.title) throw new Error('no title');
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS ){
+            var tmp = new accountdb(req.body);
+            accountdb.findOneAndUpdate({'id':req.params.id}).exec(function(err,data){
+                if(err) throw err;
+                console.log(data);
+            });
+			head_url = req.files.file.path.replace(prefix, '');
+			console.log(head_url);	
+			res.redirect('/user');
+		}
+        else res.end(JSON.stringify({err:status}));
+	});
+});
 app.post('/:id/collection_list', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
@@ -279,8 +296,10 @@ var check_login = function( req, callback ){
 }
 
 app.get('/', routes.index );
-app.get('/login', routes.login )
-app.get('/test', routes.test)
+app.get('/login', routes.login );
+app.get('/user',function(req,res){
+	res.render('user.ejs',{head_url:head_url});
+})
 
 var randomString = function(){
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";

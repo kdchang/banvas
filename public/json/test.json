@@ -1,0 +1,36 @@
+{
+    "timeline":
+    {
+        "headline":"Sh*t People Say",
+        "type":"default",
+		"text":"People say stuff",
+		"startDate":"2012,1,26",
+        "date": [
+            {
+                "startDate":"2012,1,27",
+				"endDate":"2012,1,28",
+                "headline":"Sh*t Politicians Say",
+                "text":"<p>In true political fashion, his character rattles off common jargon heard from people running for office.</p>",
+            	"asset":{
+					"media":"http://www.google.com",
+					"credit":"",
+					"caption":""
+				}
+			},
+            {
+                "startDate":"2012,1,29",
+				"endDate":"2012,1,30",
+                "headline":"Test",
+                "text":"<p>hahaha</p>",
+            	"asset":{}
+			},
+            {
+                "startDate":"2012,1,17",
+				"endDate":"2012,1,18",
+                "headline":"Meow",
+                "text":"<p>Already 00:12!!time to sleep</p>",
+            	"asset":{}
+			}
+		]
+	}
+}
