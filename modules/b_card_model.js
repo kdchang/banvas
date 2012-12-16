@@ -7,7 +7,7 @@ var schema   = new mongoose.Schema({
     	first: {type:String, require:true},
     	last : {type:String, require:true}
     },
-    id           : {type:String, require:true},
+    id           : {type:String, require:true, unique: true},
     linked       : {type:{Facebook:String, Blogger:String, Linkedin:String}, require:true},
     Position     : {type:String},
     Intro        : {type:String},

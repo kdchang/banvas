@@ -52,13 +52,19 @@ app.post('/signup', function(req, res){
     if( data.email && data.password && data.first_name && data.last_name && data.id ){
         accountdb.findOne({email:req.body.email}).exec(function(err,data){
             if(err) throw err;
-            if( data ) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+            if(data) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
-                req.session.item = {signup_token: randomString(), signup_data: req.body};
-                mail.server.send(mail.message(req.session.item.signup_data['email'], req.session.item.signup_token), function(err, data){
-                    if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
-                    else res.end(JSON.stringify({err:err_code.SUCCESS}));
-                    console.log(data);
+                accountdb.findOne({id: req.body.id}).exec(function(err,data){
+                    if(err) throw err;
+                    if( data ) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                    else{
+                        req.session.item = {signup_token: randomString(), signup_data: req.body};
+                        mail.server.send(mail.message(req.session.item.signup_data['email'], req.session.item.signup_token), function(err, data){
+                            if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
+                            else res.end(JSON.stringify({err:err_code.SUCCESS}));
+                            console.log(data);
+                        })
+                    }
                 })
             }
         })
@@ -67,6 +73,7 @@ app.post('/signup', function(req, res){
 });
 
 app.get('/signup/confirmation', function(req, res){
+    console.log(req.session);
     if( req.session.item && req.session.item.signup_token && req.session.item.signup_data ){
         if( req.session.item.signup_token == req.query.token ){
             var account = new accountdb(req.session.item.signup_data);

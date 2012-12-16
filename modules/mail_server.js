@@ -9,9 +9,10 @@ exports.server = email.server.connect({
 });
 
 exports.message =  function(email, token){
+    var address = process.env.APP_URL || 'http://localhost:3000';
     return {
         text: "Welcome to Banvas!!!\n Please enter the following link to complete signup!!!\n"+
-                process.env.APP_URL+"/signup/confirmation?token="+token,
+                address+"/signup/confirmation?token="+token,
         from: "Banvas <banvastest@gmail.com>",
         to: email,
         cc: null,
