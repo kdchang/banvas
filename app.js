@@ -238,14 +238,6 @@ var check_login = function( req, callback ){
     else callback(err_code.NOT_LOGIN);
 }
 
-var permission_check = function(req, callback){
-    var email = req.session.item.log_data.email;
-    var password = req.session.item.log_data.password;
-    console.log("query = ");
-    console.log({email:email,password:password,id:req.params.id});
-    return accountdb.findOne({id:req.params.id, email:email, password:password}, callback);
-}
-
 app.get('/', routes.index );
 app.get('/login', routes.login )
 app.get('/test', routes.test)
