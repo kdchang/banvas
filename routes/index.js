@@ -3,18 +3,17 @@
  * GET home page.
  */
 
-exports.index = function(req, res){
-	res.render('index.ejs', { layout: false, title: 'Signup' });
-};
-exports.user = function(req, res){
-	res.render('user.ejs', { layout: false, title: 'Signup',head_url: 'default' });
-};
-exports.login= function(req, res){
-	res.render('login');
-}
-exports.test = function(req, res){
-	res.render('test', {title: 'login'});
-}
-exports.facebook = function(req, res){
-	res.render('facebook');
+module.exports = function(app){
+	app.get('/', function(req, res){
+		res.render('index', {title: 'Signup'});
+	});
+	app.get('/user', function(req, res){
+		res.render('user', {title: 'Signup', head_url: 'default'});
+	});
+	app.get('/login', function(req, res){
+		res.redirect('test');
+	});
+	app.get('/test', function(req, res){
+		res.render('test', {title:'test'});
+	});
 }

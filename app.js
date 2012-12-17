@@ -52,54 +52,51 @@ app.configure('development', function(){
     app.use(express.errorHandler());
 });
 
+
+var confirm_list = {};
 app.post('/signup', function(req, res){
-    var data = req.body;
-    if( data.email && data.password && data.first_name && data.last_name && data.id ){
+    var query = req.body;
+    if( query.email && query.password && query.first_name && query.last_name && query.id ){
         accountdb.findOne({email:req.body.email}).exec(function(err,data){
             if(err) throw err;
             if(data) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
-                accountdb.findOne({id: req.body.id}).exec(function(err,data){
+                accountdb.findOne({id: query.id}).exec(function(err,result){
                     if(err) throw err;
-                    if( data ) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                    if(result) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                     else{
-                        req.session.item = {signup_token: randomString(), signup_data: req.body};
-                        mail.server.send(mail.message(req.session.item.signup_data['email'], req.session.item.signup_token), function(err, data){
+                        var token = randomString();
+                        confirm_list[token] = new accountdb(query);
+                        mail.server.send(mail.message(query.email, token), function(err, data){
                             if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
                             else res.end(JSON.stringify({err:err_code.SUCCESS}));
                             console.log(data);
-                        })
+                        });
                     }
-                })
+                });
             }
-        })
+        });
     }
     else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
 });
 
 app.get('/signup/confirmation', function(req, res){
-    console.log(req.session);
-    if( req.session.item && req.session.item.signup_token && req.session.item.signup_data ){
-        if( req.session.item.signup_token == req.query.token ){
-            var account = new accountdb(req.session.item.signup_data);
+    if( req.query.token && confirm_list[req.query.token] ){
+            var account = confirm_list[req.query.token];
             account.register_date = Date.now();
             account.save(function(err, data){
                 if(err) throw err;
                 else{
                     console.log(data);
-                    req.session.item = {};
+                    delete confirm_list[req.query.token];
                     res.redirect('/user');
                 }
             });
-            
-        }
-        else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
     }
-    else res.end(JSON.stringify({err:err_code.CONFIRM_ERR}));
+    else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
 });
 
 app.post('/login', function(req,res){
-
     if( req.body.email && req.body.password ){
         accountdb.findOne( {email: req.body.email, password:req.body.password},{'password':1,'email':1, 'id':1}, function(err,data){
             if( data ){
@@ -140,16 +137,6 @@ app.post('/:id/status', function(req, res){
         else res.end(JSON.stringify({err:status}));
     });
 });
-
-var trim = function(account, constraint){
-    delete account._v;
-    delete account._id;
-    delete account.register_date;
-
-    for( i in constraint){
-        delete account[constraint[i]];
-    }
-}
 
 app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
@@ -213,7 +200,8 @@ app.post('/:id/save', function(req, res){
                             var collect = [];
                             if(owner.collect) collect = owner.collect.split(',');
                             for(i in data){
-                                collect.push(data[i].id);
+                                if(!collect.indexOf(data[i].id))
+                                    collect.push(data[i].id);
                             }
                             owner.collect = collect.join(',');
                             owner.save();
@@ -291,6 +279,40 @@ app.post('/:id/b-card_load', function(req, res){
 //     }); 
 // })
 
+app.get('/facebook', function(req, res){
+    console.log(req);
+    req.facebook.me(function(user) {
+        res.render('facebook.ejs', {
+            layout: false,
+            req: req,
+            app: app,
+            user: user
+        });
+    });
+});
+
+routes(app);
+
+var trim = function(account, constraint){
+    delete account._v;
+    delete account._id;
+    delete account.register_date;
+
+    for( i in constraint){
+        delete account[constraint[i]];
+    }
+}
+
+var randomString = function(){
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz_";
+    var string_length = 25;
+    var result = '';
+    for (var i=0; i<string_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+        result += chars.substring(rnum,rnum+1);
+    }
+    return result;
+}
 
 var check_login = function( req, callback ){
     if( req.session.item.log_token ){
@@ -305,34 +327,6 @@ var check_login = function( req, callback ){
         else callback(err_code.DATA_INCOM);
     }
     else callback(err_code.NOT_LOGIN);
-}
-
-app.get('/', routes.index );
-app.get('/login', routes.login );
-app.get('/user',function(req,res){
-	res.render('user.ejs',{head_url:head_url});
-})
-app.get('/test', routes.test );
-app.get('/facebook', function(req, res){
-    console.log(req);
-    req.facebook.me(function(user) {
-        res.render('facebook.ejs', {
-            layout: false,
-            req: req,
-            app: app,
-            user: user
-        });
-    });
-});
-var randomString = function(){
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-    var string_length = 20;
-    var result = '';
-    for (var i=0; i<string_length; i++) {
-        var rnum = Math.floor(Math.random() * chars.length);
-        result += chars.substring(rnum,rnum+1);
-    }
-    return result;
 }
 
 http.createServer(app).listen(app.get('port'), function(){
