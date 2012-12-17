@@ -4,13 +4,13 @@ var Banvas_id = getCookie('Banvas_id'),
 	Banvas_token = getCookie('Banvas_token');
 var timeline = {
 		"timeline":
-		{   
+		{
 				"headline":"Default",
 				"type":"default",
 				"text":"Default",
 				"startDate":"2000,1,1",
 				"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Welcome to Banvas</p>","asset":{"media":"","credit":"","caption":""}}] 
-		}   
+		}
 };
 $.post('/'+Banvas_id+'/status',{"token": Banvas_token},function(data){
 	console.log(data);
@@ -25,20 +25,12 @@ $.post('/'+Banvas_id+'/status',{"token": Banvas_token},function(data){
 		if(info.data[0].Skill!='default')
 			$('.skill').html(info.data[0].Skill);
 		$('.position').html(info.data[0].Position);
-<<<<<<< HEAD
 		var temp="default";
 		if(temp.match(info.data[0].Image_pkt)==null){
 			var img_url=JSON.parse(info.data[0].Image_pkt);
 			$('img.head').attr('src','/uploads/'+img_url.head_url);
 		}
 		$('a.FB').attr('href',info.data[0].linked.Facebook);
-=======
-		console.log(info.data[0].Image_pkt);
-		var img_url=JSON.parse(info.data[0].Image_pkt);
-		$('img.head').attr('src','/uploads/'+img_url.head_url);
-		$('a.FB').attr('href',info.data[0].linked.Facebook);
-		var temp="default";
->>>>>>> d9de3137897a021ca538480daa7f590646fa27b2
 		if(temp.match(info.data[0].TimeLine)==null){
 			timeline=JSON.parse(info.data[0].TimeLine);
 		}
@@ -67,7 +59,7 @@ function edit_mode(){
 });
 		$('<button class="temp" style="float : right;">-</button>').appendTo('.skill li').click(function(event){
 			event.stopPropagation();
-			$(this).parent('li').remove();	
+			$(this).parent('li').remove();
 		});
 		$('<button class="temp">+</button>').appendTo('.skill_header').click(function(){
 			$('<li class="static">default</li>').appendTo('ul.skill').click(edit).change(save).end();
@@ -135,7 +127,7 @@ function AddTimeEvent(){
 				timeline.timeline.date.push(new_event);
 				$('#timeline-embed').empty();
 				CreateTimeLine();
-				$( this ).dialog( "close" );	
+				$( this ).dialog( "close" );
 			},
 			"Cancel": function(){
 				$( this ).dialog( "close" );

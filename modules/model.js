@@ -19,18 +19,10 @@ var schema   = new mongoose.Schema({
     phone        : {type:String, default:'default'},
     modify_date  : {type:Date, default: Date.now },
     register_date: {type:Date},
-<<<<<<< HEAD
     statistic    : {type:Number},
     collect      : {type:String},
 },{
     _id: false
-=======
-    statistic    : {type:Number, default: 0},
-    collect      : {type:String, default:'default'},
-	},{
-		_id: false
-	
->>>>>>> d9de3137897a021ca538480daa7f590646fa27b2
 });
 
 schema.virtual('name.full').get(function(){

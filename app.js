@@ -6,11 +6,8 @@ var express = require('express')
     , fs = require('fs')
     , err_code = require('./define/err');
 
-<<<<<<< HEAD
 console.log(process.env.APP_URL);
 console.log(process.env.DATABASE_URL);
-=======
->>>>>>> d9de3137897a021ca538480daa7f590646fa27b2
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 console.log(databaseUrl);
 mongoose.connect(databaseUrl);
@@ -115,16 +112,9 @@ app.post('/logout', function(req, res){
             req.session.item = {};
             res.end(JSON.stringify({err:err_code.SUCCESS}));
         }
-<<<<<<< HEAD
-        else res.end(JSON.stringify({err:status}));
-    });
-});
-=======
         else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
-    }
-    else res.end(JSON.stringify({err:err_code.NOT_LOGIN}))
+    });
 })
->>>>>>> d9de3137897a021ca538480daa7f590646fa27b2
 var head_url = 'default';
 app.post('/:id/status', function(req, res){
     check_login(req, function(status){
@@ -139,7 +129,6 @@ app.post('/:id/status', function(req, res){
             })
         }
         else res.end(JSON.stringify({err:status}));
-<<<<<<< HEAD
     });
 });
 
@@ -163,31 +152,6 @@ app.post('/:id/modify', function(req, res){
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
                 if(err) throw err;
                 if(data) res.end(JSON.stringify({err:err_code.SUCCESS, update:tmp}));
-/*    });
-});
-app.post('/:id/modify', function(req, res){
-    check_login(req, function(status){
-        if( status == err_code.SUCCESS ){
-            //var tmp = new accountdb(req.body);
-            console.log(req.body);
-            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:req.body }){$set:tmp.toObject()}).exec(function(err,data){
-                if(err) throw err;
-=======
-    })
-})
-app.post('/:id/modify', function(req, res){
-    check_login(req, function(status){
-        if( status == err_code.SUCCESS ){
-            //var tmp = new accountdb(req.body);
-            console.log(req.body);
-            accountdb.findOneAndUpdate({'id':req.params.id}, {$set:req.body })/*{$set:tmp.toObject()})*/.exec(function(err,data){
-                if(err) throw err;
->>>>>>> d9de3137897a021ca538480daa7f590646fa27b2
-				console.log(data);
-                if(data){
-                    res.end(JSON.stringify({err:err_code.SUCCESS}));
-                }
->>>>>>> editable 80% */
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
         }
