@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "banvas-dev",
   "version": "0.0.1",
   "dependencies": {
     "express": "3.0.0",
@@ -8,7 +8,7 @@
     "async": "0.1.22",
     "connect-mongo": "0.2.0",
     "emailjs": "0.3.3",
-    "faceplate": "0.4.0",
+    "faceplate": "0.4.0"
   },
   "engines": {
     "node": "0.8.x",
