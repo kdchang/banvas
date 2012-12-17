@@ -41,7 +41,7 @@ app.configure(function(){
     }));
     app.use(app.router);
     // app.use(require('less-middleware')({ src: __dirname + '/public' }));
-    // app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, 'public')));
     app.use(require('faceplate').middleware({
         app_id: process.env.FACEBOOK_APP_ID || '471817496195401',
         secret: process.env.FACEBOOK_SECRET || 'c7dc96c61c425bf4ce8dada9868d3bb3',
