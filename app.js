@@ -190,14 +190,14 @@ app.post('/:id/collection_list', function(req, res){
     });
 });
 
-// var array_only_num = function(input){
-//     output = input.replace(/ /gm, "")
-//     output = output.match(/(,[0-9]+,|,[0-9]+$|^[0-9]+,)/gm)
-//     for (i in output){
-//         output[i] = output[i].replace(/,/gm, "")
-//     }
-//     return output
-// }
+var array_only_num = function(input){
+     output = input.replace(/ /gm, "")
+     output = output.match(/(,[0-9]+,|,[0-9]+$|^[0-9]+,)/gm)
+     for (i in output){
+         output[i] = output[i].replace(/,/gm, "")
+     }
+     return output
+}
 
 app.post('/:id/save', function(req, res){
     check_login(req, function(status){
