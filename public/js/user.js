@@ -22,24 +22,19 @@ $.post('/'+Banvas_id+'/status',{"token": Banvas_token},function(data){
 		$('.name').html(info.data[0].name.first+' '+info.data[0].name.last);
 		$('.school').html(info.data[0].School);
 		$('.intro').html(info.data[0].Intro);
-		$('.skill').html(info.data[0].Skill);
+		if(info.data[0].Skill!='default')
+			$('.skill').html(info.data[0].Skill);
 		$('.position').html(info.data[0].Position);
 		console.log(info.data[0].Image_pkt);
 		var img_url=JSON.parse(info.data[0].Image_pkt);
 		$('img.head').attr('src','/uploads/'+img_url.head_url);
 		$('a.FB').attr('href',info.data[0].linked.Facebook);
 		var temp="default";
-	/*	if(temp.match(info.data[0].TimeLine)==null){
+		if(temp.match(info.data[0].TimeLine)==null){
 			timeline=JSON.parse(info.data[0].TimeLine);
 		}
 		$('#timeline-embed').empty();
-		createStoryJS({
-			type:       'timeline',
-			width:      '100%',
-			height:     '600',
-			source:     timeline,
-			embed_id:   'timeline-embed',           // ID of the DIV you want to load the timeline into
-		});*/
+		CreateTimeLine();
 	}
 })
 $(".edit").click(edit_mode);
@@ -61,7 +56,7 @@ function edit_mode(){
 		$('<button class="temp head_change">+</button>').insertAfter('img.head').click(function(){
 			$("<form method='post' action='/"+Banvas_id+"/mod_img' ENCTYPE=\"multipart/form-data\"><input type='file' name='file' /><input name='token' type='hidden' value='"+Banvas_token+"'/><input type='hidden' name='title' value='head'/> <button>送出</button></form>").dialog();
 });
-		$('<button class="temp" style="float : right;">-</button>').appendTo('li.static').click(function(event){
+		$('<button class="temp" style="float : right;">-</button>').appendTo('.skill li').click(function(event){
 			event.stopPropagation();
 			$(this).parent('li').remove();	
 		});
@@ -69,18 +64,9 @@ function edit_mode(){
 			$('<li class="static">default</li>').appendTo('ul.skill').click(edit).change(save).end();
 		});
 		$('<button class="temp" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
-		$('<button class="temp" id="add_time_event">Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
-		$('<button class="temp" id="timeline_config">Timeline Config</button>').insertAfter('div#timeline').click(Timeline_config);
+		$('<button class="temp" >Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
+		$('<button class="temp" >Timeline Config</button>').insertAfter('div#timeline').click(Timeline_config);
 };
-$('#timeline-embed').ready(function(){
-	createStoryJS({
-		type:       'timeline',
-		width:      '100%',
-		height:     '600',
-		source:     timeline,
-		embed_id:   'timeline-embed',           // ID of the DIV you want to load the timeline into
-	}); 
-});
 // Function Area
 function save(){
 			$(".editing").each(function(){
@@ -139,13 +125,7 @@ function AddTimeEvent(){
 				}
 				timeline.timeline.date.push(new_event);
 				$('#timeline-embed').empty();
-				createStoryJS({
-					type:       'timeline',
-					width:      '100%',
-					height:     '600',
-					source:     timeline,
-					embed_id:   'timeline-embed',           // ID of the DIV you want to load the timeline into
-				});
+				CreateTimeLine();
 				$( this ).dialog( "close" );	
 			},
 			"Cancel": function(){
@@ -169,13 +149,7 @@ function Timeline_config(){
 				if($('#time_start').val()!='')
 					timeline.timeline.startDate=$('#time_start').val();
 				$('#timeline-embed').empty();
-				createStoryJS({
-					type:       'timeline',
-					width:      '100%',
-					height:     '600',
-					source:     timeline,
-					embed_id:   'timeline-embed',           // ID of the DIV you want to load the timeline into
-				});
+				CreateTimeLine();
 				$( this ).dialog( "close" );
 			},
 			"Cancel": function(){
@@ -183,4 +157,13 @@ function Timeline_config(){
 			}
 		}
 	});
+}
+function CreateTimeLine(){
+	createStoryJS({
+		type:       'timeline',
+		width:      '100%',
+		height:     '600',
+		source:     timeline,
+		embed_id:   'timeline-embed',           // ID of the DIV you want to load the timeline into
+	});	
 }

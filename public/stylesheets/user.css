@@ -90,7 +90,9 @@ img.icon{
     width : 60px;
 }
 ul.skill li{
+	display: inline-block;
 	height : 25px;
+	width: 70%;
 }
 div#timeline{
 	width: 100%;
