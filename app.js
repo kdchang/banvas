@@ -169,6 +169,7 @@ app.post('/:id/mod_img', function(req, res) {
                 if(err) throw err;
                 console.log(data);
             });
+			head_url = req.files.file.path.replace(prefix, '');
 			res.redirect('/user');
 		}
         else res.end(JSON.stringify({err:status}));
