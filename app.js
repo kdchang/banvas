@@ -7,10 +7,13 @@ var async = require('async')
     , fs = require('fs')
     , err_code = require('./define/err');
 
-console.log(process.env.APP_URL);
-console.log(process.env.DATABASE_URL);
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
-console.log(databaseUrl);
+var port = process.env.PORT || 3000;
+var app_url = process.env.APP_URL || 'http://localhost';
+console.log("USING DATABASE: "+databaseUrl );
+console.log("APP_DOMAIN: "+app_url );
+console.log("PORT: "+port)
+
 mongoose.connect(databaseUrl);
 var accountdb = require('./modules/model');
 var bcardb = require('./modules/b_card_model');
@@ -21,6 +24,7 @@ var mongoStore = require('connect-mongo')(express);
 var app = express();
 app.configure(function(){
     app.set('port', process.env.PORT || 3000);
+    app.set('uploads_prefix', __dirname+'/public/uploads');
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
     app.use(express.favicon());
@@ -39,7 +43,6 @@ app.configure(function(){
         maxAge: new Date(Date.now() + 3600000)
     }));
     app.use(app.router);
-    // app.use(require('less-middleware')({ src: __dirname + '/public' }));
     app.use(express.static(path.join(__dirname, 'public')));
     app.use(require('faceplate').middleware({
         app_id: process.env.FACEBOOK_APP_ID || '471817496195401',
@@ -51,7 +54,6 @@ app.configure(function(){
 app.configure('development', function(){
     app.use(express.errorHandler());
 });
-
 
 var confirm_list = {};
 app.post('/signup', function(req, res){
@@ -89,6 +91,10 @@ app.get('/signup/confirmation', function(req, res){
                 else{
                     console.log(data);
                     delete confirm_list[req.query.token];
+
+                    var token = randomString();
+                    req.session.item = {log_token: token, log_data: data};
+
                     res.redirect('/user');
                 }
             });
@@ -98,6 +104,7 @@ app.get('/signup/confirmation', function(req, res){
 
 app.post('/login', function(req,res){
     if( req.body.email && req.body.password ){
+        console.log('user loginnnng ' + JSON.stringify(req.body));
         accountdb.findOne( {email: req.body.email, password:req.body.password},{'password':1,'email':1, 'id':1}, function(err,data){
             if( data ){
                 var token = randomString();
@@ -112,6 +119,7 @@ app.post('/login', function(req,res){
 
 app.post('/logout', function(req, res){
     check_login(req, function(status){
+        console.log('user logooooout ' + JSON.stringify(req.body));
         if(status == err_code.SUCCESS || status == err_code.PERMISSION_DENIED){
             req.session.item = {};
             res.end(JSON.stringify({err:err_code.SUCCESS}));
@@ -119,16 +127,14 @@ app.post('/logout', function(req, res){
         else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
     });
 })
-var head_url = 'default';
-app.post('/:id/status', function(req, res){
-    console.log(req.facebook);
 
+app.post('/:id/status', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             accountdb.find({id: req.params.id},{_id:0,__v:0}, function(err,data){
                 if(err) throw err;
                 if(data) {
-					if(data.head_url)	head_url = data.head_url;
+                    console.log('load '+req.params.id+' status success!!!');
 					res.end(JSON.stringify({err:status, data:data}));
 				}
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
@@ -153,23 +159,23 @@ app.post('/:id/modify', function(req, res){
         else res.end(JSON.stringify({err:status}));
     });
 });
-var prefix = __dirname + '/public/uploads/';
+
 app.post('/:id/mod_img', function(req, res) {
 	console.log(req.body);
 	if(!req.body.title) throw new Error('no title');
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
-			head_url = req.files.file.path.replace(prefix, '');
-            accountdb.findOneAndUpdate({'id':req.params.id},{$set:{Image_pkt:JSON.stringify({"head_url":head_url})} }).exec(function(err,data){
+            var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
+            accountdb.findOneAndUpdate({'id':req.params.id},{$set:{Image_pkt:JSON.stringify({"head_url":head_url})}}).exec(function(err,data){
                 if(err) throw err;
                 console.log(data);
             });
-			head_url = req.files.file.path.replace(prefix, '');
 			res.redirect('/user');
 		}
         else res.end(JSON.stringify({err:status}));
 	});
 });
+
 app.post('/:id/collection_list', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
@@ -280,7 +286,7 @@ app.post('/:id/b-card_load', function(req, res){
 // })
 
 app.get('/facebook', function(req, res){
-    console.log(req);
+    console.log(req.facebook);
     req.facebook.me(function(user) {
         res.render('facebook.ejs', {
             layout: false,
@@ -291,7 +297,7 @@ app.get('/facebook', function(req, res){
     });
 });
 
-routes(app);
+routes(app,accountdb);
 
 var trim = function(account, constraint){
     delete account._v;
