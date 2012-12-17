@@ -8,11 +8,11 @@ exports.index = function(req, res){
 };
 
 exports.login = function(req, res){
-  res.render('login', { title: 'login' });
+  res.render('login');
 };
 
 exports.test = function(req, res){
-	res.render('test');
+	res.render('test', {title: 'login'});
 }
 
 exports.facebook = function(req, res){
