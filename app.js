@@ -1,4 +1,5 @@
-var express = require('express')
+var async = require('async')
+    , express = require('express')
     , routes = require('./routes')
     , http = require('http')
     , path = require('path')
@@ -39,8 +40,13 @@ app.configure(function(){
         maxAge: new Date(Date.now() + 3600000)
     }));
     app.use(app.router);
-    app.use(require('less-middleware')({ src: __dirname + '/public' }));
-    app.use(express.static(path.join(__dirname, 'public')));
+    // app.use(require('less-middleware')({ src: __dirname + '/public' }));
+    // app.use(express.static(path.join(__dirname, 'public')));
+    app.use(require('faceplate').middleware({
+        app_id: process.env.FACEBOOK_APP_ID || '471817496195401',
+        secret: process.env.FACEBOOK_SECRET || 'c7dc96c61c425bf4ce8dada9868d3bb3',
+        scope: 'user_likes,user_photos,user_photo_video_tags'
+    }))
 });
 
 app.configure('development', function(){
@@ -94,6 +100,7 @@ app.get('/signup/confirmation', function(req, res){
 });
 
 app.post('/login', function(req,res){
+
     if( req.body.email && req.body.password ){
         accountdb.findOne( {email: req.body.email, password:req.body.password},{'password':1,'email':1, 'id':1}, function(err,data){
             if( data ){
@@ -118,6 +125,8 @@ app.post('/logout', function(req, res){
 });
 
 app.post('/:id/status', function(req, res){
+    console.log(req.facebook);
+
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             accountdb.find({id: req.params.id},{_id:0,__v:0}, function(err,data){
@@ -136,7 +145,6 @@ var trim = function(account, constraint){
     delete account.register_date;
 
     for( i in constraint){
-        console.log(constraint[i]);
         delete account[constraint[i]];
     }
 }
@@ -145,8 +153,8 @@ app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             var tmp = (new accountdb(req.body)).toObject();
-            console.log(tmp);
             trim(tmp, ['email', 'password','collect']);
+            console.log(tmp);
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
                 if(err) throw err;
                 if(data) res.end(JSON.stringify({err:err_code.SUCCESS, update:tmp}));
@@ -172,26 +180,29 @@ app.post('/:id/collection_list', function(req, res){
     });
 });
 
-// var array_only_num = function(input){
-//     output = input.replace(/ /gm, "")
-//     output = output.match(/(,[0-9]+,|,[0-9]+$|^[0-9]+,)/gm)
-//     for (i in output){
-//         output[i] = output[i].replace(/,/gm, "")
-//     }
-//     return output
-// }
-
 app.post('/:id/save', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS){
-            console.log(req.body.id);
-            console.log(req.body.id.split(','));
-            console.log(array_only_num(req.body.id));
-            accountdb.find({'id':{$in:req.body.id.split(',')}},{_id:0,id:1}).exec(function(err, data){
+            var update = req.body.id.replace(/ /gm, "");
+            update = update.split(',');
+            accountdb.find({'id':{$in:update}},{_id:0,id:1}).exec(function(err, data){
                 if(err) throw err;
                 console.log(data);
                 if(data.length>0){
-                    res.end(JSON.stringify({err:err_code.SUCCESS, save:data}));
+                    accountdb.findOne({id:req.params.id}).exec(function(err,owner){
+                        if(err) throw err;
+                        if(owner){
+                            var collect = [];
+                            if(owner.collect) collect = owner.collect.split(',');
+                            for(i in data){
+                                collect.push(data[i].id);
+                            }
+                            owner.collect = collect.join(',');
+                            owner.save();
+                            res.end(JSON.stringify({err:err_code.SUCCESS, save:data}));
+                        }
+                        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                    })
                 }
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
@@ -279,8 +290,19 @@ var check_login = function( req, callback ){
 }
 
 app.get('/', routes.index );
-app.get('/login', routes.login )
-app.get('/test', routes.test)
+app.get('/login', routes.login );
+app.get('/test', routes.test );
+app.get('/facebook', function(req, res){
+    console.log(req);
+    req.facebook.me(function(user) {
+        res.render('facebook.ejs', {
+            layout: false,
+            req: req,
+            app: app,
+            user: user
+        });
+    });
+});
 
 var randomString = function(){
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";

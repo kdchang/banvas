@@ -14,3 +14,7 @@ exports.login = function(req, res){
 exports.test = function(req, res){
 	res.render('test');
 }
+
+exports.facebook = function(req, res){
+	res.render('facebook');
+}
