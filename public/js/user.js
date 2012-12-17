@@ -25,12 +25,20 @@ $.post('/'+Banvas_id+'/status',{"token": Banvas_token},function(data){
 		if(info.data[0].Skill!='default')
 			$('.skill').html(info.data[0].Skill);
 		$('.position').html(info.data[0].Position);
+<<<<<<< HEAD
 		var temp="default";
 		if(temp.match(info.data[0].Image_pkt)==null){
 			var img_url=JSON.parse(info.data[0].Image_pkt);
 			$('img.head').attr('src','/uploads/'+img_url.head_url);
 		}
 		$('a.FB').attr('href',info.data[0].linked.Facebook);
+=======
+		console.log(info.data[0].Image_pkt);
+		var img_url=JSON.parse(info.data[0].Image_pkt);
+		$('img.head').attr('src','/uploads/'+img_url.head_url);
+		$('a.FB').attr('href',info.data[0].linked.Facebook);
+		var temp="default";
+>>>>>>> d9de3137897a021ca538480daa7f590646fa27b2
 		if(temp.match(info.data[0].TimeLine)==null){
 			timeline=JSON.parse(info.data[0].TimeLine);
 		}
