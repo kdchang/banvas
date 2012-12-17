@@ -55,9 +55,9 @@
 		</div>
 		<div id="timeline">
 			<h1>Timeline</h1>
-				<div id="timeline-embed"></div>
+				<div id="timeline-embed">
+				</div>
 		</div>
-		<button id="add_time_event">Add Timeline Event</button>
 	</body>
 	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
@@ -78,6 +78,18 @@
 			<input type="text" id="text"></input><br>
 			<label>URL</label>
 			<input type="text" id="url"></input><br>
+		</form>
+	</div>
+	</script>
+	<script type="text/template" id= "Timeline_config">
+	<div>
+		<form id="config">
+			<label>Timeline HeadName</label>
+			<input type="text" id="headname"></input><br>
+			<label>Timeline Description</label>
+			<input type="text" id="time_des"></input><br>
+			<label>StartDate</label>
+			<input type="text" id="time_start"></input><br>
 		</form>
 	</div>
 	</script>
