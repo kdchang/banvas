@@ -12,7 +12,7 @@ var schema   = new mongoose.Schema({
     Position     : {type:String},
     Intro        : {type:String},
     School       : {type:String},
-    Skill        : {type:String},
+    Skill        : {type:Array},
     TimeLine     : {type:String},
     Job_exp      : {type:String},
     Image_pkt    : {type:String},

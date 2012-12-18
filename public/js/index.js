@@ -18,7 +18,7 @@ var auditspace = Backbone.View.extend({
 					console.log('Log in success');
 					setCookie("Banvas_token",re_status.token,100);
 					setCookie("Banvas_id",re_status.id,100);
-					window.location.replace('/user');	
+					window.location.replace('/'+re_status.id);	
 					break;
 				default:
 					console.log('Log in error');

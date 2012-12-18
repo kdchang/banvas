@@ -1,7 +1,8 @@
 var eventnum = 0,i,id=2;
 //$("div").qrcode("http://www.google.com.tw");
 var Banvas_id = getCookie('Banvas_id'),
-	Banvas_token = getCookie('Banvas_token');
+	Banvas_token = getCookie('Banvas_token'),
+	page_id=$('title').html();
 var FB_temp = {};
 var timeline = {
 		"timeline":
@@ -13,27 +14,55 @@ var timeline = {
 				"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}] 
 		}
 };
-$.post('/'+Banvas_id+'/status',{"token": Banvas_token},function(data){
+$.post('/'+page_id+'/status',{"token": Banvas_token},function(data){
 	var info = JSON.parse(data);
 	if(info.err!=0)
 		window.location.replace('/');
-	else{
-		if(info.data[0].name)		$('.name').html(info.data[0].name.first+' '+info.data[0].name.last);
-		if(info.data[0].School)		$('.school').html(info.data[0].School);
-		if(info.data[0].Intro)		$('.intro').html(info.data[0].Intro);
-		if(info.data[0].Skill)		$('.skill').html(info.data[0].Skill);
-		if(info.data[0].Position)	$('.position').html(info.data[0].Position);
-		if(info.data[0].Image_pkt){
-			var img_url=JSON.parse(info.data[0].Image_pkt);
+	else if(info.data){
+		if(info.data.name)		$('.name').html(info.data.name.first+' '+info.data.name.last);
+		if(info.data.School)		$('.school').html(info.data.School);
+		if(info.data.Intro)		$('.intro').html(info.data.Intro);
+		if(info.data.Skill)		{
+			$('.skill').empty();
+			for (i=0;i<info.data.Skill.length;i++)
+				$('.skill').append('<li><p class="static">'+info.data.Skill[i]+'</p></li>');
+		}
+		if(info.data.Position)	$('.position').html(info.data.Position);
+		if(info.data.Image_pkt){
+			var img_url=JSON.parse(info.data.Image_pkt);
 			$('img.head').attr('src','/uploads/'+img_url.head_url);
 		}
-		if(info.data[0].linked)		$('a.FB').attr('href',info.data[0].linked.Facebook);
-		if(info.data[0].TimeLine)	timeline=JSON.parse(info.data[0].TimeLine);
+		if(info.data.linked)		$('a.FB').attr('href',info.data.linked.Facebook);
+		if(info.data.TimeLine)	timeline=JSON.parse(info.data.TimeLine);
 		$('#timeline-embed').empty();
 		CreateTimeLine();
 	}
 })
+
+if(Banvas_id != page_id){
+	if(Banvas_id){
+		$(".account").click(function(){
+			window.location.replace('/'+Banvas_id);
+		});
+		$('<button style="float:right;">Add to My Wallet</button>').prependTo('div.person.block').click(function(){
+			$.post('/'+Banvas_id+'/collection',{'token': Banvas_token,'id':page_id},function(data){
+				console.log(data);
+			})	
+		});
+	}
+}
+else{
 $(".edit").click(edit_mode);
+$('.logout').click(function(){
+	$.post('/logout',{'token': Banvas_token},function(){
+		document.cookie='Banvas_id=;expires=Thu, 01-Jan-1970 00:00:01 GMT'
+		document.cookie='Banvas_token=;expires=Thu, 01-Jan-1970 00:00:01 GMT'
+		window.location.replace('/');
+	});
+});
+$(".collect").click(function(){
+	$('<div style="height=100%;float:right;">test</div>').appendTo('body');
+});
 $(".FB_import").click(FB_import);
 // Function Area
 function edit_mode(){
@@ -42,8 +71,9 @@ function edit_mode(){
 			$(this).html("Edit").addClass("edit").unbind('.click');
 			$(".static").unbind('click');
 			$('.temp').remove();
-			var post_data = {"token": Banvas_token,"School": $('.school:first').html(),"Intro":$('.intro').html(),"Skill":$('.skill').html(),"Position":$('.position:first').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'},"TimeLine":JSON.stringify(timeline)};
-			$.post('/'+Banvas_id+'/modify',post_data,function(data){
+			var skill_temp=[];
+			$('.skill p').each(function(){skill_temp.push($(this).html())});
+			var post_data = {"token": Banvas_token,"School": $('.school:first').html(),"Intro":$('.intro').html(),"Skill":skill_temp,"Position":$('.position:first').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'},"TimeLine":JSON.stringify(timeline)}; $.post('/'+Banvas_id+'/modify',post_data,function(data){
 				console.log(data);
 			});
 			console.log('Posting new data....');
@@ -59,7 +89,7 @@ function edit_mode(){
 			$(this).parent('li').remove();
 		});
 		$('<button class="temp">+</button>').appendTo('.skill_header').click(function(){
-			$('<li class="static">Click To Edit</li>').appendTo('ul.skill').click(edit).change(save).end();
+			$('<li><p class="static">Click To Edit</p></li>').appendTo('ul.skill').children('p').click(edit).change(save).end();
 		});
 		$('<button class="temp" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
 		$('<button class="temp" >Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
@@ -73,7 +103,7 @@ function save(){
 }
 function edit(){
 			temp=$(this).removeClass("static").addClass("changing").html();
-			$(this).html('<input class=\"editing\" type="text" value=\''+temp+'\'>').unbind('click').bind('click',save);
+			$(this).html('<input autofocus="autofocus" class=\"editing\" type="text" value=\''+temp+'\'>').unbind('click').bind('focusout',save);
 }
 function getCookie(c_name){
 		var i,x,y,ARRcookies=document.cookie.split(";");
@@ -88,6 +118,12 @@ function getCookie(c_name){
 				}
 		}
 }
+/*function setCookie(c_name,value,exdays){
+    var exdate = new Date();
+	exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+	document.cookie=c_name + "=" + c_value;
+}*/
 function Social_url(){
 	$("<form><label>Facebook:</label><input type='text' id='FB_url'/><br><label>Blog:</label><input type='text' id='Blog_url'/><br><label>LinkedIn:</label><input type='text' id='Linked_url'/></form>").dialog({
 		buttons: {
@@ -205,4 +241,5 @@ function FB_import(){
 			});
 		} else console.log('User cancelled login or did not fully authorize.');
 	});
+}
 }

@@ -2,12 +2,6 @@ All response returned is descripted in class attribute named 'err', ex: {err:0}
 
 the error codes are referenced below
 
-HTML
-==================================================================================
-/index.html             : 
-
-/user.html              :
-
 API
 ==================================================================================
 /signup              : sign up new account, send email for certification
@@ -81,3 +75,5 @@ STATUS number
 7                    : mail error, can't send email to the email address
 
 8                    : DB save error, can't save data to DB
+
+9                    : permission denied, can't change other person's status
