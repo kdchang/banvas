@@ -8,3 +8,4 @@ exports.CONFIRM_ERR = 6
 exports.MAIL_ERROR = 7
 exports.DB_SAVE_ERROR = 8
 exports.PERMISSION_DENIED = 9
+exports.DATA_FORMAT = 10

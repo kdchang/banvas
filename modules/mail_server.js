@@ -12,8 +12,8 @@ exports.message =  function(email, token){
     var address = process.env.APP_URL || 'http://localhost:3000';
     return {
         text: "Welcome to Banvas!!!\n Please enter the following link to complete signup!!!\n"+
-                address+"/signup/confirmation?token="+token,
-        from: "Banvas <banvastest@gmail.com>",
+                address+"/signup/confirmation?token="+token ,
+        from: "Banvas <banvastest@gmail.com>",  
         to: email,
         cc: null,
         subject: "Welcome to Banvas"

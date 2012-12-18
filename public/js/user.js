@@ -14,31 +14,6 @@ var timeline = {
 				"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}] 
 		}
 };
-$.post('/'+page_id+'/status',{"token": Banvas_token},function(data){
-	var info = JSON.parse(data);
-	if(info.err!=0)
-		window.location.replace('/');
-	else if(info.data){
-		if(info.data.name)		$('.name').html(info.data.name.first+' '+info.data.name.last);
-		if(info.data.School)		$('.school').html(info.data.School);
-		if(info.data.Intro)		$('.intro').html(info.data.Intro);
-		if(info.data.Skill)		{
-			$('.skill').empty();
-			for (i=0;i<info.data.Skill.length;i++)
-				$('.skill').append('<li><p class="static">'+info.data.Skill[i]+'</p></li>');
-		}
-		if(info.data.Position)	$('.position').html(info.data.Position);
-		if(info.data.Image_pkt){
-			var img_url=JSON.parse(info.data.Image_pkt);
-			$('img.head').attr('src','/uploads/'+img_url.head_url);
-		}
-		if(info.data.linked)		$('a.FB').attr('href',info.data.linked.Facebook);
-		if(info.data.TimeLine)	timeline=JSON.parse(info.data.TimeLine);
-		$('#timeline-embed').empty();
-		CreateTimeLine();
-	}
-})
-
 if(Banvas_id != page_id){
 	if(Banvas_id){
 		$(".account").click(function(){
@@ -60,10 +35,9 @@ $('.logout').click(function(){
 		window.location.replace('/');
 	});
 });
-$(".collect").click(function(){
-	$('<div style="height=100%;float:right;">test</div>').appendTo('body');
-});
+$(".collect").click(Show_collection);
 $(".FB_import").click(FB_import);
+$('.B_card').click(show_card);
 // Function Area
 function edit_mode(){
 		$(this).html("Done").removeClass("edit").click(function(){
@@ -223,11 +197,8 @@ function FB_import(){
 		if (response.authResponse) {
 			console.log('Welcome!  Fetching your information.... ');
 			FB.api('/me?fields=bio,birthday,education,work', function(response) {
-				//console.log(response);
-				//console.log(response['education']);
 				for (i in response['education']){
 					if( response['education'][i]['type'] == 'College' || response['education'][i]['type'] == 'Graduate School' ){
-						//console.log(response['education'][i]['school']['name'])
 						FB_temp['School'] = response['education'][i]['school']['name'];
 					}
 				}
@@ -241,5 +212,25 @@ function FB_import(){
 			});
 		} else console.log('User cancelled login or did not fully authorize.');
 	});
+}
+function Show_collection(){
+	var contain_temp = $('div.container').html();
+	$('div.container').empty().append($('#collection_list').html());
+	console.log('1');
+	$.post('/'+Banvas_id+'/collection_list',function(data){
+		console.log(data);
+	});
+
+	//setTimeout(function(){$().one('click',Back_user(contain_temp))},3000);
+}
+function Back_user(contain_temp){
+	console.log('1');
+	$('div.container').empty();
+	//$('').one('click',Show_collection());
+}
+function show_card(){
+	var b_card = $('#b_card').html();
+	console.log($('<div></div>').qrcode(document.URL).append(b_card));
+	$.fancybox.open($('<div></div>').qrcode(document.URL).append(b_card));
 }
 }

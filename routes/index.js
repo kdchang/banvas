@@ -14,6 +14,11 @@ module.exports = function(app, accountdb){
 		res.render('test', {title:'test'});
 	});
 	app.get('/:id', function(req, res){
-		res.render('user', {title: 'Signup', head_url: 'default',userid: req.params.id});
+		accountdb.findOne({id: req.params.id},{_id:0,__v:0}, function(err,data){
+		if(err) throw err;
+		console.log(data.TimeLine);
+		if(data) res.render('user', {userid: req.params.id,pkt : data,timeline : (data.TimeLine=='default')?{}: JSON.parse(data.TimeLine)});
+		else res.render('No Such User');
+		});
 	});
 }

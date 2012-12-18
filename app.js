@@ -77,24 +77,19 @@ var confirm_list = {};
 app.post('/signup', function(req, res){
     var query = req.body;
     if( query.email && query.password && query.first_name && query.last_name && query.id ){
-        accountdb.findOne({email:req.body.email}).exec(function(err,data){
+        accountdb.findOne({$or:[{email:req.body.email},{id: query.id}]}).exec(function(err,data){
             if(err) throw err;
             if(data) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
-                accountdb.findOne({id: query.id}).exec(function(err,result){
-                    if(err) throw err;
-                    if(result) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-                    else{
-                        var token = randomString();
-                        confirm_list[token] = new accountdb(query);
-                        mail.server.send(mail.message(query.email, token), function(err, data){
-                            if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
-                            else res.end(JSON.stringify({err:err_code.SUCCESS}));
-                            console.log(data);
-                        });
-                    }
+                var token = randomString();
+                // confirm_list[query.id] = {token:token, data:new accountdb(query)};
+                confirm_list[token] = new accountdb(query);
+                mail.server.send(mail.message(query.email, token), function(err, data){
+                    if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
+                    else res.end(JSON.stringify({err:err_code.SUCCESS, confirm_token:token}));
+                    console.log(data);
                 });
-            }
+            };
         });
     }
     else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
@@ -102,22 +97,23 @@ app.post('/signup', function(req, res){
 
 app.get('/signup/confirmation', function(req, res){
     if( req.query.token && confirm_list[req.query.token] ){
-            var account = confirm_list[req.query.token];
-            account.register_date = Date.now();
-            account.save(function(err, data){
-                if(err) throw err;
-                else{
-                    console.log(data);
-                    delete confirm_list[req.query.token];
+        var account = confirm_list[req.query.token];
+        account.register_date = Date.now(); 
+        account.save(function(err, data){
+            if(err) throw err;
+            else{
+                console.log(data);
+                delete confirm_list[req.query.token];
 
-                    var token = randomString();
-                    req.session.item = {log_token: token, log_data: data};
+                var token = randomString();
+                req.session.item = {log_token: token, log_data: data};
 
-                    res.redirect('/user');
-                }
-            });
+                res.render('confirmation', {err:err_code.SUCCESS, id:data.id, token: token});
+            }
+        });
     }
-    else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
+    // else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
+    else res.redirect('/');
 });
 
 app.post('/login', function(req,res){
@@ -147,14 +143,28 @@ app.post('/logout', function(req, res){
 })
 
 app.post('/:id/status', function(req, res){
-    console.log(res.locals);
     // check_login(req, function(status){
         // if( status == err_code.SUCCESS ){
-            accountdb.findOne({id: req.params.id},{_id:0,__v:0}, function(err,data){
+            accountdb.findOne({id: req.params.id}).exec(function(err,data){
                 if(err) throw err;
                 if(data) {
                     console.log('load '+req.params.id+' status success!!!');
-					res.end(JSON.stringify({err:err_code.SUCCESS, data:data}));
+
+                    data.statistic.view_time = data.statistic.view_time + 1;
+
+                    data.save(function(err, data){
+                        if(err) throw err;
+                        console.log(data);
+                    });
+
+                    var a = data.toObject();
+                    trim(a, ['password','statistic','collect','modify_date']);
+                    // var a = data.toObject();
+                    // delete a.statistic;
+                    // console.log(a);
+
+                    console.log(a);
+					res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
 				}
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
@@ -167,7 +177,7 @@ app.post('/:id/modify', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             var tmp = (new accountdb(req.body)).toObject();
-            trim(tmp, ['email', 'password','collect']);
+            trim(tmp, ['email', 'password','collect','register_date']);
             console.log(tmp);
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
                 if(err) throw err;
@@ -196,50 +206,86 @@ app.post('/:id/mod_img', function(req, res) {
 });
 
 app.post('/:id/collection_list', function(req, res){
-    check_login(req, function(status){
-        if( status == err_code.SUCCESS ){
+    // check_login(req, function(status){
+        // if( status == err_code.SUCCESS ){
             console.log(req.session.item.log_data);
             accountdb.findOne({'id':req.params.id},{collect:1}).exec(function(err, data){
                 if(err) throw err;
                 console.log(data);
                 if(data) res.end(JSON.stringify({err:err_code.SUCCESS, collection: data.collect}));
-                else res.end(JSON.stringify({err:err_code.PERMISSION_DENIED}));
-            })
-        }
-        else res.end(JSON.stringify({err:status}));
-    });
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+            });
+        // }
+        // else res.end(JSON.stringify({err:status}));
+    // });
 });
 
 app.post('/:id/save', function(req, res){
     check_login(req, function(status){
         if( status == err_code.SUCCESS){
-            var update = req.body.id.replace(/ /gm, "");
-            update = update.split(',');
-            accountdb.find({'id':{$in:update}},{_id:0,id:1}).exec(function(err, data){
-                if(err) throw err;
-                if(data.length>0){
-                    accountdb.findOne({id:req.params.id}).exec(function(err,owner){
-                        if(err) throw err;
-                        if(owner){
-                            var collect = [];
-                            if(owner.collect) collect = owner.collect.split(',');
-                            for(i in data){
-                                if(collect.indexOf(data[i].id)==-1)
-                                    collect.push(data[i].id);
-                            }
-                            owner.collect = collect.join(',');
-                            owner.save();
-                            res.end(JSON.stringify({err:err_code.SUCCESS, save:data}));
-                        }
-                        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-                    })
+            if( typeof(req.body.id) == typeof({}) ){
+                var id = [];
+                for(i in req.body.id){
+                    id.push(i);
                 }
-                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-            })
+                accountdb.find({'id':{$in:id}}, {_id:0, id:1}).exec(function(err, data){
+                    if(err) throw err;
+                    if(data.length>0){
+                        accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, owner){
+                            if(err) throw err;
+                            if(owner){
+                                var updated = [];
+                                var collect = {};
+                                if(owner.collect) collect = JSON.parse(owner.collect);
+                                for(i in data){
+                                    collect[data[i].id] = req.body.id[data[i].id];
+                                    updated.push(data[i].id);
+                                }
+                                owner.collect = JSON.stringify(collect);
+                                owner.save();
+                                res.end(JSON.stringify({err:err_code.SUCCESS, save:updated}));
+                            }
+                            else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                        })
+                    }
+                    else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                })
+            }
+            else res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
         }
         else res.end(JSON.stringify({err:status}));
     });
 });
+
+app.post('/:id/delete', function(req, res){
+    check_login(req, function(status){
+        if(status == err_code.SUCCESS){
+            if( typeof(req.body.id) == typeof([]) ){
+                accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, data){
+                    if(err) throw err;
+                    if(data){
+                        var deleted = [];
+                        var collect = {};
+                        if( data.collect ) collect = JSON.parse(data.collect);
+
+                        for(i in req.body.id){
+                            if(collect[req.body.id[i]]){
+                                delete collect[req.body.id[i]];
+                                deleted.push(req.body.id[i]);
+                            }
+                        }
+                        data.collect = JSON.stringify(collect);
+                        data.save();
+                        res.end(JSON.stringify({err:err_code.SUCCESS, update:deleted}));
+                    }
+                    else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                })
+            }
+            else res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
+        }
+        else res.end(JSON.stringify({err:status}));
+    })
+})
 
 app.post('/:id/b-card_save', function(req, res){
     check_login(req, function(status){
@@ -303,54 +349,67 @@ app.post('/:id/b-card_load', function(req, res){
 //     }); 
 // })
 
-app.get('/facebook', function(req, res){
-    console.log(req.facebook);
-    req.facebook.me(function(user) {
-        res.render('facebook.ejs', {
-            layout: false,
-            req: req,
-            app: app,
-            user: user
-        });
-    });
-});
+app.post('/:id/statistic', function(req, res){
+    check_login(req, function(status){
+        if(status==err_code.SUCCESS){
+            accountdb.findOne({id: req.params.id},{_id:0, statistic:1}).exec(function(err, data){
+                if(err) throw err;
+                if(data)
+                    res.end(JSON.stringify({err:status, statistic:data.statistic}));
+                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+            })
+        }
+        else res.end(JSON.stringify({err:status}));
+    })
+})
 
-// show friends
-app.get('/friends', function(req, res) {
-  req.facebook.get('/me/friends', { limit: 4 }, function(friends) {
-    res.send('friends: ' + require('util').inspect(friends));
-  });
-});
+// app.get('/facebook', function(req, res){
+//     console.log(req.facebook);
+//     req.facebook.me(function(user) {
+//         res.render('facebook.ejs', {
+//             layout: false,
+//             req: req,
+//             app: app,
+//             user: user
+//         });
+//     });
+// });
 
-// use fql to show my friends using this app
-app.get('/friends_using_app', function(req, res) {
-  req.facebook.fql('SELECT uid, name, is_app_user, pic_square FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1', function(friends_using_app) {
-    res.send('friends using app: ' + require('util').inspect(friends_using_app));
-  });
-});
+// // show friends
+// app.get('/friends', function(req, res) {
+//   req.facebook.get('/me/friends', { limit: 4 }, function(friends) {
+//     res.send('friends: ' + require('util').inspect(friends));
+//   });
+// });
 
-// perform multiple fql queries at once
-app.get('/multiquery', function(req, res) {
-  req.facebook.fql({
-    likes: 'SELECT user_id, object_id, post_id FROM like WHERE user_id=me()',
-    albums: 'SELECT object_id, cover_object_id, name FROM album WHERE owner=me()',
-  },
-  function(result) {
-    var inspect = require('util').inspect;
-    res.send('Yor likes: ' + inspect(result.likes) + ', your albums: ' + inspect(result.albums) );
-  });
-});
+// // use fql to show my friends using this app
+// app.get('/friends_using_app', function(req, res) {
+//   req.facebook.fql('SELECT uid, name, is_app_user, pic_square FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1', function(friends_using_app) {
+//     res.send('friends using app: ' + require('util').inspect(friends_using_app));
+//   });
+// });
 
-app.get('/signed_request', function(req, res) {
-  res.send('Signed Request details: ' + require('util').inspect(req.facebook.signed_request));
-});
+// // perform multiple fql queries at once
+// app.get('/multiquery', function(req, res) {
+//   req.facebook.fql({
+//     likes: 'SELECT user_id, object_id, post_id FROM like WHERE user_id=me()',
+//     albums: 'SELECT object_id, cover_object_id, name FROM album WHERE owner=me()',
+//   },
+//   function(result) {
+//     var inspect = require('util').inspect;
+//     res.send('Yor likes: ' + inspect(result.likes) + ', your albums: ' + inspect(result.albums) );
+//   });
+// });
+
+// app.get('/signed_request', function(req, res) {
+//   res.send('Signed Request details: ' + require('util').inspect(req.facebook.signed_request));
+// });
 
 routes(app,accountdb);
 
 var trim = function(account, constraint){
-    delete account._v;
+    delete account.__v;
     delete account._id;
-    delete account.register_date;
 
     for(i in constraint){
         delete account[constraint[i]];

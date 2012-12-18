@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title><%=userid %></title>
+		<link href="stylesheets/jquery.fancybox.css" rel="stylesheet">
 		<link href="stylesheets/no-theme/jquery-ui-1.9.2.custom.css" rel="stylesheet">
 		<link href="stylesheets/user.css" rel="stylesheet">
 	</head>
@@ -17,53 +18,77 @@
 						<li class="FB_import">Import from FB</li>
 						<li class="edit">Edit</li>
 						<li class="collect">My Wallet</li>
-						<li>Share</li>
+						<li class="B_card">Share</li>
 						<li>Help</li>
 						<li class="logout">Log Out</li>
 					</ul>
 				</span>
 			</form>
 		</div>  
+		<div class="container">
 		<div class="person block">
-			<img class="head" src='/uploads/<%= head_url %>'>
+			<img class="head" src='/uploads/<%= pkt.Image_pkt %>'>
 			<span class="id">
-				<h1 class="name static">Banvas!!</h1>
-				<span>School:</span><p class="school static">Default</p><br>
-				<span>Position:</span><p class="position static">Default</p><br>
-				<span>Intro:</span><p class="intro static">This is Introduction</p>
+				<h1 class="name static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
+				<span>School:</span><p class="school static"><%= pkt.School %></p><br>
+				<span>Position:</span><p class="position static"><%= pkt.Position  %></p><br>
+				<span>Intro:</span><p class="intro static"><%= pkt.Intro %></p>
 			</span>
 		</div>
 		<div class="social block">
-			<a class="FB" href="http://www.facebook.com/wallymath">
+			<a class="FB" href= "<%= pkt.linked %>">
 				<img class="icon social FB" src="/material/facebook.png">
 			</a>                        
 		</div>
 		<div class="block">
 			<img class="icon" src="/material/ntulogo.jpg" >
-			<p class="school static">Default</p><br>
-			<p class="position static">Default</p>
+			<p class="school static"><%= pkt.School %></p><br>
+			<p class="position static"><%= pkt.Position %></p>
 		</div>
 		<div class="block">
 			<img class="icon" src="/material/TFSH.jpg" >
-			<p class="high_school static">Default</p>             
+			<p class="high_school static"><%= pkt.School %></p>
 		</div>
 		<div class="block">
 			<h1 class="skill_header">Skill</h1>
 			<ul class="skill">
-				<li><p class="static">PHP</p></li>
-				<li><p class="static">Design</p></li>
-				<li><p class="static">C</p></li>
+				<% for(var k = 0; k < pkt.Skill.length ;k++ ) { %>
+				<li><p class="static"><%= pkt.Skill[k] %></p></li>
+				<% } %>
 			</ul>
 		</div>
 		<div id="timeline">
 			<h1>Timeline</h1>
-				<div id="timeline-embed"></div>
+			<div id="timeline-embed"></div>
+		</div>
 		</div>
 	</body>
 	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
 	<script type="text/javascript" src="js/jquery-qr-plugin.js"></script>
 	<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<script type="text/javascript">
+	var timeline_json={
+			"timeline":
+			{
+					"headline":"Welcome To Banvas",
+					"type":"default",
+					"text":"Make professional connect easier and closer",
+					"startDate":"2000,1,1",
+					"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}]
+			}
+	};
+	if(timeline){
+		 <% timeline_json=timeline %>;
+	}
+	var timeline_config = {
+					width:              '100%',
+					height:             '600',
+					source:             timeline_json,
+					embed_id:           'timeline-embed',               //OPTIONAL USE A DIFFERENT DIV ID FOR EMBED
+	}
+	</script>
 	<script type="text/javascript" src="js/storyjs-embed.js"></script>
 	<script type="text/javascript" src="js/user.js"></script>
 	<script type="text/template" id= "add_time_form">
@@ -93,5 +118,15 @@
 			<input type="text" id="time_start"></input><br>
 		</form>
 	</div>
+	</script>
+	<script type="text/template" id= "collection_list">
+	<div class='block'>
+		<div><h1>Wallet Of <%=userid %></h1></div>
+		<button class="add_collection">Subscribe B-Cards By ID</buttton>
+		<button class="go_back">Back To My Page</button>
+	</div>
+	</script>
+	<script type="text/template" id= "b_card">
+		<h1><%= pkt.name.first %> <%= pkt.name.last %></h1>
 	</script>
 </html>
