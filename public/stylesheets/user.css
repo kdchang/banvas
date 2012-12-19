@@ -6,6 +6,9 @@ div.block{
     margin : 20px auto;
     width: 700px;
 }
+div#backboard{
+	width: 100%;
+}
 div.hero-unit{
 	width: 800px;
 }

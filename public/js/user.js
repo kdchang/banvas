@@ -1,4 +1,4 @@
-var eventnum = 0,i,id=2;
+var eventnum = 0,i,collect_status=0;
 //$("div").qrcode("http://www.google.com.tw");
 var Banvas_id = getCookie('Banvas_id'),
 	Banvas_token = getCookie('Banvas_token'),
@@ -20,9 +20,19 @@ $(document).ready(function(){
 	timeline=JSON.parse($('meta[name="timeline_json"]').attr('content'));
 	CreateTimeLine();
 })
-if(Banvas_id != page_id){
-	if(Banvas_id){
-		$(".account").click(function(){
+$('.search').click(search);
+function search(){
+	console.log('search clicked');
+	if($('input.search-query').val().length!=0){
+		console.log('start searching...');
+		$.post('/search',{'token':Banvas_token,'query':$('input.search-query').val()},function(data){
+			console.log(data);
+		})
+	}
+}
+if(Banvas_id){
+if(Banvas_id!=page_id){	//Log in but not the admin of this page
+		$(".account").html(Banvas_id).click(function(){
 			window.location.replace('/'+Banvas_id);
 		});
 		$('<button style="float:right;">Add to My Wallet</button>').prependTo('div.person.block').click(function(){
@@ -30,9 +40,11 @@ if(Banvas_id != page_id){
 				console.log(data);
 			})	
 		});
-	}
+		$('<button class="btn btn-info" style="float : right;">+1</button>').appendTo('.skill li').click(function(){
+			console.log('Like');
+		});
 }
-else{
+else{		//admin of the page
 $(".edit").click(edit_mode);
 $('.logout').click(function(){
 	$.post('/logout',{'token': Banvas_token},function(){
@@ -69,7 +81,7 @@ function edit_mode(){
 			$(this).parent('li').remove();
 		});
 		$('<button class="temp">+</button>').appendTo('.skill_header').click(function(){
-			$('<li><p class="static">Click To Edit</p></li>').appendTo('ul.skill').children('p').click(edit).change(save).end();
+			$('<li><p class="changing"><input autofocus="autofocus" class=\"editing\" type="text" value="default"></p></li>').appendTo('ul.skill').children('p').bind('focusout',save);
 		});
 		$('<button class="temp" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
 		$('<button class="temp" >Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
@@ -223,19 +235,20 @@ function FB_import(){
 	});
 }
 function Show_collection(){
-	var contain_temp = $('div.container').html();
-	$('div.container').empty().append($('#collection_list').html());
-	console.log('1');
-	$.post('/'+Banvas_id+'/collection_list',function(data){
-		console.log(data);
-	});
+	var contain_temp;
 
-	//setTimeout(function(){$().one('click',Back_user(contain_temp))},3000);
-}
-function Back_user(contain_temp){
-	console.log('1');
-	$('div.container').empty();
-	//$('').one('click',Show_collection());
+	if(collect_status){
+		$('div.container').empty().append(contain_temp);
+		collect_status = 0;
+	}
+	else{
+		contain_temp = $('div.container').html();
+		$('div.container').empty().append($('#collection_list').html());
+		$.post('/'+Banvas_id+'/collection_list',function(data){
+			console.log(data);
+		});
+		collect_status = 1;
+	}
 }
 function show_card(){
 	var b_card = $('#b_card').html();
@@ -245,5 +258,6 @@ function show_card(){
 			$(".static").click(edit).change(save).end();
 		}
 	});
+}
 }
 }

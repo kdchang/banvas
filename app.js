@@ -196,10 +196,6 @@ app.post('/:id/modify', function(req, res){
                 if( i!='name' && !req.body[i] && i != 'modify_date' )
                     delete tmp[i];
             }
-            if(!req.body.last_name) delete tmp.name.last_name;
-            if(!req.body.first_name) delete tmp.name.first_name;
-            if(JSON.stringify(tmp.name) === "{}") delete tmp.name;
-
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
                 if(err) throw err;
                 if(data) res.end(JSON.stringify({err:err_code.SUCCESS, update:tmp}));
@@ -380,7 +376,7 @@ app.post('/:id/b-card_load', function(req, res){
 })
 
 app.post('/search', function(req, res){
-    var query = req.body.search;
+    var query = req.body.query;
     if(typeof(query) == typeof("")){
         accountdb.find().exec(function(err, data){
             if(err) throw err;
