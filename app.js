@@ -74,6 +74,19 @@ app.configure('development', function(){
 });
 
 var confirm_list = {};
+
+    app.get('/signup', function(req, res){
+        res.render('signup',{});
+    })
+
+    app.get('/signin', function(req, res){
+        res.render('signin',{});
+    })
+
+    app.get('/detail', function(req, res){
+        res.render('detail',{});
+    })
+
 app.post('/signup', function(req, res){
     var query = req.body;
     if( query.email && query.password && query.first_name && query.last_name && query.id ){
