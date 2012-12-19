@@ -8,17 +8,18 @@ var schema   = new mongoose.Schema({
     	last : {type:String, require:true}
     },
     id           : {type:String, require:true},
-    linked       : {type:{Facebook:String, Blogger:String, Linkedin:String}, require:true,default: {Facebook:"#",Blogger:"#",Linkedin:"#"}},
+    linked       : {type:{Facebook:String, Blogger:String, Linkedin:String}, require:true, default: {Facebook:"#",Blogger:"#",Linkedin:"#"}},
     Position     : {type:String, default:"default"},
     Intro        : {type:String, default:"default"},
     School       : {type:String, default:"default"},
     Skill        : {type:Array, default:[]},
     TimeLine     : {type:String, default:"default"},
     Job_exp      : {type:String, default:"default"},
-    Image_pkt    : {type:String, default:"default.png"},
+    Image_pkt    : {type:String, default:'{"head_url":"default.png"}'},
     phone        : {type:String, default:"default"},
     modify_date  : {type:Date, default: Date.now },
     register_date: {type:Date},
+    Location     : {type:String},
     statistic    : {
         // how many people queried your status before
         view_time: {type:Number, default:0},

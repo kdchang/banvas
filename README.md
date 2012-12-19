@@ -36,7 +36,7 @@ API
 /:id/collection_list : return the id's collection list
                             POST: token
                             RETURN: collection [id1, tag1], [id2, tag2],...
-                            EXAMPLE: $.post('/111/collection_list', {token: '1234561as'}) -> {err:0, collection:{111:teacher, 222:student}}
+                            EXAMPLE: $.post('/111/collection_list', {token: '1234561as'}) -> {err:0, collection:{'teacher':['111','222'], 'student':['b99902006','b00102']}}
 
 /:id/save            : post 'id' you want to subscribe to this site. the 'id' will be added to the collection_list, default tag = 'default' override if 'id' was already in collection_list
                             POST: token, (id,tag) pair
@@ -78,7 +78,7 @@ STATUS number
 
 2                    : data provided is not complete
 
-3                    : data corrupted
+3                    : confirm_failed. The token is not valid to this id.
 
 4                    : session token not match
 

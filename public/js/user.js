@@ -2,7 +2,7 @@ var eventnum = 0,i,id=2;
 //$("div").qrcode("http://www.google.com.tw");
 var Banvas_id = getCookie('Banvas_id'),
 	Banvas_token = getCookie('Banvas_token'),
-	page_id=$('title').html();
+	page_id=$('meta[name="userid"]').attr('content');
 var FB_temp = {};
 var timeline = {
 		"timeline":
@@ -14,6 +14,12 @@ var timeline = {
 				"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}] 
 		}
 };
+
+$(document).ready(function(){
+	console.log('ready');
+	timeline=JSON.parse($('meta[name="timeline_json"]').attr('content'));
+	CreateTimeLine();
+})
 if(Banvas_id != page_id){
 	if(Banvas_id){
 		$(".account").click(function(){
@@ -115,29 +121,30 @@ function Social_url(){
 function AddTimeEvent(){
 	var temp = _.template($('#add_time_form').html(),{});
 	$(temp).dialog({
-		height: 300,
+		height: 600,
 		width: 400,
 		modal: true,
 		buttons : {
 			"Create": function(){
 				var new_event={
-					"startDate": $('#startDate').val(),
-					"endDate": $('#endDate').val(),
-					"headline":$('#headline').val(),
-					"text": '<p>'+$('#text').val()+'</p>',
+					"startDate": $('#startDate:last').val() || '1991,1,1',
+					"endDate": $('#endDate:last').val() || '1991,1,2',
+					"headline":$('#headline:last').val() || 'default',
+					"text": '<p>'+($('#text:last').val() || 'default')+'</p>',
 					"asset":{
-						"media":$('#url').val(),
+						"media":$('#url').val() || " ",
 						"credit":" ",
 						"caption":" "
 					}
 				}
+				console.log(new_event);
 				timeline.timeline.date.push(new_event);
 				$('#timeline-embed').empty();
 				CreateTimeLine();
-				$( this ).dialog( "close" );
+				$( this ).dialog("destroy").remove();
 			},
 			"Cancel": function(){
-				$( this ).dialog( "close" );
+				$( this ).dialog( "destroy" ).remove();
 			}
 		}
 	});
@@ -145,7 +152,7 @@ function AddTimeEvent(){
 function Timeline_config(){
 	var temp = _.template($('#Timeline_config').html(),{});
 	$(temp).dialog({
-		height: 300,
+		height: 600,
 		width: 400,
 		modal: true,
 		buttons : {
@@ -158,19 +165,20 @@ function Timeline_config(){
 					timeline.timeline.startDate=$('#time_start').val();
 				$('#timeline-embed').empty();
 				CreateTimeLine();
-				$( this ).dialog( "close" );
+				$( this ).dialog( "destroy" ).remove();
 			},
 			"Cancel": function(){
-				$( this ).dialog( "close" );
+				$( this ).dialog( "destroy" ).remove();
 			}
 		}
 	});
 }
 function CreateTimeLine(){
+	console.log(timeline);	
 	createStoryJS({
 		type:       'timeline',
 		width:      '100%',
-		height:     '600',
+		height:     '400',
 		source:     timeline,
 		embed_id:   'timeline-embed',           // ID of the DIV you want to load the timeline into
 	});	

@@ -1,106 +1,43 @@
-body, ul{
-	margin: 0px;
-	text-align: center;
+div#backboard{
+	width:100%;
 }
-.header {
-	width: 100%;
-	height: 30px;
-	background-color: #1a003f;
+
+.account{
+	margin-left:-190px;
+	padding: 10px;
 }
-.searchbar {
-	position : absolute;
-	left : 50%;
-	margin-left:-400px;
-	padding: 5px 0px;
-	width: 800px;
-}
-input.search{
-	position : absolute;
-	border : 1px solid #aaaaaa;
-}
-input[type=text].search{
-	margin-left: -125px;
-	border-radius : 3px ;
-	width : 250px;
-}
-input[type=submit].search{
-	width : 70px;
-	border-radius : 3px ;
-	margin-left: 125px;
-	background-color: #fff;
-}
-.login{
-	float:right;
-	margin-right : 70px;
-	width: 50px;
-	background-color: #74A6DD;
-	color: #fff;
-	border-radius : 3px;
-}
-.login ul{
-	position: absolute;
-	display:none;
-	text-align: left;
-	width: 200px;
-	margin-left:-150px;
-	background-color: #74A6DD;
-	border-radius : 3px;
-	z-index :3;
-}
-.login:hover ul{
-	display:block;
-}
-.login li {
-	padding :3px 5px;
-	z-index: 3;
-}
-.slide {
-	position : absolute;
-	background-color: #aaa;
-	width : 400px;
-	height : 100px;
-	left : 50%;
-	top : 100px;
-	margin-left: -200px;
-	z-index: 1;    
+
+.slide_container{
+	margin:auto;
+	position : relative;
+	width: 600px;
+	height: 250px;
 }
 .slide ul{
 	position : absolute;
-	right : 5%;
+	right: 5%;
 	bottom : 5%;
 	z-index:2;
 }
 .slide li{
-	display : inline-block;
+	display :inline-block;
 }
 div.slider{
 	display : none;
 	background-color : transparent;
 	position : absolute;
-	width:100%;
-	height:100%;
+	width:600px;
+	height:250px;
 }
-button{
+.slide button{
 	width: 5px;
 	height: 10px;
 	background-color: blue;
 	border-radius : 5px ;
 }
-button:hover {
+.slide button:hover {
 	background-color: yellow;
 }
-button.focus{
+.slide button.focus{
 	background-color: red;
-}
-.box{
-	position : absolute;
-	width :700px;
-	left : 50%;
-	top : 300px;
-	margin-left : -350px;
-}
-.box li{
-	text-align : right; 
-	display : inline-block;
-	padding : 0px 50px ;
 }

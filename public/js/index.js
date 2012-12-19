@@ -2,8 +2,12 @@ $(function(){
 var auditspace = Backbone.View.extend({
 	el: "body",
 	events:{
+		"click a.login"	: "open_list",
 		"click button#submit" : "log_in",
-		"click input#register" : "register"
+		//"click "
+	},
+	open_list:function(){
+		$('.btn-group').addClass('open');
 	},
 	log_in:function(event){
 		event.preventDefault();
@@ -49,18 +53,18 @@ var workspace = Backbone.Router.extend({
     			}
     			, register : function() {
 				var temp = _.template($("#register-view").html(),{});
-					el = $('.container');
+					el = $('.slide_container');
 					el.html(temp);
 				}
 				, index : function(){
 				var temp = _.template($("#index-view").html(),{});
-					el = $('.container');
+					el = $('.slide_container');
 					el.html(temp);
 					$('.top').show();
-					$('button').click(function(){
+					$('.slide button').click(function(){
 				    var x = $(this).val();
 				    if(x != $('button.focus').val()){
-  			      	$('button.focus').removeClass('focus');
+  			      	$('.slide button.focus').removeClass('focus');
 			        $(this).addClass('focus');
 			        $('div.top').removeClass('top').hide("slide", {direction: "right"}, 500);
 			        $('div.'+x).addClass('top').show("slide",{}, 500);

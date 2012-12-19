@@ -67,12 +67,26 @@
       <div id='statistic'></div>
     </div>
 
+    <div>
+      <form id='fsearch'>
+        <input type='text' name='search'>
+        <button id='search'>Search</button>
+      </form>
+    </div>
+
 <script>
   $('#statistic_load').click(function(){
     $.post('/'+id+'/statistic', {token:token}, function(data){
       console.log(data);
       $("#statistic").html(data);
     },'text');
+  })
+
+  $('#fsearch').submit(function(){
+    $.post('/search', {search:$("#fsearch input[name=search]").val()}, function(data){
+      console.log(data);
+    })
+    return false;
   })
 
   $('#collect_save').click(function(){
@@ -108,11 +122,10 @@
 
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '471817496195401', // App ID from the App Dashboard
-      // channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File for x-domain communication
-      status     : true, // check the login status upon init?
-      cookie     : true, // set sessions cookies to allow your server to access the session?
-      xfbml      : true  // parse XFBML tags on this page?
+      appId      : '471817496195401',
+      status     : true,
+      cookie     : true,
+      xfbml      : true
     });
 
   };
@@ -206,3 +219,34 @@
     </script>
   </body>
 </html>
+
+<script>
+  var FB_status = function(callback){
+    // var status = {};
+    FB.api('/me?fields=email,first_name,last_name,education,bio,picture.type(large),id,username,link,hometown', function(res){
+      var status = {};
+      status.fb_id = res.id;
+
+      status.first_name = res.first_name;
+      status.last_name = res.last_name;
+      status.email = res.email;
+      status.password = res.id;
+      status.id = res.username;
+
+      status.linked = {};
+      status.linked.Facebook = res.link;
+      status.Intro = res.bio;
+
+      status.location = (res.hometown ? res.hometown.name : undefined );
+      status.School = undefined;
+      for(i in res.education){
+        if(res[i].type=='College'||res[i].type=='Graduate School')
+          status.School = res[i].school;
+      }
+
+      status.Image_pkt = (res.picture ? JSON.stringify({head_url:res.picture.data.url}) : undefined);
+      callback(status);
+    })
+  }
+
+</script>

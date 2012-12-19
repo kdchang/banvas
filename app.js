@@ -74,6 +74,7 @@ app.configure('development', function(){
 });
 
 var confirm_list = {};
+
 app.post('/signup', function(req, res){
     var query = req.body;
     if( query.email && query.password && query.first_name && query.last_name && query.id ){
@@ -81,23 +82,33 @@ app.post('/signup', function(req, res){
             if(err) throw err;
             if(data) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
-                var token = randomString();
-                // confirm_list[query.id] = {token:token, data:new accountdb(query)};
-                confirm_list[token] = new accountdb(query);
-                mail.server.send(mail.message(query.email, token), function(err, data){
-                    if(err) res.end(JSON.stringify({err:err_code.MAIL_ERROR}));
-                    else res.end(JSON.stringify({err:err_code.SUCCESS, confirm_token:token}));
-                    console.log(data);
-                });
-            };
+                var duplicate = false;
+                if(confirm_list[query.id]) duplicate = true;
+                for(i in confirm_list){
+                    if(confirm_list[i].data.email == query.email)
+                        duplicate = true;
+                }
+
+                if(duplicate == true) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                else{
+                    var token = randomString();
+                    confirm_list[query.id] = {token:token, data: new accountdb(query)};
+                    mail.server.send(mail.message(query.email, query.id, token),function(err,data){
+                        if(err) console.log('sending confirmaton to \"'+query.email+'\" failed');
+                        else console.log(data);
+                    });
+                    res.end(JSON.stringify({err:err_code.SUCCESS, confirm_list:token}));
+                }
+            }
         });
     }
-    else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
+    else res.end(JSON.stringify({err:err_code.DATA_INCOM})); 
 });
 
 app.get('/signup/confirmation', function(req, res){
-    if( req.query.token && confirm_list[req.query.token] ){
-        var account = confirm_list[req.query.token];
+    console.log(req.query);
+    if( req.query.token && req.query.id && confirm_list[req.query.id] && confirm_list[req.query.id].token == req.query.token ){
+        var account = confirm_list[req.query.id].data;
         account.register_date = Date.now(); 
         account.save(function(err, data){
             if(err) throw err;
@@ -112,8 +123,9 @@ app.get('/signup/confirmation', function(req, res){
             }
         });
     }
+    else res.render('confirmation', {err:err_code.CONFIRM_FAIL, id:req.query.id, token: '0'});
     // else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
-    else res.redirect('/');
+    // else res.redirect('/');
 });
 
 app.post('/login', function(req,res){
@@ -159,10 +171,6 @@ app.post('/:id/status', function(req, res){
 
                     var a = data.toObject();
                     trim(a, ['password','statistic','collect','modify_date']);
-                    // var a = data.toObject();
-                    // delete a.statistic;
-                    // console.log(a);
-
                     console.log(a);
 					res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
 				}
@@ -178,7 +186,10 @@ app.post('/:id/modify', function(req, res){
         if( status == err_code.SUCCESS ){
             var tmp = (new accountdb(req.body)).toObject();
             trim(tmp, ['email', 'password','collect','register_date']);
-            console.log(tmp);
+            for(i in tmp){
+                if( !req.body[i] && i != 'modify_date')
+                    delete tmp[i];
+            }
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
                 if(err) throw err;
                 if(data) res.end(JSON.stringify({err:err_code.SUCCESS, update:tmp}));
@@ -195,29 +206,59 @@ app.post('/:id/mod_img', function(req, res) {
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
-            accountdb.findOneAndUpdate({'id':req.params.id},{$set:{Image_pkt:JSON.stringify({"head_url":head_url})}}).exec(function(err,data){
+            accountdb.findOne({'id':req.params.id}).exec(function(err, data){
                 if(err) throw err;
-                console.log(data);
-            });
-			res.redirect('/'+req.params.id);
+                if(data) res.end(JSON.stringify({err:status}));
+                else {
+                    console.log(data);
+                    var pic = JSON.pase(data.Image_pkt);
+                    fs.stat('/public/uploads/'+pic.head_url, function(err,www){
+                        if(err) console.log(err);
+                        console.log(www);
+                    });
+                    if(pic.head_url !== "default.png")
+                        fs.unlink('/public/uploads/'+pic.head_url);
+                    pic.head_url = head_url;
+                    data.Image_pkt = JSON.stringify(pic);
+                    data.save();
+
+                    res.redirect('/'+req.params.id);
+                }
+            })
+   //          accountdb.findOneAndUpdate({'id':req.params.id},{$set:{Image_pkt:JSON.stringify({"head_url":head_url})}}).exec(function(err,data){
+   //              if(err) throw err;
+   //              console.log(data);
+   //          });
+			// res.redirect('/'+req.params.id);
 		}
         else res.end(JSON.stringify({err:status}));
 	});
 });
 
 app.post('/:id/collection_list', function(req, res){
-    // check_login(req, function(status){
-        // if( status == err_code.SUCCESS ){
+    check_login(req, function(status){
+        if( status == err_code.SUCCESS ){
             console.log(req.session.item.log_data);
             accountdb.findOne({'id':req.params.id},{collect:1}).exec(function(err, data){
                 if(err) throw err;
                 console.log(data);
-                if(data) res.end(JSON.stringify({err:err_code.SUCCESS, collection: data.collect}));
+
+                var collect = {};
+                if(data.collect) collect = JSON.parse(data.collect);
+                var list = {};
+                for(i in collect){
+                    if(list[collect[i]])
+                        list[collect[i]].push(i);
+                    else
+                        list[collect[i]] = [i];
+                }
+
+                if(data) res.end(JSON.stringify({err:err_code.SUCCESS, collection: list}));
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             });
-        // }
-        // else res.end(JSON.stringify({err:status}));
-    // });
+        }
+        else res.end(JSON.stringify({err:status}));
+    });
 });
 
 app.post('/:id/save', function(req, res){
@@ -288,8 +329,8 @@ app.post('/:id/delete', function(req, res){
 })
 
 app.post('/:id/b-card_save', function(req, res){
-    check_login(req, function(status){
-        if( status == err_code.SUCCESS){
+    // check_login(req, function(status){
+        // if( status == err_code.SUCCESS){
             var bcard = new bcardb(req.body);
             bcard.email = req.session.item.log_data.email;
             bcard.password = req.session.item.log_data.password;
@@ -305,9 +346,9 @@ app.post('/:id/b-card_save', function(req, res){
                 }
                 res.end(JSON.stringify({err:err_code.SUCCESS}));
             })
-        }
-        else res.end(JSON.stringify({err:status}));
-    });
+        // }
+        // else res.end(JSON.stringify({err:status}));
+    // });
 });
 
 app.post('/:id/b-card_load', function(req, res){
@@ -322,7 +363,47 @@ app.post('/:id/b-card_load', function(req, res){
             })
         }
         else res.end(JSON.stringify({err:status}));
-    }); 
+    });
+})
+
+
+
+
+
+
+
+
+app.post('/search', function(req, res){
+    var query = req.query;
+    if(typeof(req.query.query) == typeof("")){
+        accountdb.find().exec(function(err, data){
+            if(err) throw err;
+
+            if(data){
+                var result = [];
+                for(var i=0; i<data.length; i++){
+                    var score = 0;
+                    // score += (data[i].email == query)*10;
+                    score += ambiguous_match(data[i].email, query)*10;
+                    score += ambiguous_match(data[i].name.first, query)*8;
+                    score += ambiguous_match(data[i].name.last, query)*8;
+                    score += ambiguous_match(data[i].id, query)*10;
+                    score += ambiguous_match(data[i].Position, query)*5;
+                    score += ambiguous_match(data[i].School, query)*5;
+                    score += ambiguous_match(data[i].phone, query)*3;
+
+                    result.push({id:data[i].id, score:score, name:data[i].name, email:data[i].email})
+                }
+
+                result.sort(function(a,b){
+                    return a.score < b.score;
+                });
+                res.end(JSON.stringify({err:err_code.SUCCESS, data:result}));
+            }
+            else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR, data:[]}))
+        });
+    }
+    else res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
 })
 
 // app.post('/:id/configure_pull', function(req, res){
@@ -361,7 +442,7 @@ app.post('/:id/statistic', function(req, res){
         }
         else res.end(JSON.stringify({err:status}));
     })
-})
+});
 
 // app.get('/facebook', function(req, res){
 //     console.log(req.facebook);
@@ -440,6 +521,57 @@ var check_login = function( req, callback ){
         else callback(err_code.DATA_INCOM);
     }
     else callback(err_code.NOT_LOGIN);
+}
+
+var kmp_search = function(s, w){
+    var m = 0, i = 0, 
+        pos, cnd, t,
+        slen = s.length,
+        wlen = w.length;
+    
+    s = s.split("");
+    w = w.split("");    
+            
+    t = [-1, 0];
+    for ( pos = 2, cnd = 0; pos < wlen; ) {
+        if ( w[pos-1] === w[cnd] ) {
+            t[pos] = cnd + 1;
+            pos++; cnd++;
+        }
+        else if ( cnd > 0 )
+        cnd = t[cnd];
+        else 
+          t[pos++] = 0;
+    } 
+    var max = 0;
+    while ( m + i < slen ) {
+        if ( s[m+i] === w[i] ) {
+            i++;
+            if (i>max) max = i;
+            if ( i === wlen ) 
+              return i;
+        }
+        else {
+            m += i - t[i];
+            if ( t[i] > -1 ) 
+                i = t[i];
+            else
+                i = 0;
+        }
+    }
+    return max;
+}
+
+var ambiguous_match = function(str1, str2){
+    var max = 0;
+    for(i=0; i<str2.length; i++){
+        var tmp = kmp_search(str1, str2.slice(i));
+        console.log(tmp);
+        if( tmp>max ){
+            max = tmp;
+        }
+    }
+    return max
 }
 
 http.createServer(app).listen(app.get('port'), function(){
