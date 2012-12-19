@@ -4,7 +4,7 @@ var auditspace = Backbone.View.extend({
 	events:{
 		"click a.login"	: "open_list",
 		"click button#submit" : "log_in",
-		//"click "
+		//"click a.register" : "register",
 	},
 	open_list:function(){
 		$('.btn-group').addClass('open');

@@ -76,6 +76,7 @@ app.configure('development', function(){
 var confirm_list = {};
 
 app.post('/signup', function(req, res){
+    console.log(req.body);
     var query = req.body;
     if( query.email && query.password && query.first_name && query.last_name && query.id ){
         accountdb.findOne({$or:[{email:req.body.email},{id: query.id}]}).exec(function(err,data){
@@ -129,6 +130,7 @@ app.get('/signup/confirmation', function(req, res){
 });
 
 app.post('/login', function(req,res){
+    console.log(req.body);
     if( req.body.email && req.body.password ){
         console.log('user loginnnng ' + JSON.stringify(req.body));
         accountdb.findOne( {email: req.body.email, password:req.body.password},{'password':1,'email':1, 'id':1}, function(err,data){
@@ -144,6 +146,7 @@ app.post('/login', function(req,res){
 });
 
 app.post('/logout', function(req, res){
+    console.log(req.body);
     check_login(req, function(status){
         console.log('user logooooout ' + JSON.stringify(req.body));
         if(status == err_code.SUCCESS || status == err_code.PERMISSION_DENIED){
@@ -157,6 +160,7 @@ app.post('/logout', function(req, res){
 app.post('/:id/status', function(req, res){
     // check_login(req, function(status){
         // if( status == err_code.SUCCESS ){
+            console.log(req.body);
             accountdb.findOne({id: req.params.id}).exec(function(err,data){
                 if(err) throw err;
                 if(data) {
@@ -182,6 +186,7 @@ app.post('/:id/status', function(req, res){
 });
 
 app.post('/:id/modify', function(req, res){
+    console.log(req.body);
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             var tmp = (new accountdb(req.body)).toObject();
@@ -236,6 +241,7 @@ app.post('/:id/mod_img', function(req, res) {
 });
 
 app.post('/:id/collection_list', function(req, res){
+    console.log(req.body);
     check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             console.log(req.session.item.log_data);
@@ -262,6 +268,7 @@ app.post('/:id/collection_list', function(req, res){
 });
 
 app.post('/:id/save', function(req, res){
+    console.log(req.body);
     check_login(req, function(status){
         if( status == err_code.SUCCESS){
             if( typeof(req.body.id) == typeof({}) ){
@@ -299,6 +306,7 @@ app.post('/:id/save', function(req, res){
 });
 
 app.post('/:id/delete', function(req, res){
+    console.log(req.body);
     check_login(req, function(status){
         if(status == err_code.SUCCESS){
             if( typeof(req.body.id) == typeof([]) ){
@@ -374,8 +382,8 @@ app.post('/:id/b-card_load', function(req, res){
 
 
 app.post('/search', function(req, res){
-    var query = req.query;
-    if(typeof(req.query.query) == typeof("")){
+    var query = req.body.search;
+    if(typeof(query) == typeof("")){
         accountdb.find().exec(function(err, data){
             if(err) throw err;
 
@@ -566,7 +574,6 @@ var ambiguous_match = function(str1, str2){
     var max = 0;
     for(i=0; i<str2.length; i++){
         var tmp = kmp_search(str1, str2.slice(i));
-        console.log(tmp);
         if( tmp>max ){
             max = tmp;
         }
