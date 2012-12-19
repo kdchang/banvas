@@ -67,7 +67,7 @@
 								<label class="checkbox">
 									<input type="checkbox"> Remember me
 								</label>
-								<button type="submit" id="submit" class="btn">Sign in</button>
+								<div id="sign_in_msg"></div><button type="submit" id="submit" class="btn">Sign in</button>
 							</div>
 						</div>
 					</form>
@@ -158,29 +158,41 @@
 <script type="text/template" id="register-view">
 	<h1>Register</h1>
 	<form class='reg' id='Register'>
-		<label>Email Address</label>
-		<input id='email' type='text' /><br>
-		<label>First Name</label>
-		<input id='first' type='text' /><br>
-		<label>Last Name</label>
-		<input id='last' type='text' /><br>
-		<label>Password</label>
-		<input id='reg_pass' type='password'/><br>
-		<label>Check Password</label>
-		<input id='con_pass' type='password'/><br>
-		<label>Your Personal Page ID: </label>
-		<input id='id' type='text'><br>
-		<div id="error"></div>
-		<input id='register' type='submit' value='Register'/><br>
-		<a href="#index">Back to Index</a>
+		<form class="form-horizontal">
+			<div class="control-group">
+				<div class="controls">
+				Email:	<input class="input-medium" type="text" id="email" placeholder="Email">
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+				First Name:	<input class="input-medium" type="text" id="first" placeholder="Firstname">
+				Last Name:	<input class="input-medium" type="text" id="last" placeholder="Lastname">
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+				Password:	<input class="input-medium" type="password" id="reg_pass" placeholder="Password">
+				Check Password: <input class="input-medium" type="password" id="con_pass" placeholder="Check Password">
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+				http://banvas-dev.herokuapp.com/<input class="input-medium" type="text" id="id" placeholder="Personal_ID">
+				</div>
+			</div>
+		<div id="reg_error"></div>
+		<button class="btn-large btn-primary" id='register' type='submit'>Register</button>
+		</form>
+		<a class="btn" href="#index">Back to Index</a>
 	</form>
 </script>
 <script type="text/template" id="index-view">
 	<div class= "slide">
-	<div class="first slider top">
+	<div class="first slider top" background=url('w4.jpg')>
 	        <h1>Welcome to Banvas!</h1>
 	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
-	        <p><a href="#" class="register btn btn-primary btn-large">免費註冊 &raquo;</a></p>	
+	        <p><a href="#register" class="register btn btn-primary btn-large">免費註冊 &raquo;</a></p>	
 	</div>
 	<div class="second slider">2222222</div>
 	<div class="third slider">3333333</div>

@@ -1,11 +1,8 @@
 Main_page:
 	login & logout & register
-	change status bar from login to logout when user logged in.
-	middle center box, slide show
-
-Login:
-	Placeholder.....
-	Facebook login implementation
+	change status bar from login to logout when user have logged in
+	Emphsize the login failed error on the page.
+	register input css
 
 Confirmation_page:
 	A page when confirmation failed

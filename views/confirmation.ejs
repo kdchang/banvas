@@ -15,7 +15,7 @@
 				document.cookie="Banvas_id" + "=" + id_value;
 				var token_value=escape("<%= token %>")+"; expires="+exdate.toUTCString();
 				document.cookie="Banvas_token" + "=" + token_value;
-				setTimeout(function(){window.location.replace('/'+<%= id %>);},3000);
+				setTimeout(function(){window.location.replace('/<%= id %>');},3000);
 			</script>
 		<% }
 		else { %>

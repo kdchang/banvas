@@ -1,13 +1,22 @@
 $(function(){
+var on=0;
 var auditspace = Backbone.View.extend({
 	el: "body",
 	events:{
 		"click a.login"	: "open_list",
 		"click button#submit" : "log_in",
-		//"click a.register" : "register",
+		"click button#register" : "register",
 	},
 	open_list:function(){
-		$('.btn-group').addClass('open');
+		if(on) {
+			$('.btn-group').removeClass('open');
+			on = 0;
+		}
+		else {
+			$('.btn-group').addClass('open');
+			$('#email').focus();
+			on = 1;
+		}
 	},
 	log_in:function(event){
 		event.preventDefault();
@@ -25,23 +34,35 @@ var auditspace = Backbone.View.extend({
 					window.location.replace('/'+re_status.id);	
 					break;
 				default:
-					console.log('Log in error');
+					$('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
 			}
 		})
 
 	},
 	register:function(event){
 		event.preventDefault();
-		console.log("Reg_info POST");
-		if($('#reg_pass').val()!=$('#con_pass').val())
-			$('.reg div#error').html('password unmatched!!');
+		console.log($('.reg #first').val());
+		if($('.reg input#email').val().match(/[\w\+\-\._]+@[\w\-\._]+\.\w{2,}/g)==null)
+			$('div#reg_error').addClass('alert alert-error').html('invalid email address!!');
+		else if($('.reg #first').val().length==0 || $('.reg #last').val().length==0)
+			$('div#reg_error').addClass('alert alert-error').html('Please fill both First and Last Name!!');
+		else if($('#reg_pass').val()!==$('#con_pass').val()||$('#reg_pass').val().length==0)
+			$('div#reg_error').addClass('alert alert-error').html('Password Incorrect');
+		else if($('.reg input#id').val().match(/[a-zA-Z0-9]+/g)==null)
+			$('div#reg_error').addClass('alert alert-error').html('invalid Personal ID!!');
 		else{
-			var reg_obj = {email: $('.reg input#email').val(), password:$('#reg_pass').val() , first_name: $('#first').val(), last_name: $('#last').val(), id: $('#id').val()};
+			$('div#reg_error').removeClass('alert alert-error').empty();
+			var reg_obj = {email: $('.reg input#email').val(), password:$('#reg_pass').val() , first_name: $('.reg #first').val(), last_name: $('.reg #last').val(), id: $('#id').val()};
 			console.log(reg_obj);
 			$.post('/signup',reg_obj,function(data){
 				console.log(data);
+				var temp = JSON.parse(data);
+				if(temp.err==0)
+					$('div#reg_error').addClass('alert alert-success').html('Registration Success.<br>Welcome To Banvas!!<br>check your email box for confirmation url.');
+				else if(temp.err==5)
+					$('div#reg_error').addClass('alert alert-error').html('The email address or the ID Has Been Used!!');
 			});
-			$('.reg div#error').empty();
+			$('div#reg_error').empty();
 		}
 	}
 });
@@ -55,21 +76,32 @@ var workspace = Backbone.Router.extend({
 				var temp = _.template($("#register-view").html(),{});
 					el = $('.slide_container');
 					el.html(temp);
+					$('.slide_container').css('height','auto');
+					$('input#email').focus();
 				}
 				, index : function(){
 				var temp = _.template($("#index-view").html(),{});
 					el = $('.slide_container');
 					el.html(temp);
+					$('.slide_container').css('height','250px');
 					$('.top').show();
 					$('.slide button').click(function(){
-				    var x = $(this).val();
-				    if(x != $('button.focus').val()){
-  			      	$('.slide button.focus').removeClass('focus');
-			        $(this).addClass('focus');
-			        $('div.top').removeClass('top').hide("slide", {direction: "right"}, 500);
-			        $('div.'+x).addClass('top').show("slide",{}, 500);
-				    }
+					    var x = $(this).val();
+					    if(x != $('button.focus').val()){
+	  			      		$('.slide button.focus').removeClass('focus');
+					        $(this).addClass('focus');
+					        $('div.top').removeClass('top').hide("slide", {direction: "right"}, 500);
+					        $('div.'+x).addClass('top').show("slide",{}, 500);
+					    }
 					});
+					if(getCookie('Banvas_id'))
+						$('a.login').html('登出').removeClass('login').click(function(){
+							$.post('/logout',{token:getCookie('Banvas_token')},function(){
+								setCookie('Banvas_id','',-10);
+								setCookie('Banvas_token','',-10);
+								window.location.replace('/');
+							})
+						})
 				}
 });
 function setCookie(c_name,value,exdays)
@@ -78,6 +110,19 @@ function setCookie(c_name,value,exdays)
 	exdate.setDate(exdate.getDate() + exdays);
 	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
 	document.cookie=c_name + "=" + c_value;
+}
+function getCookie(c_name){
+		var i,x,y,ARRcookies=document.cookie.split(";");
+		for (i=0;i<ARRcookies.length;i++)
+		{   
+				x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+				y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+				x=x.replace(/^\s+|\s+$/g,"");
+				if (x==c_name)
+				{   
+						return unescape(y);
+				}   
+		}                   
 }
 new auditspace();
 new workspace();

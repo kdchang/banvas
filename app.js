@@ -45,7 +45,8 @@ app.configure(function(){
         store: new mongoStore({
             url: databaseUrl
         }),
-        maxAge: new Date(Date.now() + 3600000)
+        //expired 
+        maxAge: new Date(Date.now() + 3600000*24*30)
     }));
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
@@ -115,7 +116,7 @@ app.get('/signup/confirmation', function(req, res){
             if(err) throw err;
             else{
                 console.log(data);
-                delete confirm_list[req.query.token];
+                delete confirm_list[req.query.id];
 
                 var token = randomString();
                 req.session.item = {log_token: token, log_data: data};
@@ -192,9 +193,13 @@ app.post('/:id/modify', function(req, res){
             var tmp = (new accountdb(req.body)).toObject();
             trim(tmp, ['email', 'password','collect','register_date']);
             for(i in tmp){
-                if( !req.body[i] && i != 'modify_date')
+                if( i!='name' && !req.body[i] && i != 'modify_date' )
                     delete tmp[i];
             }
+            if(!req.body.last_name) delete tmp.name.last_name;
+            if(!req.body.first_name) delete tmp.name.first_name;
+            if(JSON.stringify(tmp.name) === "{}") delete tmp.name;
+
             accountdb.findOneAndUpdate({'id':req.params.id}, {$set:tmp}).exec(function(err,data){
                 if(err) throw err;
                 if(data) res.end(JSON.stringify({err:err_code.SUCCESS, update:tmp}));
@@ -373,13 +378,6 @@ app.post('/:id/b-card_load', function(req, res){
         else res.end(JSON.stringify({err:status}));
     });
 })
-
-
-
-
-
-
-
 
 app.post('/search', function(req, res){
     var query = req.body.search;
