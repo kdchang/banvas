@@ -27,7 +27,7 @@
 		</div>  
 		<div class="container">
 		<div class="person block">
-			<img class="head" src='/uploads/<%= pkt.Image_pkt %>'>
+			<img class="head" src='/uploads/<%= JSON.parse(pkt.Image_pkt).head_url %>'>
 			<span class="id">
 				<h1 class="name static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
 				<span>School:</span><p class="school static"><%= pkt.School %></p><br>
@@ -127,6 +127,10 @@
 	</div>
 	</script>
 	<script type="text/template" id= "b_card">
-		<h1><%= pkt.name.first %> <%= pkt.name.last %></h1>
+		<h1 class="b_card name static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
+		<p class="b_card job static"><%= pkt.Position %></p><br>
+		Cell:<p class="b_card phone static"><%= pkt.phone %></p><br>
+		Mailbox:<p class="b_card mail static"><%= pkt.email %></p><br>
+		Address:<p class="b_card address static"></p><br>
 	</script>
 </html>

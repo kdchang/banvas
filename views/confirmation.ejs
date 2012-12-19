@@ -11,7 +11,7 @@
 <script type="text/javascript">
 	var exdate = new Date();
 	exdate.setDate(exdate.getDate() + 365);
-	var id_value=escape("<%= id %>")+"; expires="+exdate.toUTCString());
+	var id_value=escape("<%= id %>")+"; expires="+exdate.toUTCString();
 	document.cookie="Banvas_id" + "=" + id_value;
 	var token_value=escape("<%= token %>")+"; expires="+exdate.toUTCString());
 	document.cookie="Banvas_token" + "=" + token_value;

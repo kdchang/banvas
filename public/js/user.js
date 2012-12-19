@@ -76,6 +76,7 @@ function save(){
 			});
 }
 function edit(){
+			console.log('edit');
 			temp=$(this).removeClass("static").addClass("changing").html();
 			$(this).html('<input autofocus="autofocus" class=\"editing\" type="text" value=\''+temp+'\'>').unbind('click').bind('focusout',save);
 }
@@ -230,7 +231,11 @@ function Back_user(contain_temp){
 }
 function show_card(){
 	var b_card = $('#b_card').html();
-	console.log($('<div></div>').qrcode(document.URL).append(b_card));
-	$.fancybox.open($('<div></div>').qrcode(document.URL).append(b_card));
+	$.fancybox.open($('<div></div>').qrcode(document.URL).append(b_card),{
+		afterLoad : function(){
+			console.log('3');
+			$(".static").click(edit).change(save).end();
+		}
+	});
 }
 }

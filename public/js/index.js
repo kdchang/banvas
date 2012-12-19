@@ -2,7 +2,7 @@ $(function(){
 var auditspace = Backbone.View.extend({
 	el: "body",
 	events:{
-		"click input#submit" : "log_in",
+		"click button#submit" : "log_in",
 		"click input#register" : "register"
 	},
 	log_in:function(event){
