@@ -1,105 +1,128 @@
-<!DOCTYPE HTML>
-<html lang="en-US">
-<head>
-	<meta charset="UTF-8">
-	<title>Banvas</title>
-	<link href="/stylesheets/index.css" rel="stylesheet">
-</head>
-<body>
-	<div class= "header">
-	<form name="input" class= "searchbar">
-		<input type="text" name="search" class="search">
-		<input type="submit" value="Search" class="search">
-		<span class= "login">login
-			<ul>
-				<li>Email:<input id="email" type="text" name="Email"></li>
-				<li>Password:<input id ="password" type="password" name="Password"></li>
-				<li><input id="submit" type="submit" value="Log in"></li>
-				<a href="#register">register now</a>
-			</ul>
-		</span>
-	</form>
-	</div>
-	<div class= "container">
-	</div>
-</body>
-<script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="/js/jquery-ui-1.9.2.custom.js"></script>
-<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
-<script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
-<script type="text/javascript" src="/js/index.js"></script>
-<script type="text/template" id="register-view">
-	<h1>Register</h1>
-	<form class='reg' id='Register'>
-		<label>Email Address</label>
-		<input id='email' type='text' /><br>
-		<label>First Name</label>
-		<input id='first' type='text' /><br>
-		<label>Last Name</label>
-		<input id='last' type='text' /><br>
-		<label>Password</label>
-		<input id='reg_pass' type='password'/><br>
-		<label>Check Password</label>
-		<input id='con_pass' type='password'/><br>
-		<label>Your Personal Page ID: </label>
-		<input id='id' type='text'><br>
-		<div id="error"></div>
-		<input id='register' type='submit' value='Register'/><br>
-		<a href="#index">Back to Index</a>
-	</form>
-</script>
-<script type="text/template" id="index-view">
-	<div class= "slide">
-	<ul>
-		<li><button type="button" value="first" class="focus">o</button></li>
-		<li><button type="button" value="second">o</button></li>
-		<li><button type="button" value="third">o</button></li>
-		<li><button type="button" value="forth">o</button></li>
-		<li><button type="button" value="fifth">o</button></li>
-	</ul>
-	<div class="first slider top">1111111</div>
-	<div class="second slider">2222222</div>
-	<div class="third slider">3333333</div>
-	<div class="forth slider">4444444</div>
-	<div class="fifth slider">5555555</div>
-	</div>
-	<ul class= "box">
-	<li>
-		<span></span>
-		<span id= "banvas">Create<br>Your Banvas</span>
-	</li>
-	<span></span>
-	<li>
-		<span></span>
-		<span id= "qr">Create<br>Your QR-Code</span>
-	</li>
-	<li>
-		<span></span>
-		<span id= "intern">Find<br>Intern & Jobs</span>
-	</li>
-	</ul>
-</script>
-</html>
-<!--<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <meta charset="utf-8">
+    <title>Banvas 行動名片夾</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        position: relative;
+      }
+    </style>
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
   </head>
+
   <body>
-    <h1><%= title %></h1>
-    <form action="./signup" method="post">
-   	Email<input type="text" name='email' value='ddmail2009@gmail.com'>
-    Password<input type="password" name='password' value='default'>
-    first_name<input type='text' name='first_name' value='default'>
-    last_name<input type='text' name='last_name' value='default'>
-    id<input type='text' name='id' value='default'>
-	<button>Submit</button>
-    </form>
-    
-	<form action='./list' method='post'>
-    	<button>Get list</button>
-    </form>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
+            <form class="navbar-form pull-right">
+              <a href="/signin" class="btn btn-small">登入</a>
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+	<div id="backboard">
+	</div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+          <div id="space"></div>	
+	      <div class="hero-unit">
+	        <h1>Welcome to Banvas!</h1>
+	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
+	        <p><a href="signup" class="btn btn-primary btn-large">免費註冊 &raquo;</a></p>
+	      </div>
+	<div>
+	<div id="space"></div>
+      <!-- Example row of columns -->
+    <div class="container">
+      <div class="row">
+        <div class="span4">
+          <i>	
+          <h2>個人品牌</h2>
+          <div id="brand">
+          	<image src="/images/brand.png"></image>
+          </div>
+          <i>
+          <p>透過編輯您的個人頁面，可以呈現您過去的經歷和專案作品，讓自己的專業能力被看到，進而行銷個人品牌</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <h2>專業連結</h2>
+          <div id="link">
+          	<image src="/images/link.png"></image>
+          </div>
+          <i>
+          <p>編輯自己的個人頁面後可快速產生QR CODE名片送印，讓收到您名片的朋友可透過我們的app收藏您的名片</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+       </div>
+        <div class="span4">
+          <h2>隨時瀏覽</h2>
+          <div id="mobile">
+          	<image src="/images/mobile.png"></image>
+          </div>
+          <i>
+          <p>透過雲端管理收到的名片資料，可以跨平台隨時瀏覽收藏的名片資訊，方便洽公前先行瀏覽</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; Copyright Banvas 行動名片夾 All rights reserved.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!- ->
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/js/bootstrap-transition.js"></script>
+    <script src="/assets/js/bootstrap-alert.js"></script>
+    <script src="/assets/js/bootstrap-modal.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script src="/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="/assets/js/bootstrap-tab.js"></script>
+    <script src="/assets/js/bootstrap-tooltip.js"></script>
+    <script src="/assets/js/bootstrap-popover.js"></script>
+    <script src="/assets/js/bootstrap-button.js"></script>
+    <script src="/assets/js/bootstrap-collapse.js"></script>
+    <script src="/assets/js/bootstrap-carousel.js"></script>
+    <script src="/assets/js/bootstrap-typeahead.js"></script>
+
   </body>
 </html>
--->
