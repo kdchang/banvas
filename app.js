@@ -201,8 +201,8 @@ app.post('/:id/mod_img', function(req, res) {
             var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
             accountdb.findOne({'id':req.params.id}).exec(function(err, data){
                 if(err) throw err;
-                if(data) res.end(JSON.stringify({err:status}));
-                else {
+                // if(data) res.end(JSON.stringify({err:status}));
+                // else {
                     console.log(data);
                     var pic = JSON.pase(data.Image_pkt);
                     fs.stat('/public/uploads/'+pic.head_url, function(err,www){
@@ -216,7 +216,7 @@ app.post('/:id/mod_img', function(req, res) {
                     data.save();
 
                     res.redirect('/'+req.params.id);
-                }
+                // }
             })
    //          accountdb.findOneAndUpdate({'id':req.params.id},{$set:{Image_pkt:JSON.stringify({"head_url":head_url})}}).exec(function(err,data){
    //              if(err) throw err;
