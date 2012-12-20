@@ -204,13 +204,13 @@ app.post('/:id/mod_img', function(req, res) {
                 // if(data) res.end(JSON.stringify({err:status}));
                 // else {
                     console.log(data);
-                    var pic = JSON.pase(data.Image_pkt);
-                    fs.stat('/public/uploads/'+pic.head_url, function(err,www){
-                        if(err) console.log(err);
-                        console.log(www);
-                    });
-                    if(pic.head_url !== "default.png")
-                        fs.unlink('/public/uploads/'+pic.head_url);
+                    var pic = JSON.parse(data.Image_pkt);
+                    // fs.stat('/public/uploads/'+pic.head_url, function(err,www){
+                        // if(err) console.log(err);
+                        // console.log(www);
+                    // });
+                    // if(pic.head_url !== "default.png")
+                        // fs.unlink('/public/uploads/'+pic.head_url);
                     pic.head_url = head_url;
                     data.Image_pkt = JSON.stringify(pic);
                     data.save();

@@ -52,13 +52,15 @@ if(Banvas_id!=page_id){	//Log in but not the admin of this page
 			})	
 		});
 		$('<button class="btn btn-info" style="float : right;">+1</button>').appendTo('.skill li').click(function(){
+			var icon;
 			$.post('/'+Banvas_id+'/status',function(res){
 				var state= JSON.parse(res).data;
 				console.log(JSON.parse(state.Image_pkt).head_url);
-				var icon = $('<img class="icon social" src="/uploads/'+JSON.parse(state.Image_pkt).head_url+'">');
-				$(this).append(icon);
+				icon= $('<img class="icon social" src="/uploads/'+JSON.parse(state.Image_pkt).head_url+'">');
+				
 				console.log('test');
 			})
+			$(this).before(icon);
 		});
 }
 else{		//admin of the page

@@ -95,7 +95,7 @@
 			<p class="position static"><%= pkt.Position %></p>
 		</div>
 		<div class="block">
-			<img class="icon" src="/school_pic/school.jpg" >
+			<img class="icon" id="school" src="/school_pic/school.jpg" >
 			<p class="high_school static"><%= pkt.School %></p>
 		</div>
 		<div class="block">
@@ -233,7 +233,7 @@
 	  	}, 'text');
 	  	$.post('/pic_url', {pic: "<%= pkt.School %>"}, function(data){
 	  		console.log(data);
-	  		$(".icon").attr('src', data);
+	  		$(".icon#school").attr('src', data);
 	  	})
 	</script>
   </body>
