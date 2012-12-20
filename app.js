@@ -141,7 +141,7 @@ app.post('/logout', function(req, res){
             req.session.item = {};
             res.end(JSON.stringify({err:err_code.SUCCESS}));
         }
-        else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
+        else res.end(JSON.stringify({err:err_code.SUCCESS}));
     });
 })
 
@@ -550,7 +550,7 @@ var randomString = function(){
 }
 
 var check_login = function( req, callback ){
-    if( req.session.item.log_token ){
+    if( req.session.item && req.session.item.log_token && req.session.item.log_token ){
         if( req.body.token ){
             if( req.session.item.log_token == req.body.token ){
                 if( req.params.id && req.params.id == req.session.item.log_data.id )
