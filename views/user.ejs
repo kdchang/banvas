@@ -51,7 +51,7 @@
 		  	<input type="text" class="input-medium search-query">
 			<button type="submit" class="btn search">Search</button>
           	<div class="btn-group">
-			<button class="btn dropdown-toggle" data-toggle="dropdown"><%= userid %><span class="caret"></span></button>
+			<button class="btn dropdown-toggle acc_btn" data-toggle="dropdown"><%= userid %><span class="caret"></span></button>
 				<ul class="dropdown-menu account">
 					<li><a href="#">Account Setting</a></li>
 					<li><a href="#" class="FB_import">Import from FB</a></li>
@@ -95,7 +95,7 @@
 			<p class="position static"><%= pkt.Position %></p>
 		</div>
 		<div class="block">
-			<img class="icon" src="/school_pic/建中.jpg" >
+			<img class="icon" src="/school_pic/school.jpg" >
 			<p class="high_school static"><%= pkt.School %></p>
 		</div>
 		<div class="block">
@@ -155,6 +155,8 @@
 	<script type="text/javascript" src="js/jquery-qr-plugin.js"></script>
 	<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
 	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<script type="test/javascript" src="js/tocanvas.js"></script>
+	<script type="test/javascript" src="js/IgeClass.js"></script>
 	<script type="text/javascript">
 	var timeline_json={
 			"timeline":
@@ -224,12 +226,15 @@
 		</div>
 	</script>
 	<script>
-	  	console.log('asdasd');
 	  	$.post('<%= userid %>/statistic', {}, function(data){
 	  		var data = JSON.parse(data);
 	  		console.log(data);
 	  		$("#view_time").html("viewed time: "+data.statistic.view_time);
 	  	}, 'text');
+	  	$.post('/pic_url', {pic: <%= pkt.School %>}, function(data){
+	  		console.log(data);
+	  		$(".icon").attr('src', data);
+	  	})
 	</script>
   </body>
 </html>

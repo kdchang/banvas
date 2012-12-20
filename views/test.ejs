@@ -75,6 +75,7 @@
     </div>
 
     <div>
+      <input type="text" name='fields'>
       <button id='all'>ALL account</button>
       <div id='all_account'>
       </div>
@@ -102,7 +103,9 @@
   })
 
   $('#all').click(function(){
-    $.post('/all_list', {}, function(data){
+    var query = $("input[name=fields]").val().replace(" ","");
+    query = query.split(",");
+    $.post('/all_list', {query:query}, function(data){
       console.log(data);
       $('#all_account').html(data);
     }, 'text');

@@ -67,15 +67,17 @@ app.post('/signup', function(req, res){
     console.log(req.body);
     var query = req.body;
     if( query.email && query.password && query.first_name && query.last_name && query.id ){
-        accountdb.findOne({$or:[{email:req.body.email},{id: query.id}]}).exec(function(err,data){
+        accountdb.findOne({$or:[{email:query.email},{id:query.id}]}).exec(function(err,data){
             if(err) throw err;
             if(data) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             else{
                 var duplicate = false;
                 if(confirm_list[query.id]) duplicate = true;
                 for(i in confirm_list){
-                    if(confirm_list[i].data.email == query.email)
+                    if(confirm_list[i].data.email == query.email){
                         duplicate = true;
+                        break;
+                    }
                 }
 
                 if(duplicate == true) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
@@ -113,8 +115,6 @@ app.get('/signup/confirmation', function(req, res){
         });
     }
     else res.render('confirmation', {err:err_code.CONFIRM_FAIL, id:req.query.id, token: '0'});
-    // else res.end(JSON.stringify({err:err_code.TOKEN_UNMATCH}));
-    // else res.redirect('/');
 });
 
 app.post('/login', function(req,res){
@@ -436,16 +436,24 @@ app.post('/:id/statistic', function(req, res){
 
 app.post('/all_list', function(req, res){
     console.log(req.body);
-    accountdb.find({},{id:1, email:1, password:1, School:1}, function(err,data){
+
+    var query = {};
+    for(i in req.body.query){
+        query[req.body.query[i]] = 1;
+    }
+    if( JSON.stringify(query) == "{}" ) query = {id:1, email:1, password:1};
+    accountdb.find({},query, function(err,data){
         if(err) throw err;
         if(data){
-            for(i in data)
+            for(i in data){
+                data[i] = data[i].toObject();
                 delete data[i]._id;
+            }
             res.end(JSON.stringify({err:err_code.SUCCESS,data:data}));
         }
         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
     })
-})
+});
 
 app.post('/pic_url', function(req, res){
     pic = req.body.pic.toLowerCase();
