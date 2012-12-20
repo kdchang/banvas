@@ -39,3 +39,7 @@ body {
   height: 70px;
   width: 300px;
 }
+#slideTwo{
+  background-image: url(/images/centeral_banner.png);
+}
+  
