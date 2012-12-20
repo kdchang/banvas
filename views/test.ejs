@@ -74,13 +74,40 @@
       </form>
     </div>
 
+    <div>
+      <button id='all'>ALL account</button>
+      <div id='all_account'>
+      </div>
+    </div>
+
+    <div>
+      <img src='./school_pic/facebook.png'>
+      <input type='text' val="建中" name='pic'>
+      <button id='getpic'>getpic</button>
+    </div>
 <script>
+  $("#getpic").click(function(){
+    $.post('/pic_url', {pic:$("input[name=pic]").val()}, function(data){
+      console.log(data);
+      // $("#pic").append("<img src="+data+">");
+      $("img").attr("src",data);
+    })
+  })
+
   $('#statistic_load').click(function(){
     $.post('/'+id+'/statistic', {token:token}, function(data){
       console.log(data);
       $("#statistic").html(data);
     },'text');
   })
+
+  $('#all').click(function(){
+    $.post('/all_list', {}, function(data){
+      console.log(data);
+      $('#all_account').html(data);
+    }, 'text');
+  })
+
 
   $('#fsearch').submit(function(){
     $.post('/search', {search:$("#fsearch input[name=search]").val()}, function(data){

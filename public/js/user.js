@@ -1,4 +1,4 @@
-var eventnum = 0,i,collect_status=0;
+var eventnum = 0,i,collect_status=0,search_status=0,contain_temp,collect_temp,b_card_temp,front=1;
 //$("div").qrcode("http://www.google.com.tw");
 var Banvas_id = getCookie('Banvas_id'),
 	Banvas_token = getCookie('Banvas_token'),
@@ -21,12 +21,23 @@ $(document).ready(function(){
 	CreateTimeLine();
 })
 $('.search').click(search);
-function search(){
+function search(event){
+	event.preventDefault();
 	console.log('search clicked');
 	if($('input.search-query').val().length!=0){
 		console.log('start searching...');
-		$.post('/search',{'token':Banvas_token,'query':$('input.search-query').val()},function(data){
-			console.log(data);
+		$.post('/search',{'token':Banvas_token,'query':$('input.search-query').val()},function(res){
+			if(!search_status){
+				collect_temp = $('div.main').html();
+				search_status = 1;
+			}
+			$('div.main').empty();
+			var search_list= JSON.parse(res).data
+			console.log(search_list);
+			for(var i=0; i < search_list.length ; i++){
+				console.log(search_list[i]);
+				$('div.main').append('<div class="block"><a href="/'+search_list[i].id+'">'+search_list[i].name.first+' '+search_list[i].name.last+'</a></div>');
+			}
 		})
 	}
 }
@@ -235,15 +246,14 @@ function FB_import(){
 	});
 }
 function Show_collection(){
-	var contain_temp;
 
 	if(collect_status){
-		$('div.container').empty().append(contain_temp);
+		$('div.main').empty().append(contain_temp);
 		collect_status = 0;
 	}
 	else{
-		contain_temp = $('div.container').html();
-		$('div.container').empty().append($('#collection_list').html());
+		contain_temp = $('div.main').html();
+		$('div.main').empty().append($('#collection_list').html());
 		$.post('/'+Banvas_id+'/collection_list',function(data){
 			console.log(data);
 		});
@@ -252,10 +262,37 @@ function Show_collection(){
 }
 function show_card(){
 	var b_card = $('#b_card').html();
-	$.fancybox.open($('<div></div>').qrcode(document.URL).append(b_card),{
+	/*$.fancybox.open($('<div style="background-color: blue;"></div>').qrcode(document.URL).append(b_card),{
 		afterLoad : function(){
-			console.log('3');
-			$(".static").click(edit).change(save).end();
+			$('canvas').append('<p>test</p>');
+			//$('div.drag').draggable();
+		}
+	});*/
+	$(b_card).dialog({
+		width: 700,
+		height: 500,
+		buttons : {
+			"Backside":function(){
+				if(front){
+					b_card_temp=$('.b_card_content').html();
+					$('.b_card_content').empty();
+					$('.b_card_content').qrcode(document.URL);
+					front=0;
+				}
+			},
+			"Frontside":function(){
+				if(!front){
+					$('.b_card_content').html(b_card_temp);
+					front=1;
+				}
+			},
+			"Edit": function(){
+				$(".static").click(edit).change(save).end();
+			},
+			"Close":function(){
+				$( this ).dialog( "destroy" ).remove();
+			}
+
 		}
 	});
 }

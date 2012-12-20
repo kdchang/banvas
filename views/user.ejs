@@ -72,7 +72,7 @@
 	<div id="backboard">
 	</div>
 
-    <div class="container">
+    <div class="main container">
       <!-- Main hero unit for a primary marketing message or call to action -->
           <div id="space"></div>
 		  <div class="hero-unit">
@@ -95,7 +95,7 @@
 			<p class="position static"><%= pkt.Position %></p>
 		</div>
 		<div class="block">
-			<img class="icon" src="/material/TFSH.jpg" >
+			<img class="icon" src="/school_pic/建中.jpg" >
 			<p class="high_school static"><%= pkt.School %></p>
 		</div>
 		<div class="block">
@@ -110,6 +110,10 @@
 			<h1>Timeline</h1>
 			<div id="timeline-embed"></div>
 		</div>
+		<div class='block'>
+			<span id='view_time' style="float:right">
+			</span>
+		</div>
 		</div>
 		  </div>
 	      <!--<div class="hero-unit">
@@ -118,6 +122,8 @@
 	        <p><a href="signup" class="btn btn-primary btn-large">免費註冊 &raquo;</a></p>
 	        
 		  </div>-->
+		  
+
 	<div>
       <hr>
 
@@ -204,7 +210,26 @@
 	</div>
 	</script>
 	<script type="text/template" id= "b_card">
-		<h1><%= pkt.name.first %> <%= pkt.name.last %></h1>
+		<div class='b_card_content'>
+		<span style="display:inline-block; width: 400px;">
+		</span>
+		<span tyle="display:inline-block; width: 200px;">
+		<h1 class="static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
+		<h3 class="static"><%= pkt.School %></h3>
+		<h3 class="static"><%= pkt.Position %></h3></span>
+		<span style="display:inline-block; width: 400px;"><p class="static"><%= pkt.Intro %></p>
+		<h5>Phone: <span class="static"><%= pkt.phone  %></span></h5>
+		<h5>Email: <span class="static"><%= pkt.email  %></span></h5>
+		<h5>Address: <span class="static">default</span></h5></span>
+		</div>
+	</script>
+	<script>
+	  	console.log('asdasd');
+	  	$.post('<%= userid %>/statistic', {}, function(data){
+	  		var data = JSON.parse(data);
+	  		console.log(data);
+	  		$("#view_time").html("viewed time: "+data.statistic.view_time);
+	  	}, 'text');
 	</script>
   </body>
 </html>

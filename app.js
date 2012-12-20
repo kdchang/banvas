@@ -55,19 +55,6 @@ app.configure(function(){
         secret: facebook_secret,
         scope: 'user_likes,user_photos,user_photo_video_tags'
     }));
-    app.use(function(req, res, next){
-        console.log(req.headers['host']);
-        res.locals.host = req.headers['host'];
-        res.locals.scheme = req.headers['x-forwarded-proto'] || 'http';
-        res.locals.url = function(path){
-            return app.dynamicViewHelpers.scheme(req, res) + app.dynamicViewHelpers.url_no_scheme(path);
-        }
-        res.locals.url_no_scheme = function(path){
-            return '://' + app.dynamicViewHelpers.host(req, res) + path;
-        }
-        console.log(res.locals);
-        next();
-    });
 });
 
 app.configure('development', function(){
@@ -433,21 +420,65 @@ app.post('/search', function(req, res){
 // })
 
 app.post('/:id/statistic', function(req, res){
-    check_login(req, function(status){
-        if(status==err_code.SUCCESS){
+    console.log(req.body);
+    // check_login(req, function(status){
+        // if(status==err_code.SUCCESS){
             accountdb.findOne({id: req.params.id},{_id:0, statistic:1}).exec(function(err, data){
                 if(err) throw err;
                 if(data)
-                    res.end(JSON.stringify({err:status, statistic:data.statistic}));
+                    res.end(JSON.stringify({err:err_code.SUCCESS, statistic:data.statistic}));
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             })
-        }
-        else res.end(JSON.stringify({err:status}));
-    })
+        // }
+        // else res.end(JSON.stringify({err:status}));
+    // })
 });
 
+app.post('/all_list', function(req, res){
+    console.log(req.body);
+    accountdb.find({},{id:1, email:1, password:1, School:1}, function(err,data){
+        if(err) throw err;
+        if(data){
+            for(i in data)
+                delete data[i]._id;
+            res.end(JSON.stringify({err:err_code.SUCCESS,data:data}));
+        }
+        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+    })
+})
+
+app.post('/pic_url', function(req, res){
+    pic = req.body.pic.toLowerCase();
+    switch(pic){
+        case "中一中": case "北一女": case "北科大": case "北醫": 
+            res.end("./school_pic/"+pic+".jpg");
+            break;
+        case "台大": case "NTU": case "National Taiwan University":
+            res.end("./school_pic/台大.jpg");
+            break;
+        case "台科大": case "微軟": case "台科大":
+            res.end("./school_pic/"+pic+".jpg");
+            break;
+        case "建中": case "ck": case "chien kuo":
+            res.end("./school_pic/建中.jpg");
+            break;
+        case "武陵": case "wuling": case "wl":
+            res.end("./school_pic/武陵.jpg");
+            break;
+        case "中一中": case "清大": case "政大": case "成功": case "facebook":
+            res.end("./school_pic/"+pic+".jpg");
+            break;
+        case "garmin": case "google":
+            res.end("./school_pic/"+pic+".jpg");
+            break;
+        default:
+            res.end("./school_pic/school.jpg");
+            break;
+    }
+})
+
 // app.get('/facebook', function(req, res){
-//     console.log(req.facebook);
+//     a.log(req.facebook);
 //     req.facebook.me(function(user) {
 //         res.render('facebook.ejs', {
 //             layout: false,
