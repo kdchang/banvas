@@ -231,7 +231,7 @@
 	  		console.log(data);
 	  		$("#view_time").html("viewed time: "+data.statistic.view_time);
 	  	}, 'text');
-	  	$.post('/pic_url', {pic: <%= pkt.School %>}, function(data){
+	  	$.post('/pic_url', {pic: "<%= pkt.School %>"}, function(data){
 	  		console.log(data);
 	  		$(".icon").attr('src', data);
 	  	})

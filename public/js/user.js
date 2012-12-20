@@ -55,8 +55,8 @@ if(Banvas_id!=page_id){	//Log in but not the admin of this page
 			$.post('/'+Banvas_id+'/status',function(res){
 				var state= JSON.parse(res).data;
 				console.log(JSON.parse(state.Image_pkt).head_url);
-				$(this).before('<img class="icon social" src="/uploads/'+JSON.parse(state.Image_pkt).head_url+'">');
-				
+				var icon = $('<img class="icon social" src="/uploads/'+JSON.parse(state.Image_pkt).head_url+'">');
+				$(this).append(icon);
 				console.log('test');
 			})
 		});
