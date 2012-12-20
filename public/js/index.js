@@ -73,14 +73,14 @@ var workspace = Backbone.Router.extend({
 					'': 'index'
     			}
     			, register : function() {
-				var temp = _.template($("#register-view").html(),{});
+					var temp = _.template($("#register-view").html(),{});
 					el = $('.slide_container');
 					el.html(temp);
 					$('.slide_container').css('height','auto');
 					$('input#email').focus();
 				}
 				, index : function(){
-				var temp = _.template($("#index-view").html(),{});
+					var temp = _.template($("#index-view").html(),{});
 					el = $('.slide_container');
 					el.html(temp);
 					$('.slide_container').css('height','250px');
@@ -94,7 +94,10 @@ var workspace = Backbone.Router.extend({
 					        $('div.'+x).addClass('top').show("slide",{}, 500);
 					    }
 					});
-					if(getCookie('Banvas_id'))
+					if(getCookie('Banvas_id')){
+						$('a.register').html('我的卡片').click(function(){
+							window.location = '/'+getCookie('Banvas_id');
+						})
 						$('a.login').html('登出').removeClass('login').click(function(){
 							$.post('/logout',{token:getCookie('Banvas_token')},function(){
 								setCookie('Banvas_id','',-10);
@@ -102,6 +105,7 @@ var workspace = Backbone.Router.extend({
 								window.location.replace('/');
 							})
 						})
+					}
 				}
 });
 function setCookie(c_name,value,exdays)

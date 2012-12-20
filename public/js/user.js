@@ -43,7 +43,7 @@ function search(event){
 }
 if(Banvas_id){
 if(Banvas_id!=page_id){	//Log in but not the admin of this page
-		$(".account").html(Banvas_id).click(function(){
+		$(".acc_btn").html(Banvas_id).click(function(){
 			window.location.replace('/'+Banvas_id);
 		});
 		$('<button style="float:right;">Add to My Wallet</button>').prependTo('div.person.block').click(function(){
@@ -52,7 +52,15 @@ if(Banvas_id!=page_id){	//Log in but not the admin of this page
 			})	
 		});
 		$('<button class="btn btn-info" style="float : right;">+1</button>').appendTo('.skill li').click(function(){
-			console.log('Like');
+			var icon;
+			$.post('/'+Banvas_id+'/status',function(res){
+				var state= JSON.parse(res).data;
+				console.log(JSON.parse(state.Image_pkt).head_url);
+				icon= $('<img class="icon social" src="/uploads/'+JSON.parse(state.Image_pkt).head_url+'">');
+				
+				console.log('test');
+			})
+			$(this).before(icon);
 		});
 }
 else{		//admin of the page
@@ -122,12 +130,6 @@ function getCookie(c_name){
 				}
 		}
 }
-/*function setCookie(c_name,value,exdays){
-    var exdate = new Date();
-	exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-	document.cookie=c_name + "=" + c_value;
-}*/
 function Social_url(){
 	$("<form><label>Facebook:</label><input type='text' id='FB_url'/><br><label>Blog:</label><input type='text' id='Blog_url'/><br><label>LinkedIn:</label><input type='text' id='Linked_url'/></form>").dialog({
 		buttons: {
@@ -289,6 +291,9 @@ function show_card(){
 			"Edit": function(){
 				$(".static").click(edit).change(save).end();
 			},
+			/*"Print": function(){
+				$('<canvas></canvas>').getContext('2d').drawImage();
+			},*/
 			"Close":function(){
 				$( this ).dialog( "destroy" ).remove();
 			}
