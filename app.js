@@ -432,7 +432,7 @@ skill_app(app, accountdb);
 resume_app(app, accountdb);
 routes(app, accountdb);
 
-app.post('/:id/all_status', function(req, res){
+app.post('/:id/ios/status', function(req, res){
     f.check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             accountdb.findOne({id:req.params.id},{collect:1}).exec(function(err, owner){
@@ -471,7 +471,7 @@ app.post('/:id/all_status', function(req, res){
     })
 })
 
-app.post('/:id/app_detail', function(req, res){
+app.post('/:id/ios/detail', function(req, res){
     f.check_login(req, function(status){
         if(status == err_code.SUCCESS){
             accountdb.findOne({id:req.params.id}).exec(function(err, data){

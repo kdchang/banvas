@@ -81,7 +81,7 @@
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
 				<h1 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h1>
-				<span>School:</span>
+				<span>Company:</span>
 				<% if(JSON.parse(pkt.resume).length!=0){ %>
 				<p class="school static"><%= JSON.parse(pkt.resume)[0].Company %></p>
 				<% } %><br>
