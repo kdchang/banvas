@@ -6,7 +6,7 @@ div#backboard{
 	margin-left:-190px;
 	padding: 10px;
 }
-.account input{
+.account input[type="text"],input[type="password"]{
 	height: 32px;
 }
 .slide_container{

@@ -30,7 +30,8 @@ module.exports = function(app, accountdb){
                         res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
                     }
                 }
-
+                console.log(update);
+                
                 if( typeof(update) == typeof({}) ){
                     var id = [];
                     for(i in req.body.id){
