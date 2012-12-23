@@ -5,8 +5,8 @@ var async = require('async')
     , path = require('path')
     , mongoose = require('mongoose')
     , fs = require('fs')
-    , Canvas = require('canvas')
-    , Image = Canvas.Image;
+    , gm = require('gm')
+    , imageMagick = gm.subClass({ imageMagick: true });
 
 var err_code = require('./err')
     , skill_app = require('./skill_app')
@@ -198,20 +198,34 @@ app.post('/:id/mod_img', function(req, res) {
 	console.log(req.body);
     
     var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
+    console.log(head_url);
+    console.log(req.files.file.path);
     accountdb.findOne({'id':req.params.id}).exec(function(err, data){
         if(err) throw err;
         if(data){
-            console.log(data);
-            fs.stat('/public/uploads/'+data.Image_pkt.picture, function(err,www){
-                if(err) console.log(err);
-                console.log(www);
-            });
             if(data.Image_pkt.picture !== "default.png")
-                fs.unlink('/public/uploads/'+pic.Image_pkt);
-            data.Image_pkt.picture = head_url;
-            console.log(data.Image_pkt);
-            data.save();
+                fs.unlink('public/uploads'+data.Image_pkt.picture);
+            if(data.Image_pkt.pictureSmall !== 'default.png')
+                fs.unlink('public/uploads'+data.Image_pkt.picture);
+            
+            imageMagick(req.files.file.path)
+                .resize(250, 250)
+                .noProfile()
+                .write(req.files.file.path, function (err) {
+                    if(err) throw err;
+                    if (!err) console.log('done');
+                });
+            imageMagick(req.files.file.path)
+                .resize(60, 60)
+                .noProfile()
+                .write('public/uploads/'+req.params.id+'_small.jpg', function (err) {
+                    if (!err) console.log('done');
+                });
 
+            data.Image_pkt.picture = head_url;
+            data.Image_pkt.pictureSmall = '/'+req.params.id+'_small.jpg';
+            data.save();
+            console.log(data.Image_pkt);
             res.redirect('/'+req.params.id);
         }
         else res.redirect('/'+req.params.id);

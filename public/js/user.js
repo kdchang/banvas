@@ -113,10 +113,11 @@ $(".collect").click(Show_collection);
 $(".FB_import").click(FB_import);
 $('.B_card').click(show_card);
 // Function Area
-function edit_mode(){
-		$(this).html("Save").removeClass("edit").click(function(){
+function edit_mode(event){
+		event.preventDefault();
+		$(this).html("儲存").removeClass("edit").click(function(){
 			save();
-			$(this).html("Edit").addClass("edit").unbind('.click');
+			$(this).html("編輯").addClass("edit").unbind('.click');
 			$(".static").unbind('click');
 			$('.temp').remove();
 			$('.skill p').each(function(){
@@ -292,45 +293,44 @@ function Show_collection(){
 		collect_status = 1;
 	}
 }
-function show_card(){
+function show_card(event){
+	event.preventDefault();
 	var b_card = $('#b_card').html();
+	var edit_status=1;
 	//$(b_card).qrcode(document.URL);
-	$.fancybox.open($('<div style="width:600px;height:366px;"></div>').qrcode(document.URL).append(b_card),{
+	$.fancybox.open($('<div id="drag-bound" style="width:600px;height:366px;background-image:url(/material/card-front.png);"></div>').append(b_card),{
 		afterShow : function(){
-			$('.drag').draggable();
-			console.log('1');
-		}
-	});
-	$(b_card).dialog({
-		width: 700,
-		height: 500,
-		buttons : {
-			"Backside":function(){
+			$('.qr_container').qrcode({width:200,height:200,text:document.URL});
+			$('#back').click(function(){
 				if(front){
 					b_card_temp=$('.b_card_content').html();
 					$('.b_card_content').empty();
+					$('.qr_container').empty();
 					front=0;
 				}
-			},
-			"Frontside":function(){
+			});
+			$('#front').click(function(){
 				if(!front){
-					$('.b_card_content').qrcode(document.URL);
+					$('.qr_container').qrcode({width:200,height:200,text:document.URL});
 					$('.b_card_content').append(b_card_temp);
 					front=1;
 				}
-			},
-			"Edit": function(){
-				$(".static").click(edit).change(save).end();
-				$(".drag").draggable().css('cursor','move');
-				$("canvas").draggable();
-			},
-			/*"Print": function(){
-				$('<canvas></canvas>').getContext('2d').drawImage();
-			},*/
-			"Close":function(){
-				$( this ).dialog( "destroy" ).remove();
-			}
-
+			});
+			$('#edit_b').click(function(){
+				if(edit_status){
+					$(".static").click(edit).change(save).end();
+					$(".drag").draggable({ containment: "#drag-bound" }).css('cursor','move');
+					$("canvas").draggable({ containment: "#drag-bound" });
+					$(this).html("儲存");
+					edit_status=0;
+				}else{
+					$(this).html("編輯");
+					edit_status=1;
+				}
+			});
+			$('#close').click(function(){
+				$.fancybox.close();
+			});
 		}
 	});
 }

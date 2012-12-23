@@ -47,17 +47,18 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
+		  <input type="text" class="input-medium search-query">
+		  <button type="submit" class="btn search">搜尋</button>
           <form class="navbar-form pull-right">
-		  	<input type="text" class="input-medium search-query">
-			<button type="submit" class="btn search">Search</button>
           	<div class="btn-group">
+		  	<button class="btn edit">編輯</button>
+			<button class="btn B_card">印名片</button>
 			<a class="btn  acc_btn" ><%= userid %><span class="caret"></span></a>
 				<ul class="dropdown-menu account function">
 					<li><a href="#">Account Setting</a></li>
 					<li><a href="#" class="FB_import">Import from FB</a></li>
 					<!--<li><a href="#" class="edit">Edit</a></li>-->
 					<li><a href="#" class="collect">My Wallet</a></li>
-					<li><a href="#" class="B_card">Share</a></li>
 					<li><a href="#">Help</a></li>
 					<li><a href="#" class="logout">Log Out</a><li>
 				</ul>
@@ -77,15 +78,15 @@
           <div id="space"></div>
 		  <div class="hero-unit">
           <div class="person block">
-		  	<button style="position:absolute; right:5%;" class="btn-large btn-primary edit">Edit</button>
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
 				<h1 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h1>
 				<span>Company:</span>
 				<% if(JSON.parse(pkt.resume).length!=0){ %>
-				<p class="school static"><%= JSON.parse(pkt.resume)[0].Company %></p>
-				<% } %><br>
-				<span>Position:</span><p class="position static"><%= pkt.Job_exp  %></p><br>
+				<p class="school static"><%= JSON.parse(pkt.resume)[0].Company %></p><br>
+				<span>Position:</span><p class="position static"><%= JSON.parse(pkt.resume)[0].Company %></p>
+				<% } %>
+				<br>
 				<span>Intro:</span><p class="intro static"><%= pkt.About_me %></p>
 			</span>
 		  </div>
@@ -214,21 +215,24 @@
 	</div>
 	</script>
 	<script type="text/template" id= "b_card">
-		<span class='b_card_content'>
+		<span class='qr_container' style='margin: 60px;'></span>
+		<span class='b_card_content' style='margin 60px;'>
 			<h1 class="drag static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
-			<h3 class="drag static"><%= pkt.School %></h3>
-			<h3 class="drag static"><%= pkt.Position %></h3>
+			<% if(JSON.parse(pkt.resume).length!=0){ %>
+			<h3 class="drag static"><%= JSON.parse(pkt.resume)[0].Company %></h3>
+			<h3 class="drag static"><%= JSON.parse(pkt.resume)[0].Position %></h3>
+			<% } %>
 			<p class="drag static"><%= pkt.Intro %></p>
 			<h5 class="drag">Phone: <span class="static"><%= pkt.phone  %></span></h5>
 			<h5 class="drag">Email: <span class="static"><%= pkt.email  %></span></h5>
 			<h5 class="drag">Address: <span class="static">default</span></h5>
-			<div class="btn-group">
+		</span>
+			<div class="btn-group" style="position:absolute ;left:5%;bottom:5%;">
 				<button class="btn btn-info" id="front">正面</button>
 				<button class="btn btn-info" id="back">反面</button>
 				<button class="btn btn-info" id="edit_b">編輯</button>
 				<button class="btn btn-info" id="close">關閉</button>
 			</div>
-		</span>
 	</script>
 	<script type="text/template" id= "log_in">
 		<ul class="dropdown-menu account">
