@@ -24,10 +24,10 @@ module.exports = function(app, accountdb){
                 var update = req.body.id;
                 if( typeof(update) == typeof("") ){
                     try{
-                        update = JSON.stringify(update);
+                        update = JSON.parse(update);
                     }
                     catch(err){
-                        res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                        res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
                     }
                 }
 
@@ -59,7 +59,6 @@ module.exports = function(app, accountdb){
                         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                     })
                 }
-                else res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
             }
             else res.end(JSON.stringify({err:status}));
         });
