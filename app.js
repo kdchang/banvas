@@ -195,31 +195,29 @@ app.post('/:id/modify', function(req, res){
 
 app.post('/:id/mod_img', function(req, res) {
 	console.log(req.body);
-	if(!req.body.title) throw new Error('no title');
+    
     f.check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
             accountdb.findOne({'id':req.params.id}).exec(function(err, data){
                 if(err) throw err;
-                if(data) res.end(JSON.stringify({err:status}));
-                else {
-                    console.log(data);
-                    var pic = JSON.parse(data.Image_pkt);
-                    fs.stat('/public/uploads/'+pic.head_url, function(err,www){
+                if(data){
+                    fs.stat('/public/uploads/'+data.Image_pkt.picture, function(err,www){
                         if(err) console.log(err);
                         console.log(www);
                     });
-                    if(pic.head_url !== "default.png")
-                        fs.unlink('/public/uploads/'+pic.head_url);
-                    pic.head_url = head_url;
-                    data.Image_pkt = JSON.stringify(pic);
+                    if(data.Image_pkt.picture !== "default.png")
+                        fs.unlink('/public/uploads/'+pic.Image_pkt);
+                    data.Image_pkt.picture = head_url;
                     data.save();
 
                     res.redirect('/'+req.params.id);
                 }
+                else res.redirect('/'+req.params.id);
             })
 		}
-        else res.end(JSON.stringify({err:status}));
+        // else res.end(JSON.stringify({err:status}));
+        else res.redirect('/'+req.params.id);
 	});
 });
 

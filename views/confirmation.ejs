@@ -5,17 +5,16 @@
 	</head>
 	<body>
 		<% if(err==0){ %>
-			<h1>Welcome To Banvas</h1>
-			<h2>Make professional connect easier and closer</h2>
-			<h1>Redirect You To Your Personal Page In 5 Seconds</h1>
 			<script>
 				var exdate = new Date();
 				exdate.setDate(exdate.getDate() + 365);
 				var id_value=escape("<%= id %>")+"; expires="+exdate.toUTCString();
+				console.log(id_value);
 				document.cookie="Banvas_id" + "=" + id_value;
 				var token_value=escape("<%= token %>")+"; expires="+exdate.toUTCString();
+				console.log(token_value);
 				document.cookie="Banvas_token" + "=" + token_value;
-				setTimeout(function(){window.location.replace('/<%= id %>');},3000);
+				//setTimeout(function(){window.location.replace('/<%= id %>');},3000);
 			</script>
 		<% }
 		else { %>
