@@ -27,6 +27,7 @@ module.exports = function(app, accountdb){
                         update = JSON.parse(update);
                     }
                     catch(err){
+                        console.log(err);
                         res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
                     }
                 }
@@ -70,7 +71,6 @@ module.exports = function(app, accountdb){
         console.log(req.body);
         f.check_login(req, function(status){
             if(status == err_code.SUCCESS){
-                if( typeof(req.body.id) == typeof([]) ){
                     accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, data){
                         if(err) throw err;
                         if(data){
@@ -90,8 +90,6 @@ module.exports = function(app, accountdb){
                         }
                         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                     });
-                }
-                else res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
             }
             else res.end(JSON.stringify({err:status}));
         });
