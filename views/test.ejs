@@ -163,7 +163,15 @@
     }, 'text');
   })
 
-  
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '471817496195401',
+      status     : true,
+      cookie     : true,
+      xfbml      : true
+    });
+
+  };
 
   (function(d, debug){
      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -183,18 +191,22 @@
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/me?fields=bio,birthday,education,work', function(response) {
               console.log(response);
-              console.log(response['education']);
               for (i in response['education']){
                 if( response['education'][i]['type'] == 'College' || response['education'][i]['type'] == 'Graduate School' ){
                   console.log(response['education'][i]['school']['name'])
                   temp['School'] = response['education'][i]['school']['name'];
                 }
               }
-              temp['Job_exp'] = JSON.stringify(response['work'][0]);
+              // temp['Job_exp'] = JSON.stringify(response['work'][0]);
+
+              
             });
+            FB_status(function(data){
+                console.log(data);
+            })
           } else console.log('User cancelled login or did not fully authorize.');
         });
-      })
+      });
 
       $('#FBpush').click(function(){
         console.log('FBpush!!!');

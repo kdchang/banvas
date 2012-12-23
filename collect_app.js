@@ -21,7 +21,17 @@ module.exports = function(app, accountdb){
         console.log(req.body);
         f.check_login(req, function(status){
             if( status == err_code.SUCCESS){
-                if( typeof(req.body.id) == typeof({}) ){
+                var update = req.body.id;
+                if( typeof(update) == typeof("") ){
+                    try{
+                        update = JSON.stringify(update);
+                    }
+                    catch{
+                        res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                    }
+                }
+
+                if( typeof(update) == typeof({}) ){
                     var id = [];
                     for(i in req.body.id){
                         id.push(i);

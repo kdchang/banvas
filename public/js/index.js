@@ -78,8 +78,23 @@ var workspace = Backbone.Router.extend({
 					el.html(temp);
 					$('.slide_container').css('height','auto');
 					$('input#email').focus();
-					$('.reg .name').bind('focusout',function(){
-						$('input#id').attr('value',$('.reg #firstname').val()+$('.reg #lastname').val());
+					$(':password').on('blur', function(){
+						//輸入正確
+						if( $('.reg #password').val() == $('.reg #check').val() && $('.reg #check').val().length != 0 ){
+							$("label[for='check'] i").attr('class','icon-check');
+							$('.reg #check').removeClass('warning');
+						}
+						//輸入錯誤
+						else if( $('.reg #password').val() != $('.reg #check').val() && $('.reg #check').val().length != 0 ){
+							$("label[for='check'] i").attr('class','icon-check-empty');
+							$('.reg #check').addClass('warning');
+							console.log('passvalue:'+$('.reg #password').val());
+							console.log('checkvalue:'+$('.reg #check').val());
+						}
+						//未輸入
+						else{
+							$("label[for='check'] i").attr('class','icon-check-empty');
+						}
 					});
 				}
 				, index : function(){
