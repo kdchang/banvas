@@ -473,7 +473,7 @@ app.post('/:id/ios/status', function(req, res){
 
 app.post('/:id/ios/detail', function(req, res){
     f.check_login(req, function(status){
-        if(status == err_code.SUCCESS){
+        if(status == err_code.SUCCESS || status == err_code.PERMISSION_DENIED){
             accountdb.findOne({id:req.params.id}).exec(function(err, data){
                 if(err) throw err;
                 if(data){
@@ -491,7 +491,7 @@ app.post('/:id/ios/detail', function(req, res){
                         skill.push(i);
                     }
                     result.skill = skill;
-                    res.end(JSON.stringify({err:err_code.SUCCESS, data:[result]}));
+                    res.end(JSON.stringify({err:err_code.SUCCESS, data:result}));
                 }
                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
             });

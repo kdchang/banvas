@@ -105,8 +105,8 @@
 		<div class="block">
 			<h1 class="skill_header">Skill</h1>
 			<ul class="skill">
-				<% for(var k = 0; k < JSON.parse(pkt.Skill).length ;k++ ) { %>
-				<li><p class="static"><%= JSON.parse(pkt.Skill)[k] %></p></li>
+				<% for(var k in JSON.parse(pkt.Skill) ;k ) { %>
+				<li><p class="static"><%= k %></p><%= JSON.parse(pkt.Skill)[k] %></li>
 				<% } %>
 			</ul>
 		</div>
