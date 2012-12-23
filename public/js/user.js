@@ -295,7 +295,7 @@ function Show_collection(){
 function show_card(){
 	var b_card = $('#b_card').html();
 	//$(b_card).qrcode(document.URL);
-	$.fancybox.open($('<div></div>').qrcode(document.URL).append(b_card),{
+	$.fancybox.open($('<div style="width:600px;height:366px;"></div>').qrcode(document.URL).append(b_card),{
 		afterShow : function(){
 			$('.drag').draggable();
 			console.log('1');

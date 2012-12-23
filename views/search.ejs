@@ -135,6 +135,10 @@
     .search_result_element{
         width: 60%;
         margin: auto;
+
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+        border-radius: 15px;
     }
 
     .search_result_email{
@@ -166,6 +170,7 @@
                         window.location = '/'+data.data[i].id;
                     });
                     $('#search_result').append('</div>')
+                    // $("#search_result").append(JSON.stringify(data.data[i]));
                 }
             }, 'text');
             return false;

@@ -48,8 +48,6 @@ var auditspace = Backbone.View.extend({
 			$('div#reg_error').addClass('alert alert-error').html('Please fill both First and Last Name!!');
 		else if($('.reg #password').val()!==$('.reg #check').val()||$('.reg #password').val().length==0)
 			$('div#reg_error').addClass('alert alert-error').html('Password Incorrect');
-		else if($('input#id').val().match(/[a-zA-Z0-9]+/g)==null)
-			$('div#reg_error').addClass('alert alert-error').html('invalid Personal ID!!');
 		else{
 			$('div#reg_error').removeClass('alert alert-error').empty();
 			var reg_obj = {email: $('.reg input#email').val(), password:$('.reg #password').val() , first_name: $('.reg #firstname').val(), last_name: $('.reg #lastname').val(), id: $('#id').val()};

@@ -4,14 +4,15 @@ var async = require('async')
     , http = require('http')
     , path = require('path')
     , mongoose = require('mongoose')
-    , fs = require('fs');
+    , fs = require('fs')
+    , Canvas = require('canvas')
+    , Image = Canvas.Image;
 
 var err_code = require('./err')
     , skill_app = require('./skill_app')
     , collect_app = require('./collect_app')
     , resume_app = require('./resume_app')
     , f = require('./function');
-
 
 var databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/test';
 var port = process.env.PORT || 3000;
@@ -196,29 +197,25 @@ app.post('/:id/modify', function(req, res){
 app.post('/:id/mod_img', function(req, res) {
 	console.log(req.body);
     
-    f.check_login(req, function(status){
-        if( status == err_code.SUCCESS ){
-            var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
-            accountdb.findOne({'id':req.params.id}).exec(function(err, data){
-                if(err) throw err;
-                if(data){
-                    fs.stat('/public/uploads/'+data.Image_pkt.picture, function(err,www){
-                        if(err) console.log(err);
-                        console.log(www);
-                    });
-                    if(data.Image_pkt.picture !== "default.png")
-                        fs.unlink('/public/uploads/'+pic.Image_pkt);
-                    data.Image_pkt.picture = head_url;
-                    data.save();
+    var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
+    accountdb.findOne({'id':req.params.id}).exec(function(err, data){
+        if(err) throw err;
+        if(data){
+            console.log(data);
+            fs.stat('/public/uploads/'+data.Image_pkt.picture, function(err,www){
+                if(err) console.log(err);
+                console.log(www);
+            });
+            if(data.Image_pkt.picture !== "default.png")
+                fs.unlink('/public/uploads/'+pic.Image_pkt);
+            data.Image_pkt.picture = head_url;
+            console.log(data.Image_pkt);
+            data.save();
 
-                    res.redirect('/'+req.params.id);
-                }
-                else res.redirect('/'+req.params.id);
-            })
-		}
-        // else res.end(JSON.stringify({err:status}));
+            res.redirect('/'+req.params.id);
+        }
         else res.redirect('/'+req.params.id);
-	});
+    })
 });
 
 // app.post('/:id/b-card_save', function(req, res){
