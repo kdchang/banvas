@@ -31,12 +31,13 @@ module.exports = function(app, accountdb){
                     }
                 }
                 console.log(update);
-                
+
                 if( typeof(update) == typeof({}) ){
                     var id = [];
-                    for(i in req.body.id){
+                    for(i in update){
                         id.push(i);
                     }
+
                     accountdb.find({'id':{$in:id}}, {_id:0, id:1}).exec(function(err, data){
                         if(err) throw err;
                         if(data.length>0){
@@ -47,7 +48,7 @@ module.exports = function(app, accountdb){
                                     var collect = {};
                                     if(owner.collect) collect = JSON.parse(owner.collect);
                                     for(i in data){
-                                        collect[data[i].id] = req.body.id[data[i].id];
+                                        collect[data[i].id] = update[data[i].id];
                                         updated.push(data[i].id);
                                     }
                                     owner.collect = JSON.stringify(collect);
