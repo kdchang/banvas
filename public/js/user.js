@@ -95,6 +95,17 @@ if(Banvas_id!=page_id){	//Log in but not the admin of this page
 		});
 }
 else{		//admin of the page
+$('.acc_btn').click(function(){
+	if(account_status){
+		$('ul.account').hide();
+		account_status=0;
+	}
+	else{
+		$('ul.account').show();
+		account_status=1;
+	}
+	
+});
 $(".edit").click(edit_mode);
 $('.logout').click(function(){
 	$.post('/logout',{'token': Banvas_token},function(){
