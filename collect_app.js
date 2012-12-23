@@ -26,7 +26,7 @@ module.exports = function(app, accountdb){
                     try{
                         update = JSON.stringify(update);
                     }
-                    catch{
+                    catch(err){
                         res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                     }
                 }
