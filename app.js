@@ -433,33 +433,44 @@ resume_app(app, accountdb);
 routes(app, accountdb);
 
 app.post('/:id/ios/status', function(req, res){
+    console.log(req.body);
     f.check_login(req, function(status){
         if( status == err_code.SUCCESS ){
             accountdb.findOne({id:req.params.id},{collect:1}).exec(function(err, owner){
                 if(err) throw err;
                 if(owner){
-                    var id = [];
+                    var id = [], tag = [];
                     var collect = JSON.parse(owner.collect);
                     console.log(owner.collect);
                     for(i in collect){
-                        id.push(i);
+                        for(j in collect[i]){
+                            id.push(collect[i][j]);
+                            tag.push(collect[i]);
+                        }
                     }
                     console.log(id);
                     accountdb.find({id:{$in:id}}).exec(function(err, data){
                         if(err) throw err;
                         if(data.length > 0){
                             var result = [];
-                            for( i in data ){
-                                var user = {};
-                                user.id = data[i].id;
-                                user.name = data[i].name.full;
-                                user.tag = owner.collect[data[i].id];
-                                user.resume = data[i].resume;
-                                user.pictureSmall = data[i].Image_pkt.pictureSmall
-                                result.push(user);
+                            for(i in collect){
+                                for(j in collect[i]){
+                                    for(l in data){
+                                        console.log(collect[i][j]);
+                                        if(data[l].id == collect[i][j]){
+                                            var user = {};
+
+                                            user.id = data[l].id;
+                                            user.name = data[l].name.full;
+                                            user.tag = i;
+                                            user.resume = data[l].resume;
+                                            user.pictureSmall = data[l].Image_pkt.pictureSmall
+                                            result.push(user);
+                                        }
+                                    }
+                                }
                             }
                             res.end(JSON.stringify({err:err_code.SUCCESS,data:result}));
-                            console.log(data);
                         }
                         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                     })

@@ -7,13 +7,7 @@ module.exports = function(app, accountdb){
         f.login_and_find(req, res, accountdb, function(data){
             var list = {};
             var collect = JSON.parse(data.collect);
-            for(i in collect){
-                if(list[collect[i]])
-                    list[collect[i]].push(i);
-                else 
-                    list[collect[i]] = [i];
-            }
-            res.end(JSON.stringify({err:err_code.SUCCESS, collection: list}));
+            res.end(JSON.stringify({err:err_code.SUCCESS, collection: collect}));
         });
     });
 
@@ -29,51 +23,135 @@ module.exports = function(app, accountdb){
                             if(owner){
                                 var updated = [];
                                 var collect = {};
+                                
                                 if(owner.collect) collect = JSON.parse(owner.collect);
+                                console.log(collect);
+                                console.log(collect[req.body.tag]);
 
-                                collect[data.id] = req.body.tag;
-                                updated.push(data.id);
-
-                                owner.collect = JSON.stringify(collect);
-                                owner.save();
-                                res.end(JSON.stringify({err:err_code.SUCCESS, save:updated}));
+                                if( collect[req.body.tag] ){
+                                    collect[req.body.tag].push(req.body.id);
+                                    updated.push(data.id);
+                                    owner.collect = JSON.stringify(collect);
+                                    owner.save();
+                                    res.end(JSON.stringify({err:err_code.SUCCESS, save:updated}));
+                                }
+                                else res.end(JSON.stringify({err:err_code.INVALID_OP}));
                             }
                             else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                         })
                     }
                     else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                 })
-
             }
             else res.end(JSON.stringify({err:status}));
         });
     });
+
+    app.post('/:id/collect/save_empty', function(req, res){
+        console.log(req.body);
+        f.check_login(req, function(status){
+            if(status == err_code.SUCCESS){
+                accountdb.findOne({id:req.params.id}).exec(function(err, data){
+                    if(err) throw err;
+                    if(data){
+                        var collect = JSON.parse(data.collect);
+                        if(collect[req.body.tag]) res.end(JSON.stringify({err:err_code.DUPLICATE}));
+                        else{
+                            collect[req.body.tag] = [];
+                            data.collect = JSON.stringify(collect);
+                            data.save();
+
+                            res.end(JSON.stringify({err:err_code.SUCCESS, data:req.body.tag}));
+                        }
+                    }
+                    else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                })
+            }
+            else res.end(JSON.stringify({err:status}));
+        })
+    })
 
     app.post('/:id/collect/delete', function(req, res){
         console.log(req.body);
         f.check_login(req, function(status){
             if(status == err_code.SUCCESS){
-                    accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, data){
-                        if(err) throw err;
-                        if(data){
-                            var deleted = [];
-                            var collect = {};
-                            if( data.collect ) collect = JSON.parse(data.collect);
+                accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, data){
+                    if(err) throw err;
+                    if(data){
+                        var collect = {};
+                        if( data.collect ) collect = JSON.parse(data.collect);
 
-                            for(i in req.body.id){
-                                if(collect.hasOwnProperty(req.body.id[i])){
-                                    delete collect[req.body.id[i]];
-                                    deleted.push(req.body.id[i]);
-                                }
-                            }
+                        if( collect[req.body.tag] ){
+                            f.removeA(collect[req.body.tag], req.body.id);
                             data.collect = JSON.stringify(collect);
                             data.save();
-                            res.end(JSON.stringify({err:err_code.SUCCESS, update:deleted}));
-                        }
-                        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-                    });
+
+                            res.end(JSON.stringify({err:err_code.SUCCESS}));
+                        }                        
+                        else res.end(JSON.stringify({err:err_code.INVALID_OP}));
+                    }
+                    else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                });
             }
             else res.end(JSON.stringify({err:status}));
         });
     });
+
+    app.post('/:id/collect/delete_empty', function(req, res){
+        console.log(req.body);
+        f.check_login(req, function(status){
+            if(status == err_code.SUCCESS){
+                accountdb.findOne({id:req.params.id}).exec(function(err, data){
+                    if(err) throw err;
+                    if(data){
+                        var collect = JSON.parse(data.collect);
+                        if( collect[req.body.tag] && collect[req.body.tag].length < 1){
+                            delete collect[req.body.tag];
+                            data.collect = JSON.stringify(collect);
+                            data.save();
+
+                            res.end(JSON.stringify({err:err_code.SUCCESS}));
+                        }
+                        else res.end(JSON.stringify({err:err_code.INVALID_OP}));
+                    }
+                    else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                });
+            }
+            else res.end(JSON.stringify({err:status}));
+        });
+    });
+
+    app.post('/:id/collect/move', function(req, res){
+        console.log(req.body);
+        if( req.body.id && req.body.from, req.body.to ){
+            f.check_login(req, function(status){
+                if(status == err_code.SUCCESS){
+                    accountdb.findOne({id:req.params.id}).exec(function(err, data){
+                        if(err) throw err;
+                        if(data){
+                            var collect = JSON.parse(data.collect);
+                            if(collect[req.body.from]){
+
+                                if(collect[req.body.from].length != f.removeA(collect[req.body.from], req.body.id).length){
+                                    if(collect[req.body.to]){
+                                        collect[req.body.to].push(req.body.id);
+                                        data.collect = JSON.stringify(collect);
+                                        data.save();
+                                        res.end(JSON.stringify({err:err_code.SUCCESS}));
+                                    }
+                                    else res.end(JSON.stringify({err:err_code.INVALID_OP}));
+                                    
+                                }
+                                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                            }
+                            else res.end(JSON.stringify({err:err_code.INVALID_OP}));
+                        }
+                        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                    })
+                }
+                else res.end(JSON.stringify({err:status}));
+            })
+        }  
+        else res.end(JSON.stringify({err:err_code.DATA_INCOM}));
+    })
 }

@@ -77,7 +77,7 @@
           <div id="space"></div>
 		  <div class="hero-unit">
           <div class="person block">
-		  	<a style="position:absolute; right:5%;" href="#" class="btn-large btn-primary edit">Edit</a>
+		  	<button style="position:absolute; right:5%;" class="btn-large btn-primary edit">Edit</button>
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
 				<h1 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h1>
@@ -105,7 +105,7 @@
 		<div class="block">
 			<h1 class="skill_header">Skill</h1>
 			<ul class="skill">
-				<% for(var k in JSON.parse(pkt.Skill) ;k ) { %>
+				<% for(var k in JSON.parse(pkt.Skill) ) { %>
 				<li><p class="static"><%= k %></p><%= JSON.parse(pkt.Skill)[k] %></li>
 				<% } %>
 			</ul>
@@ -141,7 +141,9 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/assets/js/bootstrap-transition.js"></script>
+	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
+	<script src="/assets/js/bootstrap-transition.js"></script>
     <script src="/assets/js/bootstrap-alert.js"></script>
     <script src="/assets/js/bootstrap-modal.js"></script>
     <script src="/assets/js/bootstrap-dropdown.js"></script>
@@ -153,8 +155,6 @@
     <script src="/assets/js/bootstrap-collapse.js"></script>
     <script src="/assets/js/bootstrap-carousel.js"></script>
     <script src="/assets/js/bootstrap-typeahead.js"></script>
-	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
-	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
 	<script type="text/javascript" src="js/jquery.qrcode.js"></script>
 	<script type="text/javascript" src="js/qrcode.js"></script>
 	<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
@@ -215,16 +215,19 @@
 	</script>
 	<script type="text/template" id= "b_card">
 		<div class='b_card_content'>
-		<span style="display:inline-block; width: 400px;">
-		</span>
-		<span tyle="display:inline-block; width: 200px;">
-		<h1 class="drag static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
-		<h3 class="drag static"><%= pkt.School %></h3>
-		<h3 class="drag static"><%= pkt.Position %></h3></span>
-		<span style="display:inline-block; width: 400px;"><p class="drag static"><%= pkt.Intro %></p>
-		<h5 class="drag">Phone: <span class="static"><%= pkt.phone  %></span></h5>
-		<h5 class="drag">Email: <span class="static"><%= pkt.email  %></span></h5>
-		<h5 class="drag">Address: <span class="static">default</span></h5></span>
+			<h1 class="drag static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
+			<h3 class="drag static"><%= pkt.School %></h3>
+			<h3 class="drag static"><%= pkt.Position %></h3>
+			<p class="drag static"><%= pkt.Intro %></p>
+			<h5 class="drag">Phone: <span class="static"><%= pkt.phone  %></span></h5>
+			<h5 class="drag">Email: <span class="static"><%= pkt.email  %></span></h5>
+			<h5 class="drag">Address: <span class="static">default</span></h5>
+			<div class="btn-group">
+				<button class="btn btn-info" id="front">正面</button>
+				<button class="btn btn-info" id="back">反面</button>
+				<button class="btn btn-info" id="edit_b">編輯</button>
+				<button class="btn btn-info" id="close">關閉</button>
+			</div
 		</div>
 	</script>
 	<script type="text/template" id= "log_in">

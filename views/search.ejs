@@ -81,11 +81,12 @@
 
     <div id="backboard">
     </div>
-    <div id='search_result'></div>
+    <div id='search_result'>
+
+    </div>
     
 
     <hr>
-
     <footer>
         <p>&copy; Copyright Banvas 行動名片夾 All rights reserved.</p>
     </footer>
@@ -125,8 +126,6 @@
         float: left;
     }
     .search_result_name {
-        /*height: 40px;*/
-        /*margin-top: 40px;*/
         padding-top: 20px;
         padding-bottom: 10px;
         font-size: 30px;
@@ -167,7 +166,6 @@
                         window.location = '/'+data.data[i].id;
                     });
                     $('#search_result').append('</div>')
-                    // $("#search_result").append(JSON.stringify(data.data[i]));
                 }
             }, 'text');
             return false;

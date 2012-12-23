@@ -6,22 +6,12 @@ var i,
 	b_card_temp,
 	front=1,
 	account_status=0;
-//$("div").qrcode("http://www.google.com.tw");
+	skill_temp=[];
 var Banvas_id = getCookie('Banvas_id'),
 	Banvas_token = getCookie('Banvas_token'),
 	page_id=$('meta[name="userid"]').attr('content');
 var FB_temp = {};
-var timeline = {
-		"timeline":
-		{
-				"headline":"Welcome To Banvas",
-				"type":"default",
-				"text":"Make professional connect easier and closer",
-				"startDate":"2000,1,1",
-				"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}] 
-		}
-};
-
+var timeline;
 $(document).ready(function(){
 	console.log('ready');
 	timeline=JSON.parse($('meta[name="timeline_json"]').attr('content'));
@@ -32,6 +22,10 @@ $('.company').each(function(){
 		console.log(data);
 		$(this).prev().attr('src',data);
 	});
+});
+$('ul.account').mouseleave(function(){
+	$(this).hide();
+	account_status=0;
 });
 $('.search').click(search);
 function search(event){
@@ -53,6 +47,7 @@ function search(event){
 		})
 	}
 }
+console.log($('.skill p'));
 function setCookie(c_name,value,exdays)
 {
 	var exdate = new Date();
@@ -119,34 +114,38 @@ $(".FB_import").click(FB_import);
 $('.B_card').click(show_card);
 // Function Area
 function edit_mode(){
-		$(this).html("Done").removeClass("edit").click(function(){
+		$(this).html("Save").removeClass("edit").click(function(){
 			save();
 			$(this).html("Edit").addClass("edit").unbind('.click');
 			$(".static").unbind('click');
 			$('.temp').remove();
-			var skill_temp=[];
-			$('.skill p').each(function(){skill_temp.push($(this).html())});
-			var post_data = {"token": Banvas_token,"School": $('.school:first').html(),"Intro":$('.intro').html(),"Skill":JSON.stringify(skill_temp),"Position":$('.position:first').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'},"TimeLine":JSON.stringify(timeline)}; $.post('/'+Banvas_id+'/modify',post_data,function(data){
+			$('.skill p').each(function(){
+				if(!skill_temp[$(this).html()])
+					$.post('/'+Banvas_id+'/skill/add',{'token':Banvas_token,'skill':$(this).html()},function(data){
+						console.log(data);
+					});
+			});
+			var post_data = {"token": Banvas_token,"About_me":$('.intro').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'},"TimeLine":JSON.stringify(timeline)}; 
+			$.post('/'+Banvas_id+'/modify',post_data,function(data){
 				console.log(data);
 			});
-			console.log('Posting new data....');
 			console.log(post_data);
 			$(this).unbind('click').bind('click',edit_mode);
 		});
 		$(".static").click(edit).change(save).end();
-		$('<button class="temp head_change">+</button>').insertAfter('img.head').click(function(){
+		$('<button class="temp head_change btn btn-info">+</button>').insertAfter('img.head').click(function(){
 			$("<form method='post' action='/"+Banvas_id+"/mod_img' ENCTYPE=\"multipart/form-data\"><input type='file' name='file' /><input name='token' type='hidden' value='"+Banvas_token+"'/><input type='hidden' name='title' value='head'/> <button>送出</button></form>").dialog();
 });
-		$('<button class="temp" style="float : right;">-</button>').appendTo('.skill li').click(function(event){
+		$('<button class="temp btn btn-info" style="float : right;">-</button>').appendTo('.skill li').click(function(event){
 			event.stopPropagation();
 			$(this).parent('li').remove();
 		});
-		$('<button class="temp">+</button>').appendTo('.skill_header').click(function(){
+		$('<button class="temp btn btn-info">+</button>').appendTo('.skill_header').click(function(){
 			$('<li><p class="changing"><input autofocus="autofocus" class=\"editing\" type="text" value="default"></p></li>').appendTo('ul.skill').children('p').bind('focusout',save);
 		});
-		$('<button class="temp" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
-		$('<button class="temp" >Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
-		$('<button class="temp" >Timeline Config</button>').insertAfter('div#timeline').click(Timeline_config);
+		$('<button class="temp btn btn-info" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
+		$('<button class="temp btn btn-info" style="margin: 5px;" >Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
+		$('<button class="temp btn btn-info" style="margin: 5px;" >Timeline Config</button>').insertAfter('div#timeline').click(Timeline_config);
 };
 function save(){
 			$(".editing").each(function(){
@@ -202,6 +201,8 @@ function AddTimeEvent(){
 			}
 		}
 	});
+	$('#startDate:last').datepicker();
+	$('#endDate:last').datepicker();
 }
 function Timeline_config(){
 	var temp = _.template($('#Timeline_config').html(),{});
@@ -293,12 +294,13 @@ function Show_collection(){
 }
 function show_card(){
 	var b_card = $('#b_card').html();
-	/*$.fancybox.open($('<div style="background-color: blue;"></div>').qrcode(document.URL).append(b_card),{
-		afterLoad : function(){
-			$('canvas').append('<p>test</p>');
-			//$('div.drag').draggable();
+	//$(b_card).qrcode(document.URL);
+	$.fancybox.open($('<div></div>').qrcode(document.URL).append(b_card),{
+		afterShow : function(){
+			$('.drag').draggable();
+			console.log('1');
 		}
-	});*/
+	});
 	$(b_card).dialog({
 		width: 700,
 		height: 500,
@@ -307,19 +309,19 @@ function show_card(){
 				if(front){
 					b_card_temp=$('.b_card_content').html();
 					$('.b_card_content').empty();
-					$('.b_card_content').qrcode(document.URL);
 					front=0;
 				}
 			},
 			"Frontside":function(){
 				if(!front){
-					$('.b_card_content').html(b_card_temp);
+					$('.b_card_content').qrcode(document.URL);
+					$('.b_card_content').append(b_card_temp);
 					front=1;
 				}
 			},
 			"Edit": function(){
 				$(".static").click(edit).change(save).end();
-				$(".drag").draggable();
+				$(".drag").draggable().css('cursor','move');
 				$("canvas").draggable();
 			},
 			/*"Print": function(){
