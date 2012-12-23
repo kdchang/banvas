@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Banvas 行動名片夾</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            position: relative;
+        }
+
+/*    
+    #searchbox {
+        border: 1px solid red;
+    }
+*/
+
+        .searchinputarea {
+            border: 1px solid lightGrey;
+            width: 180px;
+            box-shadow: 0px 0px 0px transparent;
+            -webkit-transition: box-shadow 1s ease-in-out;
+            padding-left: 8px;
+            font-size: 15px;
+            font-family: verdana;
+            padding-top: 2px;
+        }
+
+        .searchinputarea:focus {
+            border: 1px solid lightGrey;
+            box-shadow: 0px 0px 10px rgba(0, 110, 250, 0.2);
+            outline: 1px solid #ECECFA;
+        }
+    </style>
+
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+    <link href="stylesheets/jquery.fancybox.css" rel="stylesheet">
+    <link href="/stylesheets/index.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          
+          <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
+            <form class="navbar-form pull-right" id='searchbox' action='http://www.google.com/search' method='get'>
+                    <input class="searchinputarea" maxlength="255" name="q" size="25" type="text" placeholder="Search Cards!!">
+                    <!-- <input class="boxsearch123" type="submit" value="search"> -->
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div id="backboard">
+    </div>
+    <div id='search_result'></div>
+    
+
+    <hr>
+
+    <footer>
+        <p>&copy; Copyright Banvas 行動名片夾 All rights reserved.</p>
+    </footer>
+
+    </div> <!-- /container -->
+    <a herf='mailto:ddmail2009@gmail.com'>contact us!!</a>
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="/assets/js/bootstrap-transition.js"></script>
+    <script src="/assets/js/bootstrap-alert.js"></script>
+    <script src="/assets/js/bootstrap-modal.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script src="/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="/assets/js/bootstrap-tab.js"></script>
+    <script src="/assets/js/bootstrap-tooltip.js"></script>
+    <script src="/assets/js/bootstrap-popover.js"></script>
+    <script src="/assets/js/bootstrap-button.js"></script>
+    <script src="/assets/js/bootstrap-collapse.js"></script>
+    <script src="/assets/js/bootstrap-carousel.js"></script>
+    <script src="/assets/js/bootstrap-typeahead.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-1.9.2.custom.js"></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+
+  </body>
+</html>
+
+
+<style>
+    .search_result_pic {
+        width: 70px;
+        height: 70px;
+        float: left;
+    }
+    .search_result_name {
+        /*height: 40px;*/
+        /*margin-top: 40px;*/
+        padding-top: 20px;
+        padding-bottom: 10px;
+        font-size: 30px;
+        margin-left: 100px;
+    }
+
+    .search_result_element{
+        width: 60%;
+        margin: auto;
+    }
+
+    .search_result_email{
+        margin-left:100px;
+    }
+
+    .search_result_element:hover{
+        background-color: lightblue;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    $(window).ready(function(){
+        $(".searchinputarea").focus();
+        $('#searchbox').submit(function(){
+            $.post('/search', {query: $('.searchinputarea').val()}, function(data){
+                $('.searchinputarea').val("");
+                var data = JSON.parse(data);
+                console.log(data.data);
+                $("#search_result").html("");
+                for(i in data.data){
+                    $('#search_result').append("<hr>");
+                    $('#search_result').append('<div class=search_result_element id='+data.data[i].id+'>' +
+                        '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.picture+">"+
+                        '<div class=search_result_name>'+data.data[i].full_name+'</div>'+
+                        '<div class=search_result_email><a href="mailto:'+data.data[i].email+'">'+data.data[i].email+"</a>"+'</div>');
+                    $("#"+data.data[i].id).click(function(){
+                        window.location = '/'+data.data[i].id;
+                    });
+                    $('#search_result').append('</div>')
+                    // $("#search_result").append(JSON.stringify(data.data[i]));
+                }
+            }, 'text');
+            return false;
+        });
+        
+    })
+</script>

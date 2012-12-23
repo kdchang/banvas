@@ -1,0 +1,27 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/bin/npm', 'install' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /home/dan/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+ERR! Couldn't read dependencies.
+ERR! Failed to parse json
+ERR! Unexpected token }
+ERR! File: /home/dan/Dropbox/final-project/new_code/CCSP-test/package.json
+ERR! JSON.parse Failed to parse package.json data.
+ERR! JSON.parse package.json must be actual JSON, not just JavaScript.
+ERR! JSON.parse This is not a bug in npm.
+ERR! JSON.parse Tell the package author to fix their package.json file.
+ERR! 
+ERR! System Linux 3.2.0-34-generic
+ERR! command "node" "/usr/bin/npm" "install"
+ERR! cwd /home/dan/Dropbox/final-project/new_code/CCSP-test
+ERR! node -v v0.6.12
+ERR! npm -v 1.1.4
+ERR! file /home/dan/Dropbox/final-project/new_code/CCSP-test/package.json
+ERR! code EJSONPARSE
+ERR! message Failed to parse json
+ERR! message Unexpected token }
+ERR! errno {}
+verbose exit [ 1, true ]

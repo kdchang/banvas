@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Banvas 行動名片夾| <%=userid %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<meta name="userid" content="<%=userid %>">
+    <meta name="timeline_json" content="">
+	<!-- Le styles -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        position: relative;
+      }
+    </style>
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+	
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+	<link href="stylesheets/jquery.fancybox.css" rel="stylesheet">
+	<link href="stylesheets/no-theme/jquery-ui-1.9.2.custom.css" rel="stylesheet">
+	<link href="stylesheets/user.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
+          <form class="navbar-form pull-right">
+		  	<input type="text" class="input-medium search-query">
+			<button type="submit" class="btn search">Search</button>
+          	<div class="btn-group">
+			<a class="btn  acc_btn" ><%= userid %><span class="caret"></span></a>
+				<ul class="dropdown-menu account function">
+					<li><a href="#">Account Setting</a></li>
+					<li><a href="#" class="FB_import">Import from FB</a></li>
+					<!--<li><a href="#" class="edit">Edit</a></li>-->
+					<li><a href="#" class="collect">My Wallet</a></li>
+					<li><a href="#" class="B_card">Share</a></li>
+					<li><a href="#">Help</a></li>
+					<li><a href="#" class="logout">Log Out</a><li>
+				</ul>
+			</div>
+			<!--
+			<a href="/signin" class="btn btn-small">登入</a>
+            -->
+		  </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+	<div id="backboard">
+	</div>
+
+    <div class="main container">
+      <!-- Main hero unit for a primary marketing message or call to action -->
+          <div id="space"></div>
+		  <div class="hero-unit">
+          <div class="person block">
+		  	<a style="position:absolute; right:5%;" href="#" class="btn-large btn-primary edit">Edit</a>
+			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
+			<span class="id">
+				<h1 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h1>
+				<span>School:</span>
+				<% if(JSON.parse(pkt.resume).length!=0){ %>
+				<p class="school static"><%= JSON.parse(pkt.resume)[0].Company %></p>
+				<% } %><br>
+				<span>Position:</span><p class="position static"><%= pkt.Job_exp  %></p><br>
+				<span>Intro:</span><p class="intro static"><%= pkt.About_me %></p>
+			</span>
+		  </div>
+		<div class="social block">
+			<a class="FB" href= "<%= pkt.linked.Facebook %>"> <img class="icon social FB" src="/material/facebook.png">
+			</a>                        
+		</div>
+		<div class="block">
+			<h1 class="resume_header">Resume</h1>
+			<ul class="resume">
+				<% for(var i = 0; i < JSON.parse(pkt.resume).length ;i++ ) { %>
+				<!--<li><img class="icon" id="company" src="/material/ntulogo.jpg" >-->
+				<p class="company static"><%= JSON.parse(pkt.resume)[i].Company %></p></li>
+			<% } %>
+			</ul>
+		</div>
+		<div class="block">
+			<h1 class="skill_header">Skill</h1>
+			<ul class="skill">
+				<% for(var k = 0; k < JSON.parse(pkt.Skill).length ;k++ ) { %>
+				<li><p class="static"><%= JSON.parse(pkt.Skill)[k] %></p></li>
+				<% } %>
+			</ul>
+		</div>
+		<div class="block" id="timeline">
+			<h1>Timeline</h1>
+			<div id="timeline-embed"></div>
+		</div>
+		<div class='block'>
+			<span id='view_time' style="float:right">
+			</span>
+		</div>
+		</div>
+		  </div>
+	      <!--<div class="hero-unit">
+	        <h1>Welcome to Banvas!</h1>
+	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
+	        <p><a href="signup" class="btn btn-primary btn-large">免費註冊 &raquo;</a></p>
+	        
+		  </div>-->
+		  
+
+	<div>
+      <hr>
+
+      <footer>
+        <p>&copy; Copyright Banvas 行動名片夾 All rights reserved.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/assets/js/bootstrap-transition.js"></script>
+    <script src="/assets/js/bootstrap-alert.js"></script>
+    <script src="/assets/js/bootstrap-modal.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script src="/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="/assets/js/bootstrap-tab.js"></script>
+    <script src="/assets/js/bootstrap-tooltip.js"></script>
+    <script src="/assets/js/bootstrap-popover.js"></script>
+    <script src="/assets/js/bootstrap-button.js"></script>
+    <script src="/assets/js/bootstrap-collapse.js"></script>
+    <script src="/assets/js/bootstrap-carousel.js"></script>
+    <script src="/assets/js/bootstrap-typeahead.js"></script>
+	<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.9.2.custom.js"></script>
+	<script type="text/javascript" src="js/jquery-qr-plugin.js"></script>
+	<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+	<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+	<script type="test/javascript" src="js/tocanvas.js"></script>
+	<script type="test/javascript" src="js/IgeClass.js"></script>
+	<script type="text/javascript">
+	var timeline_json={
+			"timeline":
+			{
+					"headline":"Welcome To Banvas",
+					"type":"default",
+					"text":"Make professional connect easier and closer",
+					"startDate":"2000,1,1",
+					"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}]
+			}
+	};
+	<% for(var k in timeline ){ %>
+		<% timeline_json=timeline %>;
+	<% } %>
+	$('meta[name="timeline_json"]').attr('content',JSON.stringify(timeline_json));	
+	console.log('change');
+	</script>
+	<script type="text/javascript" src="js/storyjs-embed.js"></script>
+	<script type="text/javascript" src="js/user.js"></script>
+	<script type="text/template" id= "add_time_form">
+	<div>
+		<form id="add_event">
+			<label>Event Name</label>
+			<input type="text" id="headline"></input><br>
+			<label>Start Date</label>
+			<input type="text" id="startDate"></input><br>
+			<label>End Date</label>
+			<input type="text" id="endDate"></input><br>
+			<label>Description</label>
+			<input type="text" id="text"></input><br>
+			<label>URL</label>
+			<input type="text" id="url"></input><br>
+		</form>
+	</div>
+	</script>
+	<script type="text/template" id= "Timeline_config">
+	<div>
+		<form id="config">
+			<label>Timeline HeadName</label>
+			<input type="text" id="headname"></input><br>
+			<label>Timeline Description</label>
+			<input type="text" id="time_des"></input><br>
+			<label>StartDate</label>
+			<input type="text" id="time_start"></input><br>
+		</form>
+	</div>
+	</script>
+	<script type="text/template" id= "collection_list">
+	<div class='block'>
+		<div><h1>Wallet Of <%=userid %></h1></div>
+		<button class="add_collection">Subscribe B-Cards By ID</buttton>
+		<button class="go_back">Back To My Page</button>
+	</div>
+	</script>
+	<script type="text/template" id= "b_card">
+		<div class='b_card_content'>
+		<span style="display:inline-block; width: 400px;">
+		</span>
+		<span tyle="display:inline-block; width: 200px;">
+		<h1 class="drag static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
+		<h3 class="drag static"><%= pkt.School %></h3>
+		<h3 class="drag static"><%= pkt.Position %></h3></span>
+		<span style="display:inline-block; width: 400px;"><p class="drag static"><%= pkt.Intro %></p>
+		<h5 class="drag">Phone: <span class="static"><%= pkt.phone  %></span></h5>
+		<h5 class="drag">Email: <span class="static"><%= pkt.email  %></span></h5>
+		<h5 class="drag">Address: <span class="static">default</span></h5></span>
+		</div>
+	</script>
+	<script type="text/template" id= "log_in">
+		<ul class="dropdown-menu account">
+				<div class="control-group">
+					<label class="control-label" for="inputEmail">Email</label>
+					<div class="controls">
+						<input type="text" id="email" placeholder="Email">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputPassword">Password</label>
+					<div class="controls">
+						<input type="password" id="password" placeholder="Password">
+					</div>
+				</div>
+				<div class="control-group">
+					<div class="controls">
+					<label class="checkbox">
+						<input type="checkbox"> Remember me
+					</label>
+					
+					<div id="sign_in_msg"></div>
+					</div>
+					<button  id="submit" class="btn">Sign in</button>
+				</div>
+		</ul>
+	</script>
+	<script>
+	  	$.post('<%= userid %>/statistic', {}, function(data){
+	  		var data = JSON.parse(data);
+	  		console.log(data);
+	  		$("#view_time").html("viewed time: "+data.statistic.view_time);
+	  	}, 'text');
+	</script>
+  </body>
+</html>
