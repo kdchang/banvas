@@ -21,47 +21,29 @@ module.exports = function(app, accountdb){
         console.log(req.body);
         f.check_login(req, function(status){
             if( status == err_code.SUCCESS){
-                var update = req.body.id;
-                if( typeof(update) == typeof("") ){
-                    try{
-                        update = JSON.parse(update);
-                    }
-                    catch(err){
-                        console.log(err);
-                        res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
-                    }
-                }
-                console.log(update);
+                accountdb.findOne({'id':req.body.id}, {_id:0, id:1}).exec(function(err, data){
+                    if(err) throw err;
+                    if(data){
+                        accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, owner){
+                            if(err) throw err;
+                            if(owner){
+                                var updated = [];
+                                var collect = {};
+                                if(owner.collect) collect = JSON.parse(owner.collect);
 
-                if( typeof(update) == typeof({}) ){
-                    var id = [];
-                    for(i in update){
-                        id.push(i);
-                    }
+                                collect[data.id] = req.body.tag;
+                                updated.push(data.id);
 
-                    accountdb.find({'id':{$in:id}}, {_id:0, id:1}).exec(function(err, data){
-                        if(err) throw err;
-                        if(data.length>0){
-                            accountdb.findOne({id:req.params.id}, {collect:1}).exec(function(err, owner){
-                                if(err) throw err;
-                                if(owner){
-                                    var updated = [];
-                                    var collect = {};
-                                    if(owner.collect) collect = JSON.parse(owner.collect);
-                                    for(i in data){
-                                        collect[data[i].id] = update[data[i].id];
-                                        updated.push(data[i].id);
-                                    }
-                                    owner.collect = JSON.stringify(collect);
-                                    owner.save();
-                                    res.end(JSON.stringify({err:err_code.SUCCESS, save:updated}));
-                                }
-                                else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-                            })
-                        }
-                        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-                    })
-                }
+                                owner.collect = JSON.stringify(collect);
+                                owner.save();
+                                res.end(JSON.stringify({err:err_code.SUCCESS, save:updated}));
+                            }
+                            else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                        })
+                    }
+                    else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                })
+
             }
             else res.end(JSON.stringify({err:status}));
         });
