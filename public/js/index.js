@@ -50,7 +50,7 @@ var auditspace = Backbone.View.extend({
 			$('div#reg_error').addClass('alert alert-error').html('Password Incorrect');
 		else{
 			$('div#reg_error').removeClass('alert alert-error').empty();
-			var reg_obj = {email: $('.reg input#email').val(), password:$('.reg #password').val() , first_name: $('.reg #firstname').val(), last_name: $('.reg #lastname').val(), id: $('.reg #firstname').val()+$('reg #lastname').val()};
+			var reg_obj = {email: $('.reg input#email').val(), password:$('.reg #password').val() , first_name: $('.reg #firstname').val(), last_name: $('.reg #lastname').val(), id: $('.reg #firstname').val()+$('.reg #lastname').val()};
 			console.log(reg_obj);
 			$.post('/signup',reg_obj,function(data){
 				console.log(data);
