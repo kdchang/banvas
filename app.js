@@ -373,14 +373,13 @@ app.get('/search', function(req, res){
         accountdb.findOne({id: req.session.item.log_data.id},{_id:0,__v:0}, function(err,data){
             if(err) throw err;
             if(data) 
-                res.render('search', {userid: req.params.id,pkt : data,timeline : (data.TimeLine.length==0)?{}: JSON.parse(data.TimeLine)});
+                res.render('search', {userid: req.session.item.log_data.id});
             else 
                 res.redirect('/');
         });
     }
     else res.redirect('/');
 })
-
 
 collect_app(app, accountdb);
 skill_app(app, accountdb);

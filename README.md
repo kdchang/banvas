@@ -86,7 +86,30 @@ API
                             POST: token, {Company, Positon, Department}   
                             RETURN: {err}
 
+/:id/collect/list    : return the user's collection list   
+                            POST: token   
+                            RETURN: {err, data:{'tag1':[user],...}}  
 
+/:id/collect/save    : save the user to id's colleciton list    
+                            POST: token, id, tag  
+                            RETURN: {err, saved}
+
+/:id/collect/save_empty : create a empty tag in id's collection list   
+                            POST: token, tag   
+                            RETURN: {err}   
+
+/:id/collect/delete  : delete a user from the id's collection list    
+                            POST: token, tag, id   
+                            RETURN: {err}   
+
+/:id/collect/delete_empty : delete a empty tag   
+                            POST: token, tag   
+                            RETURN: {err}   
+
+/:id/collect/move    : move the id's from tag to tag   
+                            POST: token, id, to, from   
+                            RETURN: {err}
+       
 STATUS number   
 ====================================================   
 0                    : success   
