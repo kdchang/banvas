@@ -9,12 +9,16 @@
 
     <!-- Le styles -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/slides.css">
     <style type="text/css">
       body {
         padding-top: 0px;
         padding-bottom: 0px;
         position: relative;
       }
+ /*     #fix-nav-bar{
+        background: rgba(90%, 90%, 90%,0.8);
+      }*/
     </style>
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -39,15 +43,16 @@
 
   <body>
 
+<!--Nav Fixed Bar!-->
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container" id="fix-nav-bar">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
+          <a class="brand" href="/"><strong>Banvas 行動名片夾(Beta)</strong></a>
             <form class="navbar-form pull-right">
           	<div class="btn-group">
 			<a class="btn login">登入</a>
@@ -85,16 +90,109 @@
 	<div id="backboard">
 	</div>
 
-    <div class="container">
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
-          <div id="space"></div>	
-	      <div class="hero-unit slide_container">
-		  </div>
-	<div>
-	<div id="space"></div>
-      <!-- Example row of columns -->
+    <!--Main Contain!-->
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <!-- Slide Show index !-->
+<script type="text/template" id="index-view">
+    <div id="container">
+    <div id="example">
+      <div id="slides">
+        <div class="slides_container">
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/jliba/4665625073/" title="145.365 - Happy Bokeh Thursday! | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-1.jpg" width="570" height="270" alt="Slide 1"></a>
+            <div class="caption" style="bottom:0">
+              <p>Happy Bokeh Thursday!</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/stephangeyer/3020487807/" title="Taxi | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-2.jpg" width="570" height="270" alt="Slide 2"></a>
+            <div class="caption">
+              <p>Taxi</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/childofwar/2984345060/" title="Happy Bokeh raining Day | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-3.jpg" width="570" height="270" alt="Slide 3"></a>
+            <div class="caption">
+              <p>Happy Bokeh raining Day</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/b-tal/117037943/" title="We Eat Light | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-4.jpg" width="570" height="270" alt="Slide 4"></a>
+            <div class="caption">
+              <p>We Eat Light</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/bu7amd/3447416780/" title="&ldquo;I must go down to the sea again, to the lonely sea and the sky; and all I ask is a tall ship and a star to steer her by.&rdquo; | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-5.jpg" width="570" height="270" alt="Slide 5"></a>
+            <div class="caption">
+              <p>&ldquo;I must go down to the sea again, to the lonely sea and the sky...&rdquo;</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/streetpreacher/2078765853/" title="twelve.inch | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-6.jpg" width="570" height="270" alt="Slide 6"></a>
+            <div class="caption">
+              <p>twelve.inch</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/aftab/3152515428/" title="Save my love for loneliness | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-7.jpg" width="570" height="270" alt="Slide 7"></a>
+            <div class="caption">
+              <p>Save my love for loneliness</p>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="prev"><img src="images/slides/arrow-prev.png" width="24" height="43" alt="Arrow Prev"></a>
+        <a href="#" class="next"><img src="images/slides/arrow-next.png" width="24" height="43" alt="Arrow Next"></a>
+      </div>
+      <img src="images/slides/example-frame.png" width="739" height="341" alt="Example Frame" id="frame">
+    </div>
+</script>
+
+
+  <!--Center Box Container!-->
+    <div class="container" id="mainbody">     
+      <div id="space"></div>  
+    <div class="container">  
+      <div class="container slide_container"> 
+      </div>  
+     
+
+
+
+    <!--Register Form!-->
+<script type="text/template" id="register-view">  
     <div class="container">
+      <section class="main">
+        <form class="form clearfix">
+          <h1><span class="sign-up">註冊一個自己的名片</span></h1>
+            <p class="reg">    
+                <label for="firstName"><i class="icon-user"></i>Username</label>
+                <input type="text" class="name" id="firstname" placeholder="First Name">
+                <input type="text" class="name" id="lastname" placeholder="Last name">
+                <label for="email"><i class="icon-envelope"></i>Email</label>
+                <input type="email" id="email" placeholder="Email Address">
+                <label for="password"><i class="icon-lock"></i>Password</label>
+                <input type="password" id="password" placeholder="New Password" name="Password">
+                <label for="check"><i class="icon-check-empty"></i>Confirm Password</label>
+                <input type="password" id="check" placeholder="Confirm Password" name="Password"> 
+            </p>
+          <div id="reg_error"></div>
+            <button class="sign" id="register">
+              <span>Sign in</span>
+            </button>
+            <button class="log-fb">
+              <span>Facebook login</span>
+            </button> 
+        </form>
+      </section>
+    </div>
+</script>
+
+
+
+    <!-- Example row of columns -->
+<script type="text/template" id="index-columns">    
       <div class="row">
         <div class="span4">
           <i>	
@@ -124,7 +222,8 @@
           <p>透過雲端管理收到的名片資料，可以跨平台隨時瀏覽收藏的名片資訊，方便洽公前先行瀏覽</p>
           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
         </div>
-      </div>
+    </div>
+</script>  
 
       <hr>
 
@@ -139,8 +238,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
 
-	<script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui-1.9.2.custom.js"></script>
+	  <script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+	  <script type="text/javascript" src="/js/jquery-ui-1.9.2.custom.js"></script>
     <script src="/assets/js/bootstrap-transition.js"></script>
     <script src="/assets/js/bootstrap-alert.js"></script>
     <script src="/assets/js/bootstrap-modal.js"></script>
@@ -153,57 +252,60 @@
     <script src="/assets/js/bootstrap-collapse.js"></script>
     <script src="/assets/js/bootstrap-carousel.js"></script>
     <script src="/assets/js/bootstrap-typeahead.js"></script>
-<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
-<script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
-<script type="text/javascript" src="js/jquery.fancybox.js"></script>
-
-<script type="text/javascript" src="/js/index.js"></script>
-<script type="text/template" id="register-view">
-	
-			<section class="main">
-				<form class="form clearfix">
-					<h1><span class="sign-up">註冊一個自己的名片</span></h1>
-				    <p class="reg">    
-				        <label for="firstName"><i class="icon-user"></i>Username</label>
-				        <input type="text" class="name" id="firstname" placeholder="First Name">
-				        <input type="text" class="name" id="lastname" placeholder="Last name">
-				        <label for="email"><i class="icon-envelope"></i>Email</label>
-				        <input type="email" id="email" placeholder="Email Address">
-			         	<label for="password"><i class="icon-lock"></i>Password</label>
-				        <input type="password" id="password" placeholder="New Password" name="Password">
-				        <label for="check"><i class="icon-check-empty"></i>Confirm Password</label>
-				        <input type="password" id="check" placeholder="Confirm Password" name="Password"> 
-				    </p>
-					<div id="reg_error"></div>
-				    <button class="sign" id="register">
-				    	<span>Sign in</span>
-				    </button>
-				    <button class="log-fb">
-				    	<span>Facebook login</span>
-				    </button> 
-				</form>
-			</section>
-</script>
-<script type="text/template" id="index-view">
-	<div class= "slide">
-	<div class="first slider top" background=url('w4.jpg')>
-	        <h1>Welcome to Banvas!</h1>
-	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
-	        <p><a href="#register" class="register btn btn-primary btn-large">免費註冊 &raquo;</a></p>	
-	</div>
-	<div class="second slider">2222222</div>
-	<div class="third slider">3333333</div>
-	<div class="forth slider">4444444</div>
-	<div class="fifth slider">5555555</div>
-	<ul>
-		<li><button type="button" value="first" class="focus">o</button></li>
-		<li><button type="button" value="second">o</button></li>
-		<li><button type="button" value="third">o</button></li>
-		<li><button type="button" value="forth">o</button></li>
-		<li><button type="button" value="fifth">o</button></li>
-	</ul>
-	</div>
-</script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+    <script type="text/javascript" src="/js/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script src="/js/slides.jquery.js"></script>
+    <script src="/js/slides.min.jquery.js"></script>
+    <!--jQuery Slider!-->
+    <script>
+    $(function(){
+      $('#slides').slides({
+        preload: true,
+        preloadImage: 'img/loading.gif',
+        play: 5000,
+        pause: 2500,
+        hoverPause: true,
+        animationStart: function(current){
+          $('.caption').animate({
+            bottom:-35
+          },100);
+          if (window.console && console.log) {
+            // example return of current slide number
+            console.log('animationStart on slide: ', current);
+          };
+        },
+        animationComplete: function(current){
+          $('.caption').animate({
+            bottom:0
+          },200);
+          if (window.console && console.log) {
+            // example return of current slide number
+            console.log('animationComplete on slide: ', current);
+          };
+        },
+        slidesLoaded: function() {
+          $('.caption').animate({
+            bottom:0
+          },200);
+        }
+      });
+    });
+  </script>
+  <!--Register Form!-->
 
   </body>
+
+  <!--Feedback Box!-->
+  <script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/OutTAeuvZEaub5vIbvDXjw.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
+
+
 </html>

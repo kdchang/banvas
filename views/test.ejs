@@ -61,15 +61,11 @@
     
     <br/>
     <div>
-      id <input type="text" name='id' id='collect_id' style='width:30px'>
-      tag1 <input type='text' name='tag' id='collect_tag' style='width:30px'>
-      tag2 <input type='text' name='tag' id='collect_tag2' style='width:30px'>
-      <button id="collect_list">collect LIST</button>
-      <button id='collect_save'>collect SAVE</button>
-      <button id='collect_delete'>collect DELETE</button>
-      <button id='collect_save_empty'>collect CREATE EMPTY</button>
-      <button id='collect_delete_empty'>collect DELETE EMPY</button>
-      <button id='collect_move'>collect MOVE</button>
+      collect_id <input type="text" name='id' id='collect_id' style='width:30px'>
+      collect_tag <input type='text' name='tag' id='collect_tag' style='width:30px'>
+      <button id="collect_list">collection LIST</button>
+      <button id='collect_save'>collection SAVE</button>
+      <button id='collect_delete'>collection DELETE</button>
     </div>
 
     <div>
@@ -85,7 +81,7 @@
     </div>
 
     <div>
-      <input type="text" name='fields'> 
+      <input type="text" name='fields'>
       <button id='all'>ALL account</button>
       <div id='all_account'>
       </div>
@@ -143,16 +139,13 @@
   })
 
   $('#collect_save').click(function(){
-    $.post('/'+id+'/collect/save', {token:token, id:$('#collect_id').val(), tag:$('#collect_tag').val()},function(data){
+    var data = {};
+    data[$('#collect_id').val()] = $('#collect_tag').val()
+    console.log(data);
+    $.post('/'+id+'/collect/save', {token:token, id:data},function(data){
       console.log(data);
     }, 'text');
   });
-
-  $('#collect_save_empty').click(function(){
-    $.post('/'+id+'/collect/save_empty', {token:token, tag:$("#collect_tag").val()}, function(data){
-      console.log(data);
-    }, 'text');
-  })
 
   $("#collect_list").click(function(){
     $.post('/'+id+'/collect/list', {token:token}, function(data){
@@ -161,22 +154,16 @@
   });
 
   $('#collect_delete').click(function(){
-    $.post('/'+id+'/collect/delete', {token:token, id:$('#collect_id').val(), tag:$("#collect_tag").val()}, function(data){
+    var data = $('#collect_id').val().replace(' ', '');
+    data = data.split(',');
+
+    console.log('sending: ' + JSON.stringify({token:token, id:data}));
+    $.post('/'+id+'/collect/delete', {token:token, id:data}, function(data){
       console.log(data);
     }, 'text');
   })
 
-  $('#collect_delete_empty').click(function(){
-    $.post('/'+id+'/collect/delete_empty', {token:token, tag:$("#collect_tag").val()}, function(data){
-      console.log(data);
-    }, 'text');
-  })
-
-  $('#collect_move').click(function(){
-    $.post('/'+id+'/collect/move', {token:token, id:$('#collect_id').val(), from:$("#collect_tag").val(), to:$('#collect_tag2').val()}, function(data){
-      console.log(data);
-    }, 'text');
-  })
+// Facebook
 
   window.fbAsyncInit = function() {
     FB.init({
@@ -204,6 +191,7 @@
         FB.login(function(response) {
           if (response.authResponse) {
             console.log('Welcome!  Fetching your information.... ');
+            console.log(FB.get);
             FB.api('/me?fields=bio,birthday,education,work', function(response) {
               console.log(response);
               for (i in response['education']){
