@@ -16,12 +16,6 @@
             position: relative;
         }
 
-/*    
-    #searchbox {
-        border: 1px solid red;
-    }
-*/
-
         .searchinputarea {
             border: 1px solid lightGrey;
             width: 180px;
@@ -68,19 +62,31 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          
           <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
-            <form class="navbar-form pull-right" id='searchbox' action='http://www.google.com/search' method='get'>
-                    <input class="searchinputarea" maxlength="255" name="q" size="25" type="text" placeholder="Search Cards!!">
-                    <!-- <input class="boxsearch123" type="submit" value="search"> -->
-            </form>
-          </div><!--/.nav-collapse -->
-        </div>
+          <form method='get' action='search' class='navbar-form pull-left' id='searchbox'>
+            <input type="text" class="searchinputarea input-medium search-query" placeholder='搜尋名片' name='query' maxlength="255" size="25">
+          </form>
+          <form class="navbar-form pull-right">
+            <div class="btn-group">
+            <button class="btn edit">編輯</button>
+            <button class="btn B_card">印名片</button>
+            <a class="btn  acc_btn" ><%= userid %><span class="caret"></span></a>
+                <ul class="dropdown-menu account function">
+                    <li><a href="#">Account Setting</a></li>
+                    <li><a href="#" class="FB_import">Import from FB</a></li>
+                    <!--<li><a href="#" class="edit">Edit</a></li>-->
+                    <li><a href="#" class="collect">My Wallet</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="#" class="logout">Log Out</a><li>
+                </ul>
+            </div>
+          </form>
+        </div><!--/.nav-collapse -->
       </div>
     </div>
-
     <div id="backboard">
     </div>
+
     <div id='search_result'>
     </div>
     
@@ -124,11 +130,14 @@
         height: 70px;
         float: left;
     }
+    .temp{
+        padding-top: 15px;
+        padding-bottom: 9px;
+    }
+
     .search_result_name {
-        padding-top: 20px;
-        padding-bottom: 10px;
         font-size: 30px;
-        margin-left: 100px;
+        margin-left: 30px;
     }
 
     .search_result_element{
@@ -148,40 +157,51 @@
         background-color: lightblue;
         cursor: pointer;
     }
+
+    .search_view_time{
+        font-size: 10px;
+        font-family: "Lucida Console", sans-serif, "MS Serif";
+        font-style: italic;
+        margin-left: 10px;
+        width: 20px;
+    }
+
 </style>
 
 <script>
     $(window).ready(function(){
-        $(".searchinputarea").focus();
-        $('#searchbox').submit(function(){
-            $.post('/search', {query: $('.searchinputarea').val()}, function(data){
-                $('.searchinputarea').val("");
-                var data = JSON.parse(data);
-                console.log(data.data);
-                $("#search_result").html("");
-                for(i in data.data){
-                    $('#search_result').append("<hr>");
-                    $('#search_result').append('<div class=search_result_element id='+data.data[i].id+'>' +
-                        '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.picture+">"+
-                        '<div class=search_result_name>'+data.data[i].full_name+'</div>'+
-                        '<div class=search_result_email><a href="mailto:'+data.data[i].email+'">'+data.data[i].email+"</a>"+'</div>');
-                    $("#"+data.data[i].id).click(function(){
-                        window.location = '/'+data.data[i].id;
-                    });
-                    $('#search_result').append('</div>')
-                    // $("#search_result").append(JSON.stringify(data.data[i]));
-                }
-            }, 'text');
-            return false;
-        });
+        var parts = window.location.search.substr(1).split("&");
+        var $_GET = {};
+        for (var i = 0; i < parts.length; i++) {
+            var temp = parts[i].split("=");
+            $_GET[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+        }
+
+        var query = $_GET['query'];
+        console.log(query);
+        $.post('/search', {query: query}, function(data){
+            $('.searchinputarea').val("");
+            var data = JSON.parse(data);
+            console.log(data.data);
+            $("#search_result").html("");
+            for(i in data.data){
+                $('#search_result').append("<hr>");
+                $('#search_result').append('<a href=/'+data.data[i].id+'>'+
+		    '<div class=search_result_element id='+data.data[i].id+'>' +
+                    '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.picture+">"+
+                    '<div class=temp>'+
+                    '<span class=search_result_name>'+data.data[i].full_name+'</span>'+
+                    '<span class=search_view_time> viewed:'+data.data[i].view_time+'</span>'+
+                    '</div>'+
+                    '<div class=search_result_email><a href="mailto:'+data.data[i].email+'">'+data.data[i].email+"</a>"+
+		    '</div>'+'</a>');
+
+                $('#search_result').append('</div>')
+                // $("#search_result").append(JSON.stringify(data.data[i]));
+            }
+        }, 'text');
     })
 </script>
-<!--Feedback Box!-->
-  <script type="text/javascript">
-  var uvOptions = {};
-  (function() {
-    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/OutTAeuvZEaub5vIbvDXjw.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-  })();
-</script>
+
+
+
