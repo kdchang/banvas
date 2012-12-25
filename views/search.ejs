@@ -186,16 +186,16 @@
             $("#search_result").html("");
             for(i in data.data){
                 $('#search_result').append("<hr>");
-                $('#search_result').append('<div class=search_result_element id='+data.data[i].id+'>' +
+                $('#search_result').append('<a href=/'+data.data[i].id+'>'+
+		    '<div class=search_result_element id='+data.data[i].id+'>' +
                     '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.picture+">"+
                     '<div class=temp>'+
                     '<span class=search_result_name>'+data.data[i].full_name+'</span>'+
                     '<span class=search_view_time> viewed:'+data.data[i].view_time+'</span>'+
                     '</div>'+
-                    '<div class=search_result_email><a href="mailto:'+data.data[i].email+'">'+data.data[i].email+"</a>"+'</div>');
-                $("#"+data.data[i].id).click(function(){
-                    window.location = '/'+data.data[i].id;
-                });
+                    '<div class=search_result_email><a href="mailto:'+data.data[i].email+'">'+data.data[i].email+"</a>"+
+		    '</div>'+'</a>');
+
                 $('#search_result').append('</div>')
                 // $("#search_result").append(JSON.stringify(data.data[i]));
             }

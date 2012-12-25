@@ -168,8 +168,8 @@ app.post('/:id/status', function(req, res){
             var a = data.toObject();
             f.trim(a, ['password','statistic','collect','modify_date']);
             console.log(a);
-			res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
-		}
+	    res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
+	}
         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
     })
 });
