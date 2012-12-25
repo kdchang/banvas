@@ -1,0 +1,217 @@
+info it worked if it ends with ok
+verbose cli [ '/usr/bin/nodejs', '/usr/bin/npm', 'install', 'graphicsmagick' ]
+info using npm@1.1.4
+info using node@v0.6.19
+verbose config file /home/vm/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/package.json
+verbose loadDefaults banvas-dev@0.0.1
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/async/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/connect-mongo/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/express/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/ejs/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/faceplate/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/gm/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/emailjs/package.json
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/mongoose/package.json
+verbose from cache /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/package.json
+verbose readDependencies: using package.json deps
+verbose cache add [ 'graphicsmagick', null ]
+silly cache add: name, spec, args [ undefined, 'graphicsmagick', [ 'graphicsmagick', null ] ]
+verbose parsed url { pathname: 'graphicsmagick',
+verbose parsed url   path: 'graphicsmagick',
+verbose parsed url   href: 'graphicsmagick' }
+verbose addNamed [ 'graphicsmagick', '' ]
+verbose addNamed [ null, '' ]
+silly name, range, hasData [ 'graphicsmagick', '', false ]
+verbose raw, before any munging graphicsmagick
+verbose url resolving [ 'https://registry.npmjs.org/', './graphicsmagick' ]
+verbose url resolved https://registry.npmjs.org/graphicsmagick
+http GET https://registry.npmjs.org/graphicsmagick
+http 200 https://registry.npmjs.org/graphicsmagick
+silly get cb [ 200,
+silly get cb   { vary: 'Accept',
+silly get cb     server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+silly get cb     etag: '"AT9FNCCH4PYTA0Z1A0M7PM9RH"',
+silly get cb     date: 'Sun, 23 Dec 2012 16:16:26 GMT',
+silly get cb     'content-type': 'application/json',
+silly get cb     'content-length': '1147' } ]
+verbose mkdir (expected) error ENOENT, stat '/home/vm/.npm/graphicsmagick'
+verbose mkdir done: /home/vm/.npm/graphicsmagick 755
+silly name, range, hasData 2 [ 'graphicsmagick', '', true ]
+silly versions [ 'graphicsmagick', [ '0.0.1' ] ]
+verbose bin dist [ '0.6-ares1.9.1-evundefined-openssl1.0.1c-v83.8.9.20-linux-x64-3.5.0-17-generic',
+verbose bin dist   { shasum: '0af95878190dcbd1028e46c13526f5284245bf29',
+verbose bin dist     tarball: 'http://registry.npmjs.org/graphicsmagick/-/graphicsmagick-0.0.1.tgz' } ]
+verbose addRemoteTarball [ 'https://registry.npmjs.org/graphicsmagick/-/graphicsmagick-0.0.1.tgz',
+verbose addRemoteTarball   '0af95878190dcbd1028e46c13526f5284245bf29' ]
+verbose mkdir (expected) error ENOENT, stat '/tmp/npm-1356279450891'
+verbose mkdir (expected) error ENOENT, stat '/tmp/npm-1356279450891/1356279450891-0.6234281847719103'
+verbose mkdir done: /tmp/npm-1356279450891/1356279450891-0.6234281847719103 755
+verbose fetch to /tmp/npm-1356279450891/1356279450891-0.6234281847719103/tmp.tgz
+http GET https://registry.npmjs.org/graphicsmagick/-/graphicsmagick-0.0.1.tgz
+http 200 https://registry.npmjs.org/graphicsmagick/-/graphicsmagick-0.0.1.tgz
+silly updated sha bytes 24702
+info shasum 0af95878190dcbd1028e46c13526f5284245bf29
+info shasum /tmp/npm-1356279450891/1356279450891-0.6234281847719103/tmp.tgz
+verbose mkdir (expected) error ENOENT, stat '/tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm'
+verbose mkdir done: /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package
+silly gunzTarPerm modes [ '755', '644' ]
+silly afterUntar ok
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/.npmignore
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/test.jpg
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/test.js
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/package.json
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/wscript
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/README.creole
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/GraphicsMagick.cc
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/build
+silly asyncMap in gTP /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package/build/.wafpickle-7
+verbose gunzed /tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package
+verbose rm'ed /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package
+verbose renamed [ '/tmp/npm-1356279450891/1356279450891-0.6234281847719103/___package.npm/package',
+verbose renamed   '/tmp/npm-1356279450891/1356279450891-0.6234281847719103/package' ]
+verbose has wscript [ undefined,
+verbose has wscript   { file: '/tmp/npm-1356279450891/1356279450891-0.6234281847719103/package/package.json',
+verbose has wscript     contributors: false,
+verbose has wscript     serverjs: false,
+verbose has wscript     wscript: true } ]
+verbose caching /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package/package.json
+verbose loadDefaults graphicsmagick@0.0.1
+verbose tarball contents [ 'tmp.tgz', 'package' ]
+verbose from cache /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package/package.json
+verbose pack /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package
+verbose pack /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package /home/vm/.npm/graphicsmagick/0.0.1/package.tgz
+silly makeList /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package
+silly dir, dirLen [ '/tmp/npm-1356279450891/1356279450891-0.6234281847719103/package',
+silly dir, dirLen   64 ]
+verbose tarball /home/vm/.npm/graphicsmagick/0.0.1/package.tgz
+verbose parent /tmp/npm-1356279450891/1356279450891-0.6234281847719103/package
+verbose mkdir (expected) error ENOENT, stat '/home/vm/.npm/graphicsmagick/0.0.1/___package.npm'
+verbose mkdir done: /home/vm/.npm/graphicsmagick/0.0.1/___package.npm 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /home/vm/.npm/graphicsmagick/0.0.1/package
+silly gunzTarPerm modes [ '755', '644' ]
+silly afterUntar ok
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/.npmignore
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/test.jpg
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/test.js
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/package.json
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/wscript
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/README.creole
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/GraphicsMagick.cc
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/build
+silly asyncMap in gTP /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package/build/.wafpickle-7
+verbose gunzed /home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package
+verbose rm'ed /home/vm/.npm/graphicsmagick/0.0.1/package
+verbose renamed [ '/home/vm/.npm/graphicsmagick/0.0.1/___package.npm/package',
+verbose renamed   '/home/vm/.npm/graphicsmagick/0.0.1/package' ]
+verbose has wscript [ undefined,
+verbose has wscript   { file: '/home/vm/.npm/graphicsmagick/0.0.1/package/package.json',
+verbose has wscript     contributors: false,
+verbose has wscript     serverjs: false,
+verbose has wscript     wscript: true } ]
+verbose caching /home/vm/.npm/graphicsmagick/0.0.1/package/package.json
+verbose loadDefaults graphicsmagick@0.0.1
+silly updated sha bytes 24290
+info shasum deb78b79167ecaef18dc00ca374c09a16eff95ad
+info shasum /home/vm/.npm/graphicsmagick/0.0.1/package.tgz
+verbose from cache /home/vm/.npm/graphicsmagick/0.0.1/package/package.json
+verbose chmod /home/vm/.npm/graphicsmagick/0.0.1/package.tgz 644
+verbose chown [ '/home/vm/.npm/graphicsmagick/0.0.1/package.tgz', 1000, 1000 ]
+silly resolved [ { name: 'graphicsmagick',
+silly resolved     description: 'Bindings to the graphicsmagick library.',
+silly resolved     version: '0.0.1',
+silly resolved     author: { name: 'Izaak Schroeder' },
+silly resolved     engine: 'node >= 0.6.0',
+silly resolved     _id: 'graphicsmagick@0.0.1',
+silly resolved     scripts: { preinstall: 'node-waf clean || (exit 0); node-waf configure build' },
+silly resolved     dependencies: {},
+silly resolved     devDependencies: {},
+silly resolved     optionalDependencies: {},
+silly resolved     engines: { node: '*' },
+silly resolved     _engineSupported: true,
+silly resolved     _npmVersion: '1.1.4',
+silly resolved     _nodeVersion: 'v0.6.19',
+silly resolved     _defaultsLoaded: true,
+silly resolved     dist: { shasum: 'deb78b79167ecaef18dc00ca374c09a16eff95ad' },
+silly resolved     _from: 'graphicsmagick' } ]
+info into /home/vm/Dropbox/final-project (1)/new_code/CCSP-test graphicsmagick@0.0.1
+info installOne graphicsmagick@0.0.1
+verbose from cache /home/vm/.npm/graphicsmagick/0.0.1/package/package.json
+info unbuild /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick
+verbose mkdir (expected) error ENOENT, stat '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm'
+verbose mkdir done: /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm 755
+verbose unpack_ uid, gid [ undefined, undefined ]
+verbose unpackTarget /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick
+silly gunzTarPerm modes [ '755', '644' ]
+silly afterUntar ok
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/.npmignore
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/test.jpg
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/test.js
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/package.json
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/wscript
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/README.creole
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/GraphicsMagick.cc
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/build
+silly asyncMap in gTP /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package/build/.wafpickle-7
+verbose gunzed /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package
+verbose rm'ed /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick
+verbose renamed [ '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/___graphicsmagick.npm/package',
+verbose renamed   '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick' ]
+verbose has wscript [ undefined,
+verbose has wscript   { file: '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick/package.json',
+verbose has wscript     contributors: false,
+verbose has wscript     serverjs: false,
+verbose has wscript     wscript: true } ]
+verbose caching /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick/package.json
+verbose loadDefaults graphicsmagick@0.0.1
+info preinstall graphicsmagick@0.0.1
+verbose unsafe-perm in lifecycle true
+silly exec sh "-c" "node-waf clean || (exit 0); node-waf configure build"
+silly spawning [ 'sh',
+silly spawning   [ '-c', 'node-waf clean || (exit 0); node-waf configure build' ],
+silly spawning   '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick' ]
+info graphicsmagick@0.0.1 Failed to exec preinstall script
+ERR! error installing graphicsmagick@0.0.1
+info unbuild /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick
+verbose from cache /home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules/graphicsmagick/package.json
+info preuninstall graphicsmagick@0.0.1
+WARN This failure might be due to the use of legacy binary "node" 
+WARN For further explanations, please read
+WARN /usr/share/doc/nodejs/README.Debian
+WARN 
+info uninstall graphicsmagick@0.0.1
+verbose unbuild graphicsmagick@0.0.1 [ true,
+verbose unbuild graphicsmagick@0.0.1   '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules',
+verbose unbuild graphicsmagick@0.0.1   '/home/vm/Dropbox/final-project (1)/new_code/CCSP-test/node_modules' ]
+info postuninstall graphicsmagick@0.0.1
+verbose installOne cb graphicsmagick@0.0.1
+ERR! graphicsmagick@0.0.1 preinstall: `node-waf clean || (exit 0); node-waf configure build`
+ERR! `sh "-c" "node-waf clean || (exit 0); node-waf configure build"` failed with 1
+ERR! 
+ERR! Failed at the graphicsmagick@0.0.1 preinstall script.
+ERR! This is most likely a problem with the graphicsmagick package,
+ERR! not with npm itself.
+ERR! Tell the author that this fails on your system:
+ERR!     node-waf clean || (exit 0); node-waf configure build
+ERR! You can get their info via:
+ERR!     npm owner ls graphicsmagick
+ERR! There is likely additional logging output above.
+ERR! 
+ERR! System Linux 3.5.0-17-generic
+ERR! command "/usr/bin/nodejs" "/usr/bin/npm" "install" "graphicsmagick"
+ERR! cwd /home/vm/Dropbox/final-project (1)/new_code/CCSP-test
+ERR! node -v v0.6.19
+ERR! npm -v 1.1.4
+ERR! code ELIFECYCLE
+ERR! message graphicsmagick@0.0.1 preinstall: `node-waf clean || (exit 0); node-waf configure build`
+ERR! message `sh "-c" "node-waf clean || (exit 0); node-waf configure build"` failed with 1
+ERR! errno {}
+verbose exit [ 1, true ]
