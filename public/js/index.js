@@ -76,7 +76,7 @@ var workspace = Backbone.Router.extend({
 					el = $('.slide_container');
 					el.html(temp);
 					$('.slide_container').css('height','auto');
-					$('#index-columns').empty();
+					//$('#index-columns').empty();
 					$('input#email').focus();
 					$(':password').on('blur', function(){
 						//輸入正確
@@ -101,7 +101,7 @@ var workspace = Backbone.Router.extend({
 					var temp = _.template($("#index-view").html(),{});
 					el = $('.slide_container');
 					el.html(temp);
-					$('.slide_container').css('height','250px');
+					$('.slide_container').css('height','300px');
 					$('.top').show();
 					$('.slide button').click(function(){
 					    var x = $(this).val();
