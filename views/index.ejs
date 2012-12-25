@@ -662,8 +662,7 @@
 
   </body>
 
-  <!--Feedback Box!-->
-  <script type="text/javascript">
+<script type="text/javascript">
   var uvOptions = {};
   (function() {
     var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
@@ -672,5 +671,42 @@
   })();
 </script>
 
+<script>
+	$(window).ready(function(){
+		window.fbAsyncInit = function() {
+			FB.init({
+			appId      : '471817496195401',
+			status     : true,
+			cookie     : true,
+			xfbml      : true
+			});
+	  	};
+
+		(function(d, debug){
+			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+			ref.parentNode.insertBefore(js, ref);
+			}(document, /*debug*/ false));
+		
+		console.log('asd');
+		console.log($('#FB_login'));
+		$("#FB_login").click(function(){
+			FB.login(function(data){
+				if(data.status === 'connected'){
+					FB.api('me', function(res){
+						$.post('/login', {email: res.username, password: data.authResponse.accessToken}, function(data){
+							console.log(data);
+						}, 'text');
+					});
+				}
+			})
+			return false;
+		});
+	});
+</script>
 
 </html>
+
+

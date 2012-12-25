@@ -137,7 +137,8 @@
     }
 
     .search_result_element{
-        width: 50%;
+    	min-width: 120px;
+        max-width: 50%;
         margin: auto;
 
         -webkit-border-radius: 10px;
@@ -184,7 +185,7 @@
                 $('#search_result').append("<hr>");
                 $('#search_result').append('<a href=/'+data.data[i].id+'>'+
 		    '<div class=search_result_element id='+data.data[i].id+'>' +
-                    '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.picture+">"+
+                    '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.pictureSmall+">"+
                     '<div class=temp>'+
                     '<span class=search_result_name>'+data.data[i].full_name+'</span>'+
                     '<span class=search_view_time> viewed:'+data.data[i].view_time+'</span>'+
