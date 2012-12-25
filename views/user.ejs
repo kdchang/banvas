@@ -47,8 +47,9 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
-		  <input type="text" class="input-medium search-query">
-		  <button type="submit" class="btn search">搜尋</button>
+		  <form method='get' action='search' class='navbar-form pull-left' id='searchbox'>
+            <input type="text" class="searchinputarea input-medium search-query" placeholder='搜尋名片' name='query' maxlength="255" size="25">
+          </form>
           <form class="navbar-form pull-right">
           	<div class="btn-group">
 		  	<button class="btn edit">編輯</button>
@@ -107,7 +108,7 @@
 			<h1 class="skill_header">Skill</h1>
 			<ul class="skill">
 				<% for(var k in JSON.parse(pkt.Skill) ) { %>
-				<li><p class="static"><%= k %></p><%= JSON.parse(pkt.Skill)[k] %></li>
+				<list stlye="position:relative;"><p class="static"><%= k %></p><%= JSON.parse(pkt.Skill)[k] %></li>
 				<% } %>
 			</ul>
 		</div>

@@ -198,8 +198,6 @@ app.post('/:id/mod_img', function(req, res) {
 	console.log(req.body);
     
     var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
-    console.log(head_url);
-    console.log(req.files.file.path);
     accountdb.findOne({'id':req.params.id}).exec(function(err, data){
         if(err) throw err;
         if(data){
@@ -223,9 +221,8 @@ app.post('/:id/mod_img', function(req, res) {
                 });
 
             data.Image_pkt.picture = head_url;
-            data.Image_pkt.pictureSmall = '/'+req.params.id+'_small.jpg';
+            data.Image_pkt.pictureSmall = 'public/uploads/'+req.params.id+'_small.jpg';
             data.save();
-            console.log(data.Image_pkt);
             res.redirect('/'+req.params.id);
         }
         else res.redirect('/'+req.params.id);
@@ -285,12 +282,13 @@ app.post('/search', function(req, res){
                     if(data[i].email) score += ambiguous_match(data[i].email, query)*6;
                     if(data[i].name.first) score += ambiguous_match(data[i].name.first, query)*10;
                     if(data[i].name.last) score += ambiguous_match(data[i].name.last, query)*10;
+                    if(data[i].name.full) score += ambiguous_match(data[i].name.full, query)*10;
                     if(data[i].id) score += ambiguous_match(data[i].id, query)*9;
                     if(data[i].About_me) score += ambiguous_match(data[i].About_me, query)*5;
                     if(data[i].Job_exp) score += ambiguous_match(data[i].Job_exp, query)*3;
                     if(data[i].phone) score += ambiguous_match(data[i].phone, query)*2;
 
-                    result.push({id:data[i].id, score:score, name:data[i].name, email:data[i].email, Image_pkt:data[i].Image_pkt, full_name:data[i].name.full});
+                    result.push({id:data[i].id, view_time: data[i].statistic.view_time, score:score, name:data[i].name, email:data[i].email, Image_pkt:data[i].Image_pkt, full_name:data[i].name.full});
                 }
 
                 result.sort(function(a,b){
@@ -303,30 +301,6 @@ app.post('/search', function(req, res){
     }
     else res.end(JSON.stringify({err:err_code.DATA_FORMAT}));
 })
-
-// app.post('/:id/configure_pull', function(req, res){
-//     f.check_login(req, function(status){
-//         if( status == err_code.SUCCESS){
-
-//         }
-//         else res.end(JSON.stringify({err:status}));
-//     });
-// });
-
-// app.post('/:id/configure_push', function(req, res){
-//    f.check_login(req, function(status){
-//         if( status == err_code.SUCCESS){
-//             bcardb().find({email:req.session.item.log_data.email}).exec(function(err,data){
-//                 if(err) throw err;
-//                 if(data){
-//                     res.end(JSON.stringify({err:err_code.SUCCESS, collect:data}));
-//                 }
-//                 else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
-//             })
-//         }
-//         else res.end(JSON.stringify({err:status}));
-//     }); 
-// })
 
 app.post('/:id/statistic', function(req, res){
     console.log(req.body);
@@ -394,49 +368,19 @@ app.post('/pic_url', function(req, res){
     }
 })
 
+app.get('/search', function(req, res){
+    if(req.session.item && req.session.item.log_data){
+        accountdb.findOne({id: req.session.item.log_data.id},{_id:0,__v:0}, function(err,data){
+            if(err) throw err;
+            if(data) 
+                res.render('search', {userid: req.params.id,pkt : data,timeline : (data.TimeLine.length==0)?{}: JSON.parse(data.TimeLine)});
+            else 
+                res.redirect('/');
+        });
+    }
+    else res.redirect('/');
+})
 
-
-// app.get('/facebook', function(req, res){
-//     a.log(req.facebook);
-//     req.facebook.me(function(user) {
-//         res.render('facebook.ejs', {
-//             layout: false,
-//             req: req,
-//             app: app,
-//             user: user
-//         });
-//     });
-// });
-
-// // show friends
-// app.get('/friends', function(req, res) {
-//   req.facebook.get('/me/friends', { limit: 4 }, function(friends) {
-//     res.send('friends: ' + require('util').inspect(friends));
-//   });
-// });
-
-// // use fql to show my friends using this app
-// app.get('/friends_using_app', function(req, res) {
-//   req.facebook.fql('SELECT uid, name, is_app_user, pic_square FROM user WHERE uid in (SELECT uid2 FROM friend WHERE uid1 = me()) AND is_app_user = 1', function(friends_using_app) {
-//     res.send('friends using app: ' + require('util').inspect(friends_using_app));
-//   });
-// });
-
-// // perform multiple fql queries at once
-// app.get('/multiquery', function(req, res) {
-//   req.facebook.fql({
-//     likes: 'SELECT user_id, object_id, post_id FROM like WHERE user_id=me()',
-//     albums: 'SELECT object_id, cover_object_id, name FROM album WHERE owner=me()',
-//   },
-//   function(result) {
-//     var inspect = require('util').inspect;
-//     res.send('Yor likes: ' + inspect(result.likes) + ', your albums: ' + inspect(result.albums) );
-//   });
-// });
-
-// app.get('/signed_request', function(req, res) {
-//   res.send('Signed Request details: ' + require('util').inspect(req.facebook.signed_request));
-// });
 
 collect_app(app, accountdb);
 skill_app(app, accountdb);
@@ -529,10 +473,11 @@ var ambiguous_match = function(str1, str2){
         if( tmp>max ){
             max = tmp;
         }
+        i += tmp;
     }
-    return max
+    if(max == str2.length)return max*5;
+    else return max
 }
-
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

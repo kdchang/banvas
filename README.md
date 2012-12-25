@@ -31,34 +31,10 @@ API
                             POST: token, info1, info2...   
                             RETURN successful changed info i1,i2...    
                             EXAMPLE: $.post('/111/modify', {token: '1234561as', 'last_name':'wang', 'toilet': 'gold', 'pig':'good'}) -> {err:0, 'last_name':'wang'}    
-                
-/:id/collection_list : return the id's collection list   
-                            POST: token    
-                            RETURN: collection [id1, tag1], [id2, tag2],...   
-                            EXAMPLE: $.post('/111/collection_list', {token: '1234561as'}) -> {err:0, collection:{'teacher':['111','222'], 'student':['b99902006','b00102']}}    
 
-/:id/save            : post 'id' you want to subscribe to this site. the 'id' will be added to the collection_list, default tag = 'default' override if 'id' was already in collection_list    
-                            POST: token, (id,tag) pair    
-                            EXAMPLE: $.post('/111/save', {token:token, id:{'11':'english', '22':'math', '33':'company'}) -> {err:0, update:['11', '22']};    
-
-/:id/delete          : post 'id' you want to delect from collection, the 'id' will be deleted from the collection_list.    
-                            POST: token, id   
-                            EXAMPLE: $.post('/111/delete', {token:token, id:['11','22','33','44']}) -> {err:0, update:['11', '33']}   
-
-/:id/b-card_save     : save the current editing B-card status   
-                            POST: token, details of the card   
-
-/:id/b-card_load     : load the last editing B-card status   
-                            POST: token    
-                            RETURN: details of the card    
-
-/:id/configure_pull  : load personal configuration   
-                            POST: token   
-                            RETURN: configuration, such as 'tag_color', 'privacy'...   
-
-/:id/configure_push  : save personal configuration   
-                            POST: token, {conf1: new_conf1,...}   
-                            RETURN successful changed configuration c1,c2....   
+/:id/mod_img         : change the picture Image!!!
+                            POST: token, picture (must use the form post)
+                            RETURN: redirect to user page
 
 /:id/statistic       : return the statistic of the 'id' homepage clicked time   
                             POST: token   
@@ -68,6 +44,48 @@ API
 /search              : return corresponding list   
                             POST: token, query   
                             RETURN: corresponding result id.   
+                            EXAMPLE: $.post('/search', {query:'111'}) -> {err:0, data: result}    
+
+/:id/ios/status      : return the data format ios mobile asked   
+                            POST: token   
+                            RETURN: user profile   
+
+/:id/ios/detail      : return the user detail for ios   
+                            POST: token   
+                            RETURN: specific user profile detail   
+
+/:id/skill/add       : add user's skill   
+                            POST: token, skill   
+                            RETURN: success or not   
+
+/:id/skill/list      : return the user's skill with who approved it  
+                            POST: token   
+                            RETURN: user's skill list  
+
+/:id/skill/delete    : delete the user's skill  
+                            POST: token, skill  
+                            RETURN: success or not
+
+/:id/skill/approve   : approve the id's skill, note!!!, you do not specify who you are    
+                            POST: token, skill
+                            RETURN: success or not   
+
+/:id/skill/deapprove : deapprove the id's skill, note!!!, you do not need to specify who you are    
+                            POST: token, skill   
+                            RETURN: success or not   
+
+/:id/resume/add      : add data to user's resume   
+                            POST: token, {Company, Position, Department}   
+                            RETURN: success or not   
+
+/:id/resume/list     : return the user's resume   
+                            POST: token   
+                            RETURN: {err, data}   
+
+/:id/resume/delete   : delete user's resume   
+                            POST: token, {Company, Positon, Department}   
+                            RETURN: {err}
+
 
 STATUS number   
 ====================================================   
@@ -78,7 +96,8 @@ STATUS number
 4                    : session token not match   
 5                    : user find error, may occured in register or login    
 6                    : confirm error, the link may registered before or time expired   
-7                    : mail error, can't send email to the email address   
+7                    : Invalid Operation!!, please check the id or tag is valid.   
 8                    : DB save error, can't save data to DB   
 9                    : permission denied, can't change other person's status   
 10                   : Data format is not correct, please check above README & EXAMPLE for   correct data format
+11                   : Data duplicate occured!!!   
