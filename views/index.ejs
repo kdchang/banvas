@@ -39,6 +39,7 @@
 
   <body>
 
+<!--Nav Fixed Bar!-->
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -47,7 +48,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">Banvas 行動名片夾(Beta)</a>
+          <a class="brand" href="/"><strong>Banvas 行動名片夾(Beta)</strong></a>
             <form class="navbar-form pull-right">
           	<div class="btn-group">
 			<a class="btn login">登入</a>
@@ -85,16 +86,40 @@
 	<div id="backboard">
 	</div>
 
-    <div class="container">
 
-      <!-- Main hero unit for a primary marketing message or call to action -->
+<!--Main Contain!-->
+<!-- Main hero unit for a primary marketing message or call to action -->
+<!-- Slide Show index !-->
+<script type="text/template" id="index-view">
+  <div class= "slide">
+  <div class="first slider top" background=url('w4.jpg')>
+          <h1>Welcome to Banvas!</h1>
+          <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
+          <p><a href="#register" class="register btn btn-primary btn-large">免費註冊 &raquo;</a></p>  
+  </div>
+  <div class="second slider">2222222</div>
+  <div class="third slider">3333333</div>
+  <div class="forth slider">4444444</div>
+  <div class="fifth slider">5555555</div>
+  <ul>
+    <li><button type="button" value="first" class="focus">o</button></li>
+    <li><button type="button" value="second">o</button></li>
+    <li><button type="button" value="third">o</button></li>
+    <li><button type="button" value="forth">o</button></li>
+    <li><button type="button" value="fifth">o</button></li>
+  </ul>
+  </div>
+</script>
+
+    <div class="container" id="mainbody">
+      <div class="container">      
           <div id="space"></div>	
-	      <div class="hero-unit slide_container">
-		  </div>
-	<div>
-	<div id="space"></div>
+	       <div class="hero-unit slide_container">
+		      </div>
+	       <div id="space"></div>
+
       <!-- Example row of columns -->
-    <div class="container">
+<script type="text/template" id="index-columns">    
       <div class="row">
         <div class="span4">
           <i>	
@@ -124,7 +149,8 @@
           <p>透過雲端管理收到的名片資料，可以跨平台隨時瀏覽收藏的名片資訊，方便洽公前先行瀏覽</p>
           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
         </div>
-      </div>
+    </div>
+</script>  
 
       <hr>
 
@@ -153,13 +179,14 @@
     <script src="/assets/js/bootstrap-collapse.js"></script>
     <script src="/assets/js/bootstrap-carousel.js"></script>
     <script src="/assets/js/bootstrap-typeahead.js"></script>
-<script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
-<script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
-<script type="text/javascript" src="js/jquery.fancybox.js"></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+    <script type="text/javascript" src="js/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
 
-<script type="text/javascript" src="/js/index.js"></script>
-<script type="text/template" id="register-view">
-	
+<!--Register Form!-->
+<script type="text/template" id="register-view">	
+    <div class="container">
 			<section class="main">
 				<form class="form clearfix">
 					<h1><span class="sign-up">註冊一個自己的名片</span></h1>
@@ -183,27 +210,19 @@
 				    </button> 
 				</form>
 			</section>
+    </div>
 </script>
-<script type="text/template" id="index-view">
-	<div class= "slide">
-	<div class="first slider top" background=url('w4.jpg')>
-	        <h1>Welcome to Banvas!</h1>
-	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
-	        <p><a href="#register" class="register btn btn-primary btn-large">免費註冊 &raquo;</a></p>	
-	</div>
-	<div class="second slider">2222222</div>
-	<div class="third slider">3333333</div>
-	<div class="forth slider">4444444</div>
-	<div class="fifth slider">5555555</div>
-	<ul>
-		<li><button type="button" value="first" class="focus">o</button></li>
-		<li><button type="button" value="second">o</button></li>
-		<li><button type="button" value="third">o</button></li>
-		<li><button type="button" value="forth">o</button></li>
-		<li><button type="button" value="fifth">o</button></li>
-	</ul>
-	</div>
+  </body>
+
+  <!--Feedback Box!-->
+  <script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/OutTAeuvZEaub5vIbvDXjw.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
 </script>
 
-  </body>
+
 </html>
