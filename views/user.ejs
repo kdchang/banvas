@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-	<meta name="userid" content="<%= userid %>">
+	<meta name="userid" content="<%=userid %>">
     <meta name="timeline_json" content="">
 	<!-- Le styles -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
@@ -16,7 +16,6 @@
         padding-bottom: 0px;
         position: relative;
       }
-
     </style>
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -57,8 +56,10 @@
 			<button class="btn B_card">印名片</button>
 			<a class="btn  acc_btn" ><%= userid %><span class="caret"></span></a>
 				<ul class="dropdown-menu account function">
+					<li><a href="#">Account Setting</a></li>
 					<li><a href="#" class="FB_import">Import from FB</a></li>
 					<li><a href="#" class="collect">My Wallet</a></li>
+					<li><a href="#">Help</a></li>
 					<li><a href="#" class="logout">Log Out</a><li>
 				</ul>
 			</div>
@@ -75,24 +76,18 @@
     <div class="main container">
       <!-- Main hero unit for a primary marketing message or call to action -->
           <div id="space"></div>
-		  <div  class="hero-unit">
+		  <div class="hero-unit">
           <div class="person block">
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
-				<h2 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h2>
-				<% var resume_temp=JSON.parse(pkt.resume); 
-				 if(resume_temp.length!=0 && resume_temp[0].Company.length!=0 ){ %>
-				<h4><img style="height:30px; width:30px;" src="/images/brand.png"><p>單位：</p></h4>
-				<p class="school static"><%= resume_temp[0].Company %></p><br>
+				<h1 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h1>
+				<span>Company:</span>
+				<% if(JSON.parse(pkt.resume).length!=0){ %>
+				<p class="school static"><%= JSON.parse(pkt.resume)[0].Company %></p><br>
+				<span>Position:</span><p class="position static"><%= JSON.parse(pkt.resume)[0].Company %></p>
 				<% } %>
-				<% if(resume_temp.length!=0 && resume_temp[0].Position.length!=0 ){ %>
-				<h4><img style="height:30px; width:30px;" src="/images/position.png">職位:</h4>
-				<p class="position static"><%= resume_temp[0].Position %></p>
-				<% } %>
-				<% if( pkt.About_me.length!=0 ){ %>
 				<br>
-				<h4><img style="height:30px; width:30px;" src="/images/aboutme.png">關於我:</h4><p class="intro static"><%= pkt.About_me %></p>
-				<% } %>
+				<span>Intro:</span><p class="intro static"><%= pkt.About_me %></p>
 			</span>
 		  </div>
 		<div class="social block">
@@ -100,26 +95,24 @@
 			</a>                        
 		</div>
 		<div class="block">
-
-			<h3>背景：</h3>
-			<h4 class="resume_header"><img style="height:30px; width:30px;" src="/images/background.png">學歷與工作經歷:</h4>
+			<h1 class="resume_header">Resume</h1>
 			<ul class="resume">
-			<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
-				<li style="height: 80px;"><img class="icon" id="company" src="/material/ntulogo.jpg" >&nbsp <p class="company static"><%= resume_temp[i].Company %></p>&nbsp<span>&nbsp</span><hr></li>
+				<% for(var i = 0; i < JSON.parse(pkt.resume).length ;i++ ) { %>
+				<!--<li><img class="icon" id="company" src="/material/ntulogo.jpg" >-->
+				<p class="company static"><%= JSON.parse(pkt.resume)[i].Company %></p></li>
 			<% } %>
 			</ul>
 		</div>
 		<div class="block">
-			<h4 class="skill_header"><img style="height:30px; width:30px;" src="/images/skill.png">專長：</h4>
+			<h1 class="skill_header">Skill</h1>
 			<ul class="skill">
-				<% var skill_temp = JSON.parse(pkt.Skill);
-				 for(var k in skill_temp ) { %>
-				<li stlye="position:relative;"><p class="static"><%= k %></p><span class="approve"><%= skill_temp[k] %></span></li>
+				<% for(var k in JSON.parse(pkt.Skill) ) { %>
+				<list stlye="position:relative;"><p class="static"><%= k %></p><%= JSON.parse(pkt.Skill)[k] %></li>
 				<% } %>
 			</ul>
 		</div>
 		<div class="block" id="timeline">
-			<h4><img style="height:30px; width:30px;" src="/images/demo.png">專案作品：</h4>
+			<h1>Timeline</h1>
 			<div id="timeline-embed"></div>
 		</div>
 		<div class='block'>
@@ -128,6 +121,14 @@
 		</div>
 		</div>
 		  </div>
+	      <!--<div class="hero-unit">
+	        <h1>Welcome to Banvas!</h1>
+	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
+	        <p><a href="signup" class="btn btn-primary btn-large">免費註冊 &raquo;</a></p>
+	        
+		  </div>-->
+		  
+
 	<div>
       <hr>
 
@@ -163,11 +164,11 @@
 	var timeline_json={
 			"timeline":
 			{
-					"headline":"Welcome To Banvas",
+					"headline":"展示您的專案和作品	",
 					"type":"default",
-					"text":"Make professional connect easier and closer",
+					"text":"您可以放上您專案的連結和您的作品或是影片",
 					"startDate":"2000,1,1",
-					"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>Join Banvas</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}]
+					"date": [{"startDate":"2000,1,1","endDate":"2000,1,30","headline":"Default","text":"<p>行銷個人品牌</p>","asset":{"media":"","credit":"","caption":""},"my_post_id":0}]
 			}
 	};
 	<% for(var k in timeline ){ %>
@@ -177,22 +178,19 @@
 	console.log('change');
 	</script>
 	<script type="text/javascript" src="js/storyjs-embed.js"></script>
-	<script type="text/javascript" src="js/html2canvas.js"></script>
-	<script type="text/javascript" src="js/jquery.plugin.html2canvas.js"></script>
-
 	<script type="text/javascript" src="js/user.js"></script>
 	<script type="text/template" id= "add_time_form">
 	<div>
 		<form id="add_event">
-			<label>Event Name</label>
+			<label>名稱：</label>
 			<input type="text" id="headline"></input><br>
-			<label>Start Date</label>
+			<label>開始時間：</label>
 			<input type="text" id="startDate"></input><br>
-			<label>End Date</label>
+			<label>結束時間：</label>
 			<input type="text" id="endDate"></input><br>
-			<label>Description</label>
+			<label>描述：</label>
 			<input type="text" id="text"></input><br>
-			<label>URL</label>
+			<label>網址：</label>
 			<input type="text" id="url"></input><br>
 		</form>
 	</div>
@@ -200,7 +198,7 @@
 	<script type="text/template" id= "Timeline_config">
 	<div>
 		<form id="config">
-			<label>Timeline HeadName</label>
+			<label></label>
 			<input type="text" id="headname"></input><br>
 			<label>Timeline Description</label>
 			<input type="text" id="time_des"></input><br>
