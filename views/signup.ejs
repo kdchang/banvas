@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <meta charset="utf-8">
     <title>Banvas 行動名片夾| 註冊</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,17 +98,20 @@
             <button class="sign" id="register">
               <span>註冊</span>
             </button>
-            <button class="log-fb">
+            <button class="log-fb" >
               <span>Facebook登入</span>
             </button> 
         </form>
       </section>
     </div>
     <!-- jQuery if needed -->
+    <script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
     <script type="text/javascript" src="/lib/sign up/js/jquery.placeholder.min.js"></script>
+
+    
     <script type="text/javascript">
     $(function(){
-      $('input, textarea').placeholder();
+      // $('input, textarea').placeholder();
 
       $(':text').on('input', function(){
         $('.address span').html($('#firstName').val() +'.'+ $('#lastName').val() );
@@ -134,6 +138,7 @@
     </script>
 
 
+
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -150,23 +155,24 @@
     <script src="/assets/js/bootstrap-collapse.js"></script>
     <script src="/assets/js/bootstrap-carousel.js"></script>
     <script src="/assets/js/bootstrap-typeahead.js"></script>
+
     <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
     <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+
     <script type="text/javascript" src="/js/index.js"></script>
   </body>
 </html>
-
 
 <script>
   $(window).ready(function(){
     window.fbAsyncInit = function() {
       FB.init({
-        appId      : '471817496195401',
-        status     : true,
-        cookie     : true,
-        xfbml      : true
+      appId      : '471817496195401',
+      status     : true,
+      cookie     : true,
+      xfbml      : true
       });
-    };
+      };
 
     (function(d, debug){
       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -174,13 +180,15 @@
       js = d.createElement('script'); js.id = id; js.async = true;
       js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
       ref.parentNode.insertBefore(js, ref);
-    }(document, /*debug*/ false));
+      }(document, /*debug*/ false));
     
     var try_login = function(email, password, callback){
       $.post('/login', {email:email, password:password}, function(data){callback(JSON.parse(data))}, 'text');
     }
 
-    $(".log-fb").click(function(){
+    $(".log-fb").click(function(event){
+	  event.preventDefault();
+	  alert('123');
       FB.login(function(fb_login){
         if(fb_login.status === 'connected'){
           FB.api('me', function(fb){
@@ -202,38 +210,27 @@
                             setCookie("Banvas_id",err.id,100);
                             window.location.replace('/'+err.id);  
                           }
-                          else $('div#sign_in_msg').addClass('alert alert-error').html('註冊失敗，FB信箱已被註冊');
+                          else $('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
                         }, 'text');
                       }
-                      else $('div#sign_in_msg').addClass('alert alert-error').html('註冊失敗，FB信箱已被註冊');
+                      else $('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
                     }, 'text');
                   }
-                  else $('div#sign_in_msg').addClass('alert alert-error').html('註冊失敗，FB信箱已被註冊');
+                  else $('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
                 }, 'text');
             });
           });
         }
       },{scope: 'email,user_work_history,user_education_history'});
-      return false; 
+      return false;
     });
   });
 
-  function setCookie(c_name,value,exdays){
+  function setCookie(c_name,value,exdays)
+  {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
     var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
     document.cookie=c_name + "=" + c_value;
-  }
-  
-  function getCookie(c_name){
-    var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++){   
-      x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
-      y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
-      x=x.replace(/^\s+|\s+$/g,"");
-      if (x==c_name){   
-        return unescape(y);
-      }   
-    }                   
   }
 </script>

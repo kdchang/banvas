@@ -124,6 +124,13 @@ app.get('/signup/confirmation', function(req, res){
     else res.render('confirmation', {err:err_code.CONFIRM_FAIL, id:req.query.id, token: '0'});
 });
 
+app.post('/:id/fb_import', function(res, req){
+    import_fb(req.params.id, res.body.fb, res.body.img, function(data){
+        if(data == -1) res.end(JSON.stringify({err:err_code.SUCCESS}));
+        else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+    })
+})
+
 var import_fb = function(userid, fb, img, callback){
     accountdb.findOne({id: userid},function(err, data){
         if(err) throw err;
@@ -307,11 +314,11 @@ app.post('/:id/mod_img', function(req, res) {
     accountdb.findOne({'id':req.params.id}).exec(function(err, data){
         if(err) throw err;
         if(data){
-            if(data.Image_pkt.picture !== "default.png")
-                fs.unlink('public/uploads'+data.Image_pkt.picture);
-            if(data.Image_pkt.pictureSmall !== 'default.png')
-                fs.unlink('public/uploads'+data.Image_pkt.pictureSmall);
-            
+            // if(data.Image_pkt.picture !== "default.png")
+            //     fs.unlink('public/uploads'+data.Image_pkt.picture);
+            // if(data.Image_pkt.pictureSmall !== 'default.png')
+            //     fs.unlink('public/uploads'+data.Image_pkt.pictureSmall);
+
             imageMagick(req.files.file.path)
                 .resize(250, 250)
                 .noProfile()

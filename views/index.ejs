@@ -87,25 +87,25 @@
 			<a class="btn login">登入</a>
 				<ul class="dropdown-menu account">
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">Email</label>
+							<label class="control-label" for="inputEmail">信箱</label>
 							<div class="controls">
-								<input type="text" id="email" placeholder="Email">
+								<input type="text" id="email" placeholder="信箱">
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">Password</label>
+							<label class="control-label" for="inputPassword">密碼</label>
 							<div class="controls">
-								<input type="password" id="password" placeholder="Password">
+								<input type="password" id="password" placeholder="密碼">
 							</div>
 						</div>
 						<div class="control-group">
 							<div class="controls">
 								<label class="checkbox">
-									<input type="checkbox"> Remember me
+									<input type="checkbox"> 記住我
 								</label>
-								<div id="sign_in_msg"></div><button type="submit" id="submit" class="btn">Sign in</button>
+								<div id="sign_in_msg"></div><button type="submit" id="submit" class="btn">登入</button>
 				    			<button class="btn btn-primary" id="FB_login">
-				    				<span>Facebook login</span>
+				    				<span>Facebook登入</span>
 				    			</button> 
 							</div>
 						</div>
@@ -674,12 +674,12 @@
   $(window).ready(function(){
     window.fbAsyncInit = function() {
       FB.init({
-      appId      : '471817496195401',
-      status     : true,
-      cookie     : true,
-      xfbml      : true
+        appId      : '471817496195401',
+        status     : true,
+        cookie     : true,
+        xfbml      : true
       });
-      };
+    };
 
     (function(d, debug){
       var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
@@ -687,7 +687,7 @@
       js = d.createElement('script'); js.id = id; js.async = true;
       js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
       ref.parentNode.insertBefore(js, ref);
-      }(document, /*debug*/ false));
+    }(document, /*debug*/ false));
     
     var try_login = function(email, password, callback){
       $.post('/login', {email:email, password:password}, function(data){callback(JSON.parse(data))}, 'text');
@@ -731,8 +731,7 @@
     });
   });
 
-  function setCookie(c_name,value,exdays)
-  {
+  function setCookie(c_name,value,exdays){
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
     var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
@@ -740,13 +739,11 @@
   }
   function getCookie(c_name){
     var i,x,y,ARRcookies=document.cookie.split(";");
-    for (i=0;i<ARRcookies.length;i++)
-    {   
+    for (i=0;i<ARRcookies.length;i++){   
       x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
       y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
       x=x.replace(/^\s+|\s+$/g,"");
-      if (x==c_name)
-      {   
+      if (x==c_name){   
         return unescape(y);
       }   
     }                   

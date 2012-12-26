@@ -274,20 +274,25 @@ window.fbAsyncInit = function() {
 }(document, /*debug*/ false));
 
 function FB_import(){
-	alert('asd');
-	FB.login(function(fb_login){
-		if(fb_login.status === 'connected'){
-			FB.api('me', function(fb){
-			FB.api('me?fields=picture.height(250).width(250).type(square)', function(pic){
-			$.post('/'+getCookie('Banvas_id')+'/fb_import', {token:getCookie('Banvas_token'), fb:fb, img:pic}, function(data){
-				console.log(data);
-				alert(data);
-			});        
+	FB.login(function(response) {
+		if (response.authResponse) {
+			console.log('Welcome!  Fetching your information.... ');
+			FB.api('/me?fields=bio,birthday,education,work', function(response) {
+				for (i in response['education']){
+					if( response['education'][i]['type'] == 'College' || response['education'][i]['type'] == 'Graduate School' ){
+						FB_temp['School'] = response['education'][i]['school']['name'];
+					}
+				}
+				if(response['work']) FB_temp['Job_exp'] = JSON.stringify(response['work'][0]);
+				FB_temp['token']=Banvas_token;
+				console.log(FB_temp);
+				$.post('/'+Banvas_id+'/modify', FB_temp, function(message){
+					console.log(message);
+				})
+				window.location.replace('/user');
 			});
-		});
-		}
-	},{scope: 'email,user_work_history,user_education_history'});
-	return false;
+		} else console.log('User cancelled login or did not fully authorize.');
+	});
 }
 function Show_collection(){
 
@@ -309,7 +314,7 @@ function show_card(event){
 	var b_card = $('#b_card').html();
 	var edit_status=1;
 	//$(b_card).qrcode(document.URL);
-	$.fancybox.open($('<div id="drag-bound" style="width:600px;height:366px;background-image:  url(/material/card-front.png);background-repeat:no-repeat;background-size: 100%"></div>').append(b_card),{
+	$.fancybox.open($('<div id="drag-bound" style="width:600px;height:366px;background-image:url(/material/card-front.png);"></div>').append(b_card),{
 		afterShow : function(){
 			$('.qr_container').qrcode({render:'table',width:200,height:200,text:document.URL});
 		//	if(b_card_temp.length!=0)
@@ -349,10 +354,9 @@ function show_card(event){
 					$.post('./'+Banvas_id+'/modify',{token:Banvas_token,Job_exp:$('div#drag-bound').html()},function(data){
 						console.log(data);
 					});
-					//var canvas=$('#canvas:first');
-					//console.log(canvas);	
-					//canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-					//rasterizeHTML.drawHTML($('#drag-bound').html(),canvas);
+					var canvas=$('#canvas:first');
+					canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+					rasterizeHTML.drawHTML($('#drag-bound').html(),canvas);
 					$(this).html("編輯");
 					edit_status=1;
 				}

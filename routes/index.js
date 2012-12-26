@@ -8,8 +8,9 @@ module.exports = function(app, accountdb){
 		if(req.session.item && req.session.item.log_data){
 			accountdb.findOne({id: req.session.item.log_data.id}, function(err, data){
 				if(err) throw err;
-				if(data)
-					res.render('user', {userid:req.session.item.log_data.id, pkt:data, timeline:(data.TimeLine.length==0)?{}:JSON.parse(data.TimeLine)});
+				if(data){
+					res.redirect('/'+req.session.item.log_data.id);
+				}
 				else{
 					req.session.item = {};
 					res.redirect('/');
@@ -41,8 +42,11 @@ module.exports = function(app, accountdb){
     app.get('/:id', function(req, res){
 		accountdb.findOne({id: req.params.id}, function(err,data){
 			if(err) throw err;
-			if(data) 
+			if(data){
+				data.statistic.view_time = data.statistic.view_time + 1;
+				data.save();
 				res.render('user', {userid: req.params.id, pkt: data, timeline: (data.TimeLine.length==0)?{}:JSON.parse(data.TimeLine)});
+			}
 			else 
 				res.redirect('/');
 		});
