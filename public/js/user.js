@@ -15,6 +15,7 @@ var timeline;
 $(document).ready(function(){
 	timeline=JSON.parse($('meta[name="timeline_json"]').attr('content'));
 	CreateTimeLine();
+	b_card_temp=$('meta[name="b_card"]').attr('content');
 })
 $('.company').each(function(){
 	$.post('/pic_url', {pic: $(this).html()}, function(data){
@@ -316,6 +317,8 @@ function show_card(event){
 	$.fancybox.open($('<div id="drag-bound" style="width:600px;height:366px;background-image:url(/material/card-front.png);"></div>').append(b_card),{
 		afterShow : function(){
 			$('.qr_container').qrcode({render:'table',width:200,height:200,text:document.URL});
+			if(b_card_temp.length!=0)
+				$('div#drag-bound').html(b_card_temp);
 			$('#back').click(function(){
 				if(front){
 					b_card_temp=$('.b_card_content').html();
@@ -342,11 +345,14 @@ function show_card(event){
 					$(".static").unbind('click');
 					$(".drag").draggable('destroy').css('cursor','');
 					$("canvas").draggable('destroy');
-					html2canvas($('div#drag-bound'),{
+					/*html2canvas($('div#drag-bound'),{
 						onrendered: function( canvas ) {
 							console.log('test');
 							canvas.appendTo('div#drag-bound');
 						}
+					});*/
+					$.post('./'+Banvas_id+'/modify',{token:Banvas_token,Job_exp:$('div#drag-bound').html()},function(data){
+						console.log(data);
 					});
 					$(this).html("編輯");
 					edit_status=1;

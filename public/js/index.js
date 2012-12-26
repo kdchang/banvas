@@ -44,11 +44,11 @@ var auditspace = Backbone.View.extend({
 		event.preventDefault();
 		console.log($('.reg #firstname').val());
 		if($('.reg input#email').val().match(/[\w\+\-\._]+@[\w\-\._]+\.\w{2,}/g)==null)
-			$('div#reg_error').addClass('alert alert-error').html('invalid email address!!');
+			$('div#reg_error').addClass('alert alert-error').html('請確認信箱填寫正確!!');
 		else if($('.reg #firstname').val().length==0 || $('.reg #lastname').val().length==0)
-			$('div#reg_error').addClass('alert alert-error').html('Please fill both First and Last Name!!');
+			$('div#reg_error').addClass('alert alert-error').html('請確認姓名填寫正確!!');
 		else if($('.reg #password').val()!==$('.reg #check').val()||$('.reg #password').val().length==0)
-			$('div#reg_error').addClass('alert alert-error').html('Password Incorrect');
+			$('div#reg_error').addClass('alert alert-error').html('密碼輸入不正確');
 		else{
 			$('div#reg_error').removeClass('alert alert-error').empty();
 			var id = $('.reg input#email').val().split('@');
@@ -57,9 +57,9 @@ var auditspace = Backbone.View.extend({
 				console.log(data);
 				var temp = JSON.parse(data);
 				if(temp.err==0)
-					$('div#reg_error').addClass('alert alert-success').html('Registration Success.<br>Welcome To Banvas!!<br>check your email box for confirmation url.');
+					$('div#reg_error').addClass('alert alert-success').html('註冊成功.<br>歡迎使用Banvas行動名片夾!!<br>請至您的信箱收去認證信.');
 				else if(temp.err==5)
-					$('div#reg_error').addClass('alert alert-error').html('The email address or the ID Has Been Used!!');
+					$('div#reg_error').addClass('alert alert-error').html('Email 已被人使用，請選擇另一個信箱!!');
 			});
 			$('div#reg_error').empty();
 		}
