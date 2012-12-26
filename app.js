@@ -7,21 +7,7 @@ var async = require('async')
     , fs = require('fs')
     , gm = require('gm')
     , imageMagick = gm.subClass({ imageMagick: true })
-    , jsdom = require('jsdom')
-    , http_get = require('http-get');   
-
-// jsdom.env({
-//   html: "http://news.ycombinator.com/",
-//   scripts: ["http://code.jquery.com/jquery.js"],
-//   done: function (errors, window) {
-//     var $ = window.$;
-//     console.log("HN Links");
-//     $("td.title:not(:last) a").each(function() {
-//       console.log(" -", $(this).text());
-//     });
-//   }
-// });
-
+    , http_get = require('http-get');
 
 var err_code = require('./err')
     , skill_app = require('./skill_app')
@@ -138,6 +124,63 @@ app.get('/signup/confirmation', function(req, res){
     else res.render('confirmation', {err:err_code.CONFIRM_FAIL, id:req.query.id, token: '0'});
 });
 
+var import_fb = function(userid, fb, img, callback){
+    accountdb.findOne({id: userid},function(err, data){
+        if(err) throw err;
+        if(data){
+            data.linked.Facebook = fb.link;
+            data.About_me = fb.bio;
+            
+            // data.TimeLine = '';
+            // data.Job_exp = '';
+            // data.Image_pkt.picture = '';
+            // data.Image_pkt.pictureSmall = '';
+            // data.phone = '';
+            var resume = JSON.parse(data.resume);
+            for(i in fb.education){
+                if(fb.education[i].type == "College" || fb.education[i].type == 'Graduate School'){
+                    var temp = {};
+                    temp.Company = fb.education[i].school.name;
+                    temp.Department = fb.education[i].concentration ? fb.education[i].concentration[0].name : "";
+                    temp.Position = '學生';
+                    resume.push(temp);
+                }
+            }
+            for(i in fb.work){
+                var temp = {};
+                temp.Company = fb.work[i].employer ? fb.work[i].employer.name : "";
+                temp.Department = "";
+                temp.Position = fb.work[i].Position ? fb.work[i].Position.name : "";
+                resume.push(temp);
+            }
+            data.resume = JSON.stringify(resume);
+
+            http_get.get({url: img}, 'public/uploads/'+data.id+'.jpg', function(err, result){
+                if(err){
+                    console.log(error);
+                    data.save();
+                    callback(0)
+                }
+                else{
+                    console.log('file downloaded at: '+result.file);
+                    imageMagick('public/uploads/'+data.id+'.jpg')
+                        .resize(60, 60)
+                        .noProfile()
+                        .write('public/uploads/'+data.id+'_small.jpg', function (err) {
+                            if(err) throw err;
+                            if (!err) console.log('done');
+                        });
+                    data.Image_pkt.pictureSmall = data.id+'_small.jpg';
+                    data.Image_pkt.picture = data.id+'.jpg';
+                    data.save();
+                    callback(0)
+                }
+            })
+        }
+        else callback(-1)
+    })
+}
+
 app.post('/fb_signup', function(req, res){
     console.log(req.body);
     if( req.body.fb ){
@@ -165,37 +208,19 @@ app.post('/fb_signup', function(req, res){
                     data.last_name = fb.last_name;
                     data.first_name = fb.first_name;
                     data.id = fb.username;
-                    data.linked.Facebook = fb.link;
-                    data.About_me = fb.bio;
-                    
-                    // data.TimeLine = '';
-                    // data.Job_exp = '';
-                    // data.Image_pkt.picture = '';
-                    // data.Image_pkt.pictureSmall = '';
-                    // data.phone = '';
-                    var resume = JSON.parse(data.resume);
-                    for(i in fb.education){
-                        if(fb.education[i].type == "College" || fb.education[i].type == 'Graduate School'){
-                            var temp = {};
-                            temp.Company = fb.education[i].school.name;
-                            temp.Department = fb.education[i].concentration ? fb.education[i].concentration[0].name : "";
-                            temp.Position = '學生';
-                            resume.push(temp);
-                        }
-                    }
-                    for(i in fb.work){
-                        var temp = {};
-                        temp.Company = fb.work[i].employer ? fb.work[i].employer.name : "";
-                        temp.Department = "";
-                        temp.Position = fb.work[i].Position ? fb.work[i].Position.name : "";
-                        resume.push(temp);
-                    }
-                    data.resume = JSON.stringify(resume);
-
                     data.register_date = Date.now();
-                    console.log(data);
-                    data.save();
-                    res.end(JSON.stringify({err:err_code.SUCCESS}));
+                    data.save( function(err, data){
+                        if(err) throw err;
+                        else {
+                            import_fb(fb.username, fb, req.body.pic, function(err){
+                                console.log(err);
+                                if(err == -1) res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
+                                else if(err == 0) res.end(JSON.stringify({err:err_code.SUCCESS}));
+                            })
+                        }
+                    });
+
+                    
                 }
             }
         });
@@ -248,8 +273,8 @@ app.post('/:id/status', function(req, res){
             var a = data.toObject();
             f.trim(a, ['password','statistic','collect','modify_date']);
             console.log(a);
-	    res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
-	}
+	       res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
+	    }
         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
     })
 });
