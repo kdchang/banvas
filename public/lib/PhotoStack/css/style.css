@@ -36,9 +36,9 @@ body{
 	position:absolute;
 	top:50%;
 	left:50%;
-	-moz-box-shadow:1px 1px 10px #000;
+/*	-moz-box-shadow:1px 1px 10px #000;
 	-webkit-box-shadow:1px 1px 10px #000;
-	box-shadow:1px 1px 10px #000;
+	box-shadow:1px 1px 10px #000;*/
 }
 /* Close button for preview mode */
 a.ps_close{
@@ -132,19 +132,9 @@ a.ps_close:hover{
 	top:0px;
 	text-align:center;
 	cursor:pointer;
-	-moz-box-shadow:1px 1px 4px #000;
+/*	-moz-box-shadow:1px 1px 4px #000;
 	-webkit-box-shadow:1px 1px 4px #000;
-	box-shadow:1px 1px 4px #000;
-	-webkit-box-reflect:
-		below 5px 
-		-webkit-gradient(
-			linear, 
-			left top, 
-			left bottom, 
-			from(transparent), 
-			color-stop(0.6, transparent), 
-			to(rgb(18, 18, 18))
-		);
+	box-shadow:1px 1px 4px #000;*/
 }
 .ps_slider .ps_album:hover{
 		background-color:#383838;
