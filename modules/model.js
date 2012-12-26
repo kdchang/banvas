@@ -8,22 +8,29 @@ var schema   = new mongoose.Schema({
     	last : {type:String, require:true}
     },
     id           : {type:String, require:true},
-    linked       : {type:{Facebook:String, Blogger:String, Linkedin:String}, require:true,default: {Facebook:"#",Blogger:"#",Linkedin:"#"}},
-    Position     : {type:String, default:"default"},
-    Intro        : {type:String, default:"default"},
-    School       : {type:String, default:"default"},
-    Skill        : {type:Array, default:[]},
-    TimeLine     : {type:String, default:"default"},
-    Job_exp      : {type:String, default:"default"},
-    Image_pkt    : {type:String, default:"default.png"},
-    phone        : {type:String, default:"default"},
+    linked       : {
+        Facebook: {type:String, default:""},
+        Blogger: {type:String, default:""},
+        Linkedin: {type:String, default:""}
+    },
+    About_me     : {type:String, default:""},
+    
+    TimeLine     : {type:String, default:""},
+    Job_exp      : {type:String, default:""},
+    Image_pkt    : {
+        picture: {type:String, default:"default.png"},
+        pictureSmall: {type:String, default:"default.png"}
+    },
+    phone        : {type:String, default:""},
     modify_date  : {type:Date, default: Date.now },
     register_date: {type:Date},
     statistic    : {
-        // how many people queried your status before
         view_time: {type:Number, default:0},
+        collect_time: {type:Number, default:0}
     },
-    collect      : {type:String, select:false},
+    resume       : {type:String, default: "[]"},
+    Skill        : {type:String, default: "{}"},
+    collect      : {type:String, default: "{}"}
 },{
     _id: false
 });

@@ -1,9 +1,23 @@
+
 $(function(){
+var on=0;
 var auditspace = Backbone.View.extend({
 	el: "body",
 	events:{
-		"click input#submit" : "log_in",
-		"click input#register" : "register"
+		"click a.login"	: "open_list",
+		"click button#submit" : "log_in",
+		"click button#register" : "register",
+	},
+	open_list:function(){
+		if(on) {
+			$('.btn-group').removeClass('open');
+			on = 0;
+		}
+		else {
+			$('.btn-group').addClass('open');
+			$('#email').focus();
+			on = 1;
+		}
 	},
 	log_in:function(event){
 		event.preventDefault();
@@ -21,23 +35,33 @@ var auditspace = Backbone.View.extend({
 					window.location.replace('/'+re_status.id);	
 					break;
 				default:
-					console.log('Log in error');
+					$('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
 			}
 		})
 
 	},
 	register:function(event){
 		event.preventDefault();
-		console.log("Reg_info POST");
-		if($('#reg_pass').val()!=$('#con_pass').val())
-			$('.reg div#error').html('password unmatched!!');
+		console.log($('.reg #firstname').val());
+		if($('.reg input#email').val().match(/[\w\+\-\._]+@[\w\-\._]+\.\w{2,}/g)==null)
+			$('div#reg_error').addClass('alert alert-error').html('請確認信箱填寫正確!!');
+		else if($('.reg #firstname').val().length==0 || $('.reg #lastname').val().length==0)
+			$('div#reg_error').addClass('alert alert-error').html('請確認姓名填寫正確!!');
+		else if($('.reg #password').val()!==$('.reg #check').val()||$('.reg #password').val().length==0)
+			$('div#reg_error').addClass('alert alert-error').html('密碼輸入不正確');
 		else{
-			var reg_obj = {email: $('.reg input#email').val(), password:$('#reg_pass').val() , first_name: $('#first').val(), last_name: $('#last').val(), id: $('#id').val()};
-			console.log(reg_obj);
+			$('div#reg_error').removeClass('alert alert-error').empty();
+			var id = $('.reg input#email').val().split('@');
+			var reg_obj = {email: $('.reg input#email').val(), password:$('.reg #password').val() , first_name: $('.reg #firstname').val(), last_name: $('.reg #lastname').val(), id: id[0]};
 			$.post('/signup',reg_obj,function(data){
 				console.log(data);
+				var temp = JSON.parse(data);
+				if(temp.err==0)
+					$('div#reg_error').addClass('alert alert-success').html('註冊成功.<br>歡迎使用Banvas行動名片夾!!<br>請至您的信箱收去認證信.');
+				else if(temp.err==5)
+					$('div#reg_error').addClass('alert alert-error').html('Email 已被人使用，請選擇另一個信箱!!');
 			});
-			$('.reg div#error').empty();
+			$('div#reg_error').empty();
 		}
 	}
 });
@@ -48,24 +72,58 @@ var workspace = Backbone.Router.extend({
 					'': 'index'
     			}
     			, register : function() {
-				var temp = _.template($("#register-view").html(),{});
-					el = $('.container');
+					var temp = _.template($("#register-view").html(),{});
+					el = $('.slide_container');
 					el.html(temp);
+					$('.slide_container').css('height','auto');
+					//$('#index-columns').empty();
+					$('input#email').focus();
+					$(':password').on('blur', function(){
+						//輸入正確
+						if( $('.reg #password').val() == $('.reg #check').val() && $('.reg #check').val().length != 0 ){
+							$("label[for='check'] i").attr('class','icon-check');
+							$('.reg #check').removeClass('warning');
+						}
+						//輸入錯誤
+						else if( $('.reg #password').val() != $('.reg #check').val() && $('.reg #check').val().length != 0 ){
+							$("label[for='check'] i").attr('class','icon-check-empty');
+							$('.reg #check').addClass('warning');
+							console.log('passvalue:'+$('.reg #password').val());
+							console.log('checkvalue:'+$('.reg #check').val());
+						}
+						//未輸入
+						else{
+							$("label[for='check'] i").attr('class','icon-check-empty');
+						}
+					});
 				}
 				, index : function(){
-				var temp = _.template($("#index-view").html(),{});
-					el = $('.container');
+					var temp = _.template($("#index-view").html(),{});
+					el = $('.slide_container');
 					el.html(temp);
+					$('.slide_container').css('height','300px');
 					$('.top').show();
-					$('button').click(function(){
-				    var x = $(this).val();
-				    if(x != $('button.focus').val()){
-  			      	$('button.focus').removeClass('focus');
-			        $(this).addClass('focus');
-			        $('div.top').removeClass('top').hide("slide", {direction: "right"}, 500);
-			        $('div.'+x).addClass('top').show("slide",{}, 500);
-				    }
+					$('.slide button').click(function(){
+					    var x = $(this).val();
+					    if(x != $('button.focus').val()){
+	  			      		$('.slide button.focus').removeClass('focus');
+					        $(this).addClass('focus');
+					        $('div.top').removeClass('top').hide("slide", {direction: "right"}, 500);
+					        $('div.'+x).addClass('top').show("slide",{}, 500);
+					    }
 					});
+					if(getCookie('Banvas_id')){
+						$('a.register').html('我的卡片').click(function(){
+							window.location = '/'+getCookie('Banvas_id');
+						})
+						$('a.login').html('登出').removeClass('login').click(function(){
+							$.post('/logout',{token:getCookie('Banvas_token')},function(){
+								setCookie('Banvas_id','',-10);
+								setCookie('Banvas_token','',-10);
+								window.location.replace('/');
+							})
+						})
+					}
 				}
 });
 function setCookie(c_name,value,exdays)
@@ -74,6 +132,19 @@ function setCookie(c_name,value,exdays)
 	exdate.setDate(exdate.getDate() + exdays);
 	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
 	document.cookie=c_name + "=" + c_value;
+}
+function getCookie(c_name){
+		var i,x,y,ARRcookies=document.cookie.split(";");
+		for (i=0;i<ARRcookies.length;i++)
+		{   
+				x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+				y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+				x=x.replace(/^\s+|\s+$/g,"");
+				if (x==c_name)
+				{   
+						return unescape(y);
+				}   
+		}                   
 }
 new auditspace();
 new workspace();
