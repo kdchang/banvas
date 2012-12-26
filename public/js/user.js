@@ -13,7 +13,6 @@ var Banvas_id = getCookie('Banvas_id'),
 var FB_temp = {};
 var timeline;
 $(document).ready(function(){
-	console.log('ready');
 	timeline=JSON.parse($('meta[name="timeline_json"]').attr('content'));
 	CreateTimeLine();
 })
@@ -120,12 +119,11 @@ function edit_mode(event){
 			$(this).html("編輯").addClass("edit").unbind('.click');
 			$(".static").unbind('click');
 			$('.temp').remove();
-			/*$('.skill p').each(function(){
-				if(!skill_temp[$(this).html()])
-					$.post('/'+Banvas_id+'/skill/add',{'token':Banvas_token,'skill':$(this).html()},function(data){
-						console.log(data);
-					});
-			});*/
+			$('.skill p').each(function(){
+				$.post('/'+Banvas_id+'/skill/add',{'token':Banvas_token,'skill':$(this).html()},function(data){
+					console.log(data);
+				});
+			});
 			var name={"first":$('.first').html(),"last":$('.last').html()};
 			var post_data = {"token": Banvas_token,"name": name,"About_me":$('.intro').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'},"TimeLine":JSON.stringify(timeline)}; 
 			$.post('/'+Banvas_id+'/modify',post_data,function(data){
