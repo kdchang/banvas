@@ -16,6 +16,7 @@
         padding-bottom: 0px;
         position: relative;
       }
+
     </style>
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -80,19 +81,19 @@
           <div class="person block">
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
-				<h4 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h4>
+				<h2 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h2>
 				<% var resume_temp=JSON.parse(pkt.resume); 
 				 if(resume_temp.length!=0 && resume_temp[0].Company.length!=0 ){ %>
-				<span ><p>現職：</p></span>
+				<h4><p>單位：</p></h4>
 				<p class="school static"><%= resume_temp[0].Company %></p><br>
 				<% } %>
 				<% if(resume_temp.length!=0 && resume_temp[0].Position.length!=0 ){ %>
-				<span>Position:</span>
+				<h4>職位:</h4>
 				<p class="position static"><%= resume_temp[0].Position %></p>
 				<% } %>
 				<% if( pkt.About_me.length!=0 ){ %>
 				<br>
-				<span>關於我:</span><p class="intro static"><%= pkt.About_me %></p>
+				<h4>關於我:</h4><p class="intro static"><%= pkt.About_me %></p>
 				<% } %>
 			</span>
 		  </div>
@@ -101,11 +102,12 @@
 			</a>                        
 		</div>
 		<div class="block">
+
 			<h3>背景：</h3>
 			<h4 class="resume_header">學歷與工作經歷:</h4>
 			<ul class="resume">
 			<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
-				<li><img class="icon" id="company" src="/material/ntulogo.jpg" ><p class="company static"><%= resume_temp[i].Company %></p></li>
+				<li style="height: 80px;"><img class="icon" id="company" src="/material/ntulogo.jpg" >&nbsp &nbsp<p class="company static"><%= resume_temp[i].Company %></p></li>
 			<% } %>
 			</ul>
 		</div>

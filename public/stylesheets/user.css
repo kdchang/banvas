@@ -31,6 +31,8 @@ ul.account{
 }
 img.head {
     width : 150px;
+    float: left;
+    margin-right: 20px;
 }
 span.id{
     width : 500px;

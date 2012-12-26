@@ -160,7 +160,6 @@ function edit_mode(event){
 		$('<button class="temp btn btn-info">+</button>').appendTo('.skill_header').click(function(){
 			$('<li><p class="changing"><input autofocus="autofocus" class=\"editing\" type="text" value="default"></p></li>').appendTo('ul.skill').children('p').bind('focusout',save);
 		});
-		$('<button class="temp btn btn-info" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
 		$('<button class="temp btn btn-info" style="margin: 5px;" >Add Timeline Event</button>').insertAfter('div#timeline').click(AddTimeEvent);
 		$('<button class="temp btn btn-info" style="margin: 5px;" >Timeline Config</button>').insertAfter('div#timeline').click(Timeline_config);
 };
