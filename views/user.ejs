@@ -178,6 +178,8 @@
 	console.log('change');
 	</script>
 	<script type="text/javascript" src="js/storyjs-embed.js"></script>
+	<script type="text/javascript" src="js/jquery.plugin.html2canvas.js"></script>
+
 	<script type="text/javascript" src="js/user.js"></script>
 	<script type="text/template" id= "add_time_form">
 	<div>
@@ -215,6 +217,7 @@
 	</div>
 	</script>
 	<script type="text/template" id= "b_card">
+		<div class="card">
 		<span class='qr_container' style='margin: 60px;'></span>
 		<span class='b_card_content' style='margin 60px;'>
 			<h1 class="drag static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
@@ -233,6 +236,7 @@
 				<button class="btn btn-info" id="edit_b">編輯</button>
 				<button class="btn btn-info" id="close">關閉</button>
 			</div>
+		</div>
 	</script>
 	<script type="text/template" id= "log_in">
 		<ul class="dropdown-menu account">

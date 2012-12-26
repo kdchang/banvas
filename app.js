@@ -126,9 +126,8 @@ app.get('/signup/confirmation', function(req, res){
 
 app.post('/fb_signup', function(req, res){
     console.log(req.body);
-    if( req.body.fb && req.body.token ){
+    if( req.body.fb ){
         var fb = JSON.parse(req.body.fb)
-        var token = req.body.token;
 
         var email = fb.email;
         accountdb.findOne({$or:[{email:email},{id:fb.username}]}).exec(function(err,data){

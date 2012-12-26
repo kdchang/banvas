@@ -340,6 +340,10 @@ function show_card(event){
 					$(this).html("儲存");
 					edit_status=0;
 				}else{
+					$(".static").unbind('click');
+					$(".drag").draggable('destroy');
+					$("canvas").draggable('destroy');
+					$('div#drag-bound').html2canvas({});
 					$(this).html("編輯");
 					edit_status=1;
 				}

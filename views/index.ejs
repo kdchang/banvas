@@ -696,8 +696,7 @@
       FB.login(function(fb_login){
         if(fb_login.status === 'connected'){
           FB.api('me', function(fb){
-            console.log(fb);
-            var email = fb.email ? fb.email : fb.username;
+            var email = fb.email;
             try_login(email, fb.id, function(err){
               if(err.err == 0){
                 setCookie("Banvas_token",err.token,100);
@@ -705,7 +704,7 @@
                 window.location.replace('/'+err.id);  
               }
               else if(err.err == 5){
-                $.post('/fb_signup',{fb:JSON.stringify(fb), token:fb_login.authResponse.accessToken}, function(err){
+                $.post('/fb_signup',{fb:JSON.stringify(fb)}, function(err){
                   var err = JSON.parse(err);
                   if(err.err == 0){
                     try_login(email, fb.id, function(err){
