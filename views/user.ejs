@@ -80,14 +80,14 @@
           <div class="person block">
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
-				<h1 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h1>
-				<span>Company:</span>
+				<h3 class="name static"><%= pkt.name.first %><%= pkt.name.last %></h3>
+				<span><p>現職：</p></span>
 				<% if(JSON.parse(pkt.resume).length!=0){ %>
 				<p class="school static"><%= JSON.parse(pkt.resume)[0].Company %></p><br>
 				<span>Position:</span><p class="position static"><%= JSON.parse(pkt.resume)[0].Company %></p>
 				<% } %>
 				<br>
-				<span>Intro:</span><p class="intro static"><%= pkt.About_me %></p>
+				<span>關於我:</span><p class="intro static"><%= pkt.About_me %></p>
 			</span>
 		  </div>
 		<div class="social block">
@@ -95,7 +95,7 @@
 			</a>                        
 		</div>
 		<div class="block">
-			<h1 class="resume_header">Resume</h1>
+			<h4 class="resume_header">學歷與工作經歷:</h4>
 			<ul class="resume">
 				<% for(var i = 0; i < JSON.parse(pkt.resume).length ;i++ ) { %>
 				<!--<li><img class="icon" id="company" src="/material/ntulogo.jpg" >-->
@@ -104,7 +104,7 @@
 			</ul>
 		</div>
 		<div class="block">
-			<h1 class="skill_header">Skill</h1>
+			<h4 class="skill_header">專長：</h4>
 			<ul class="skill">
 				<% for(var k in JSON.parse(pkt.Skill) ) { %>
 				<list stlye="position:relative;"><p class="static"><%= k %></p><%= JSON.parse(pkt.Skill)[k] %></li>
@@ -112,7 +112,7 @@
 			</ul>
 		</div>
 		<div class="block" id="timeline">
-			<h1>Timeline</h1>
+			<h4>專案作品：</h4>
 			<div id="timeline-embed"></div>
 		</div>
 		<div class='block'>
@@ -121,12 +121,7 @@
 		</div>
 		</div>
 		  </div>
-	      <!--<div class="hero-unit">
-	        <h1>Welcome to Banvas!</h1>
-	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
-	        <p><a href="signup" class="btn btn-primary btn-large">免費註冊 &raquo;</a></p>
-	        
-		  </div>-->
+
 		  
 
 	<div>
