@@ -170,6 +170,11 @@
         width: 20px;
     }
 
+    .search_view_img{
+        height: 20px;
+        width: 20px;
+    }
+
 </style>
 
 <script>
@@ -186,6 +191,9 @@
         $.post('/search', {query: query}, function(data){
             $('.searchinputarea').val("");
             var data = JSON.parse(data);
+	    data.data.sort(function(a,b){
+	    	return a.score<b.score;
+	    });
             console.log(data.data);
             $("#search_result").html("");
             for(i in data.data){
@@ -195,7 +203,7 @@
                     '<img class=search_result_pic src=/uploads/'+data.data[i].Image_pkt.pictureSmall+">"+
                     '<div class=temp>'+
                     '<span class=search_result_name>'+data.data[i].full_name+'</span>'+
-                    '<span class=search_view_time> viewed:'+data.data[i].view_time+'</span>'+
+                    '<span class=search_view_time> <img src=material/view.png class=search_view_img>'+data.data[i].view_time+'</span>'+
                     '</div>'+
                     '<div class=search_result_email><a href="mailto:'+data.data[i].email+'">'+data.data[i].email+"</a>"+
 		    '</div>'+'</a>');

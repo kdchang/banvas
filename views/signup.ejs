@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <meta charset="utf-8">
     <title>Banvas 行動名片夾| 註冊</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Le styles -->
-  
-   
+     
     <link href="/lib/sign up/css/style.css" rel="stylesheet">
     <style type="text/css">
       body {
@@ -84,32 +84,34 @@
         <form class="form clearfix">
           <h1><span class="sign-up">免費建立自己的名片</span></h1>
             <p class="reg">    
-                <label for="firstName"><i class="icon-user"></i>Username</label>
-                <input type="text" class="name" id="firstname" placeholder="First Name">
-                <input type="text" class="name" id="lastname" placeholder="Last name">
-                <label for="email"><i class="icon-envelope"></i>Email</label>
-                <input type="email" id="email" placeholder="Email Address">
-                <label for="password"><i class="icon-lock"></i>Password</label>
-                <input type="password" id="password" placeholder="New Password" name="Password">
-                <label for="check"><i class="icon-check-empty"></i>Confirm Password</label>
-                <input type="password" id="check" placeholder="Confirm Password" name="Password"> 
+                <label for="firstName"><i class="icon-user"></i>使用者姓名</label>
+                <input type="text" class="name" id="firstname" placeholder="名字">
+                <input type="text" class="name" id="lastname" placeholder="姓氏">
+                <label for="email"><i class="icon-envelope"></i>信箱</label>
+                <input type="email" id="email" placeholder="電子信箱位置">
+                <label for="password"><i class="icon-lock"></i>密碼</label>
+                <input type="password" id="password" placeholder="密碼" name="Password">
+                <label for="check"><i class="icon-check-empty"></i>確認密碼</label>
+                <input type="password" id="check" placeholder="密碼確認" name="Password"> 
             </p>
           <div id="reg_error"></div>
             <button class="sign" id="register">
-              <span>Sign in</span>
+              <span>註冊</span>
             </button>
-            <button class="log-fb">
-              <span>Facebook login</span>
+            <button class="log-fb" >
+              <span>Facebook登入</span>
             </button> 
         </form>
       </section>
     </div>
     <!-- jQuery if needed -->
-        <script type="text/javascript" src="/lib/sign up/js/jquery.placeholder.min.js"></script>
-    <script type="text/javascript">
+    <script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+    <script type="text/javascript" src="/lib/sign up/js/jquery.placeholder.min.js"></script>
 
+    
+    <script type="text/javascript">
     $(function(){
-      $('input, textarea').placeholder();
+      // $('input, textarea').placeholder();
 
       $(':text').on('input', function(){
         $('.address span').html($('#firstName').val() +'.'+ $('#lastName').val() );
@@ -133,10 +135,8 @@
       });
 
     });
-
-    
-
     </script>
+
 
 
     <!-- Le javascript
@@ -155,10 +155,82 @@
     <script src="/assets/js/bootstrap-collapse.js"></script>
     <script src="/assets/js/bootstrap-carousel.js"></script>
     <script src="/assets/js/bootstrap-typeahead.js"></script>
+
     <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
     <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+
     <script type="text/javascript" src="/js/index.js"></script>
-
-
   </body>
 </html>
+
+<script>
+  $(window).ready(function(){
+    window.fbAsyncInit = function() {
+      FB.init({
+      appId      : '471817496195401',
+      status     : true,
+      cookie     : true,
+      xfbml      : true
+      });
+      };
+
+    (function(d, debug){
+      var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement('script'); js.id = id; js.async = true;
+      js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+      ref.parentNode.insertBefore(js, ref);
+      }(document, /*debug*/ false));
+    
+    var try_login = function(email, password, callback){
+      $.post('/login', {email:email, password:password}, function(data){callback(JSON.parse(data))}, 'text');
+    }
+
+    $(".log-fb").click(function(event){
+	  event.preventDefault();
+	  alert('123');
+      FB.login(function(fb_login){
+        if(fb_login.status === 'connected'){
+          FB.api('me', function(fb){
+              FB.api('me?fields=picture.height(250).width(250).type(square)', function(pic){
+                var email = fb.email;
+                try_login(email, fb.id, function(err){
+                  if(err.err == 0){
+                    setCookie("Banvas_token",err.token,100);
+                    setCookie("Banvas_id",err.id,100);
+                    window.location.replace('/'+err.id);  
+                  }
+                  else if(err.err == 5){
+                    $.post('/fb_signup',{fb:JSON.stringify(fb), pic:pic.picture.data.url}, function(err){
+                      var err = JSON.parse(err);
+                      if(err.err == 0){
+                        try_login(email, fb.id, function(err){
+                          if(err.err == 0){
+                            setCookie("Banvas_token",err.token,100);
+                            setCookie("Banvas_id",err.id,100);
+                            window.location.replace('/'+err.id);  
+                          }
+                          else $('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
+                        }, 'text');
+                      }
+                      else $('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
+                    }, 'text');
+                  }
+                  else $('div#sign_in_msg').addClass('alert alert-error').html('Log in failed');
+                }, 'text');
+            });
+          });
+        }
+      },{scope: 'email,user_work_history,user_education_history'});
+      return false;
+    });
+  });
+
+  function setCookie(c_name,value,exdays)
+  {
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+  }
+</script>

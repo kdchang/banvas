@@ -8,6 +8,8 @@
     <meta name="author" content="">
 	<meta name="userid" content="<%=userid %>">
     <meta name="timeline_json" content="">
+	<% if (pkt.Job_exp.length!=0 ) %>
+		<meta name="b_card" content="<%= pkt.Job_exp %>">
 	<!-- Le styles -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
@@ -92,7 +94,8 @@
 		  </div>
 		<div class="social block">
 			<a class="FB" href= "<%= pkt.linked.Facebook %>"> <img class="icon social FB" src="/material/facebook.png">
-			</a>                        
+			</a> 
+			<a class="email" href= "mailto:<%= pkt.email %>"> <img class="icon social mail" src="/material/email_lrg.png"></a>
 		</div>
 		<div class="block">
 			<h1 class="resume_header">Resume</h1>
@@ -178,6 +181,10 @@
 	console.log('change');
 	</script>
 	<script type="text/javascript" src="js/storyjs-embed.js"></script>
+<<<<<<< HEAD
+=======
+	<script type="text/javascript" src="js/dist/rasterizeHTML.allinone.js"></script>
+>>>>>>> 14bbc31d1a4d53eecd8ad1e471a7f095c876f349
 	<script type="text/javascript" src="js/user.js"></script>
 	<script type="text/template" id= "add_time_form">
 	<div>
@@ -215,12 +222,12 @@
 	</div>
 	</script>
 	<script type="text/template" id= "b_card">
-		<span class='qr_container' style='margin: 60px;'></span>
-		<span class='b_card_content' style='margin 60px;'>
+		<span class='qr_container' style='margin: 50px;position:absolute;'></span>
+		<span class='b_card_content' style='margin: 50px 50px 50px 300px;'>
 			<h1 class="drag static"><%= pkt.name.first %> <%= pkt.name.last %></h1>
 			<% if(JSON.parse(pkt.resume).length!=0){ %>
-			<h3 class="drag static"><%= JSON.parse(pkt.resume)[0].Company %></h3>
-			<h3 class="drag static"><%= JSON.parse(pkt.resume)[0].Position %></h3>
+			<h4 class="drag static"><%= JSON.parse(pkt.resume)[0].Company %></h4>
+			<h4 class="drag static"><%= JSON.parse(pkt.resume)[0].Position %></h4>
 			<% } %>
 			<p class="drag static"><%= pkt.Intro %></p>
 			<h5 class="drag">Phone: <span class="static"><%= pkt.phone  %></span></h5>
