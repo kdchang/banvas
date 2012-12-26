@@ -341,9 +341,9 @@ function show_card(event){
 					edit_status=0;
 				}else{
 					$(".static").unbind('click');
-					$(".drag").draggable('destroy');
+					$(".drag").draggable('destroy').css('cursor','');
 					$("canvas").draggable('destroy');
-					$('div#drag-bound').html2canvas({});
+					$('#drag-bound').html2canvas();
 					$(this).html("編輯");
 					edit_status=1;
 				}
