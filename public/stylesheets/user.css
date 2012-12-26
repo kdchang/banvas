@@ -2,6 +2,9 @@ img, p, span{
 	margin : 0px;
     display : inline-block;
 }
+ul{
+	text-decoration:none;
+}
 div.block{
     margin : 20px auto;
     width: 700px;

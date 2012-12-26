@@ -135,12 +135,12 @@ function edit_mode(event){
 			$(this).unbind('click').bind('click',edit_mode);
 		});
 		if($('.school.static').length==0){
-			$('<br><span>公司</span><p class="school static"></p>').appendTo('span.id');
-			$('<input autofocus="autofocus" class="editing" type="text" placeholder="公司">').appendTo('p.school');
+			$('<br><span>公司</span><p class="school changing"></p>').appendTo('span.id');
+			$('<input autofocus="autofocus" class="editing" type="text" placeholder="公司">').appendTo('p.school').bind('focusout',save);
 		}
 		if($('.intro.static').length==0){
-			$('<br><span>關於我：</span><p class="intro static"></p>').appendTo('span.id');
-			$('<input autofocus="autofocus" class="editing" type="text" placeholder="關於我">').appendTo('p.intro');
+			$('<br><span>關於我：</span><p class="intro changing"></p>').appendTo('span.id');
+			$('<input autofocus="autofocus" class="editing" type="text" placeholder="關於我">').appendTo('p.intro').bind('focusout',save);
 		}
 		$(".static").click(edit).change(save).end();
 		$('<button class="temp head_change btn btn-info">+</button>').insertAfter('img.head').click(function(){
@@ -150,6 +150,10 @@ function edit_mode(event){
 			event.stopPropagation();
 			$(this).parent('li').remove();
 		});
+		$('<button class="temp btn btn-info">+</button>').appendTo('.resume_header').click(function(){
+			$('<li><p class="changing"><input autofocus="autofocus" class=\"editing\" type="text" value="default"></p></li>').appendTo('ul.resume').children('p').bind('focusout',save);
+		});
+		$('<button class="temp btn btn-info" style="float : right;">Add Social Network Link</button>').appendTo('div.social').click(Social_url);
 		$('<button class="temp btn btn-info">+</button>').appendTo('.skill_header').click(function(){
 			$('<li><p class="changing"><input autofocus="autofocus" class=\"editing\" type="text" value="default"></p></li>').appendTo('ul.skill').children('p').bind('focusout',save);
 		});
