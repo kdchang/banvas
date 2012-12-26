@@ -16,7 +16,7 @@
         padding-bottom: 0px;
         position: relative;
       }
-      
+
     </style>
     <link href="/stylesheets/style.css" rel="stylesheet">
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -102,11 +102,12 @@
 			</a>                        
 		</div>
 		<div class="block">
+			
 			<h3>背景：</h3>
 			<h4 class="resume_header">學歷與工作經歷:</h4>
 			<ul class="resume">
 			<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
-				<li><img class="icon" id="company" src="/material/ntulogo.jpg" ><p class="company static"><%= resume_temp[i].Company %></p></li>
+				<li style="height: 80px;"><img class="icon" id="company" src="/material/ntulogo.jpg" >&nbsp &nbsp<p class="company static"><%= resume_temp[i].Company %></p></li>
 			<% } %>
 			</ul>
 		</div>
