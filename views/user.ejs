@@ -80,7 +80,7 @@
           <div class="person block">
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
-				<h4 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h4>
+				<h2 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h2>
 				<% var resume_temp=JSON.parse(pkt.resume); 
 				 if(resume_temp.length!=0 && resume_temp[0].Company.length!=0 ){ %>
 				<span ><p>現職：</p></span>
