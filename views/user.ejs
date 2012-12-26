@@ -83,16 +83,16 @@
 				<h2 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h2>
 				<% var resume_temp=JSON.parse(pkt.resume); 
 				 if(resume_temp.length!=0 && resume_temp[0].Company.length!=0 ){ %>
-				<span ><p>現職：</p></span>
+				<h4><p>現職：</p></h4>
 				<p class="school static"><%= resume_temp[0].Company %></p><br>
 				<% } %>
 				<% if(resume_temp.length!=0 && resume_temp[0].Position.length!=0 ){ %>
-				<span>職位:</span>
+				<h4>職位:</h4>
 				<p class="position static"><%= resume_temp[0].Position %></p>
 				<% } %>
 				<% if( pkt.About_me.length!=0 ){ %>
 				<br>
-				<span>關於我:</span><p class="intro static"><%= pkt.About_me %></p>
+				<h4>關於我:</h4><p class="intro static"><%= pkt.About_me %></p>
 				<% } %>
 			</span>
 		  </div>
