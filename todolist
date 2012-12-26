@@ -1,0 +1,28 @@
+Main_page:
+	login & logout & register // Done
+	change status bar from login to logout when user have logged in// Done
+	Emphsize the login failed error on the page.// Done
+	register input css
+
+Confirmation_page:
+	A page when confirmation failed// Done
+	CSS for confirmation page
+
+User_page:
+	Avoid HTML injection.
+	Search function implementation.
+	Timeline event creation bugs// Done
+	Skill Point add!!!
+	Emphasize the 'done' button when editing
+	skill auto focus when add
+	better message when edit fail
+
+Collection_page:
+	ALLLLLLLLLLL
+
+Search_Page:
+	ALLLLLLLLLLL
+
+
+modify:
+	can't change name!!!

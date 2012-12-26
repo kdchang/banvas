@@ -1,0 +1,52 @@
+img, p, span{
+	margin : 0px;
+    display : inline-block;
+}
+div.block{
+    margin : 20px auto;
+    width: 700px;
+}
+div#backboard{
+	width: 100%;
+}
+div.hero-unit{
+	width: 800px;
+}
+.searchbar {
+    position : absolute;
+    left : 50%;
+    margin-left:-400px;
+    padding: 5px 0px;
+    width: 800px;
+}
+ul.account{
+    left: -100px;
+	padding: 10px;
+}
+.hero-unit{
+	position: relative;
+}
+img.head {
+    width : 150px;
+}
+span.id{
+    width : 500px;
+}
+img.icon.social{
+    height : 25px;
+    width : 25px;
+}
+img.icon{
+    height : 60px;
+    width : 60px;
+}
+ul.skill li{
+	background-color: #ccc;
+	display: inline-block;
+	height : 25px;
+	width: 70%;
+}
+td{
+	height: 4px;
+	width: 4px;
+}

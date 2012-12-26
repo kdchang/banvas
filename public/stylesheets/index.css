@@ -1,0 +1,45 @@
+div#backboard{
+	width:100%;
+}
+
+.account{
+	margin-left:-190px;
+	padding: 10px;
+}
+.account input[type="text"],input[type="password"]{
+	height: 32px;
+}
+.slide_container{
+	margin:auto;
+	position : relative;
+	width: 600px;
+	height: 250px;
+}
+.slide ul{
+	position : absolute;
+	right: 5%;
+	bottom : 5%;
+	z-index:2;
+}
+.slide li{
+	display :inline-block;
+}
+div.slider{
+	display : none;
+	background-color : transparent;
+	position : absolute;
+	width:600px;
+	height:250px;
+}
+.slide button{
+	width: 5px;
+	height: 10px;
+	background-color: blue;
+	border-radius : 5px ;
+}
+.slide button:hover {
+	background-color: yellow;
+}
+.slide button.focus{
+	background-color: red;
+}
