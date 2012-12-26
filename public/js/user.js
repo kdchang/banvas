@@ -345,6 +345,7 @@ function show_card(event){
 					$("canvas").draggable('destroy');
 					html2canvas($('div#drag-bound'),{
 						onrendered: function( canvas ) {
+							console.log('test');
 							canvas.appendTo('div#drag-bound');
 						}
 					});

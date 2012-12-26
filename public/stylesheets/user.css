@@ -23,7 +23,7 @@ div.hero-unit{
     width: 800px;
 }
 ul.account{
-    left: -100px;
+    left: 40px;
 	padding: 10px;
 }
 .hero-unit{
@@ -43,14 +43,16 @@ img.icon{
     height : 60px;
     width : 60px;
 }
-ul li{
+ul.skill li{
 	//background-color: #ccc;
 	display: inline-block;
 	height : 25px;
 	width: 70%;
 }
 ul.resume li{
+	display: inline-block;
 	height : 40px;
+	width: 70%;
 }
 td{
 	height: 4px;

@@ -9,19 +9,7 @@ var async = require('async')
     , imageMagick = gm.subClass({ imageMagick: true })
     , jsdom = require('jsdom')
     , http_get = require('http-get')
-    , request = require('request');   
-
-request( "https://www.facebook.com/poshien.wang", function(error, response, body){
-                        if(!error && response.statusCode == 200){
-                            var jsdom = require('jsdom');
-                            jsdom.env(body, ["http://code.jquery.com/jquery.js"], function(errors,window){
-                                    console.log(window.$('.profilePic').attr('src'));
-                                    console.log(window.$('a').html());
-                            })
-                        }
-                    });
-
-
+    , request = require('request');  
 
 var err_code = require('./err')
     , skill_app = require('./skill_app')
@@ -138,6 +126,14 @@ app.get('/signup/confirmation', function(req, res){
     else res.render('confirmation', {err:err_code.CONFIRM_FAIL, id:req.query.id, token: '0'});
 });
 
+// var import_fb = function(fb, img){
+//     accountdb.findOne({email:fb.email, id:fb.username},function(err, data){
+//         if(err) throw err;
+//         if(data)
+//         else 
+//     })
+// }
+
 app.post('/fb_signup', function(req, res){
     console.log(req.body);
     if( req.body.fb ){
@@ -193,12 +189,30 @@ app.post('/fb_signup', function(req, res){
                     data.resume = JSON.stringify(resume);
                     data.register_date = Date.now();
 
-
+                    console.log(req.body.pic)
+                    http_get.get({url: req.body.pic}, 'public/uploads/'+data.id+'.jpg', function(err, result){
+                        if(err){
+                            console.log(error);
+                            data.save();
+                            res.end(JSON.stringify({err:err_code.SUCCESS}));
+                        }
+                        else{
+                            console.log('file downloaded at: '+result.file);
+                            imageMagick('public/uploads/'+data.id+'.jpg')
+                                .resize(60, 60)
+                                .noProfile()
+                                .write('public/uploads/'+data.id+'_small.jpg', function (err) {
+                                    if(err) throw err;
+                                    if (!err) console.log('done');
+                                });
+                            data.Image_pkt.pictureSmall = data.id+'_small.jpg';
+                            data.Image_pkt.picture = data.id+'.jpg';
+                            data.save();
+                            res.end(JSON.stringify({err:err_code.SUCCESS}));
+                        }
+                    })
 
                     
-                    console.log(data);
-                    data.save();
-                    res.end(JSON.stringify({err:err_code.SUCCESS}));
                 }
             }
         });
@@ -251,8 +265,8 @@ app.post('/:id/status', function(req, res){
             var a = data.toObject();
             f.trim(a, ['password','statistic','collect','modify_date']);
             console.log(a);
-	    res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
-	}
+	       res.end(JSON.stringify({err:err_code.SUCCESS, data:a}));
+	    }
         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
     })
 });
