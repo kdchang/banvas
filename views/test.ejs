@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> 
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+
+    <form class='signup'>
+      Email<input type="text" name='email' value='ddmail2009@gmail.com'>
+      Password<input type="password" name='password' value='asd'>
+      Name<input type="text" name='first_name' value='111'><input type="text" name='last_name' value='111'>
+      id<input type="text" name='id' value='111'>
+      <button> Signup </button>
+    </form>
+
+
+    <div class='dlogin'>
+      <form class='login'>
+      Email<input type="text" name='email' value='ddmail2009@gmail.com'>
+      Password<input type="password" name='password' value='asd'>
+      <button id='login'>Login</button>
+      </form>
+    </div>
+
+    <div class='dlogout'>
+      <form class='logout'>
+      <button id='logout'>logout</button>
+      </form>
+    </div>
+
+    <div class='dstatus'>
+      <form class='getlist'>
+      <button>getstatus</button>
+      </form>
+      <div class='status'></div>
+    </div>
+
+    <!-- <div>
+      <form method='POST'>
+        <input type='file' name='upload'>
+        <button>upload pic</button>
+      </form>
+    </div> -->
+
+    <div class='dmodify'>
+      <form class='modify'>
+        <input type='text' name='modify' id='modify_item' value='{"School":"NTU", "Skill":"Cook"}'>
+        <button>modify</button>
+      </form>
+    </div>
+
+    <div>
+      <button id='www'>FB</button>
+      <button id='FBpush'>FBPUSH</button>
+    </div>
+    
+    <br/>
+    <div>
+      collect_id <input type="text" name='id' id='collect_id' style='width:30px'>
+      collect_tag <input type='text' name='tag' id='collect_tag' style='width:30px'>
+      <button id="collect_list">collection LIST</button>
+      <button id='collect_save'>collection SAVE</button>
+      <button id='collect_delete'>collection DELETE</button>
+    </div>
+
+    <div>
+      <button id='statistic_load'>Statistic load</button>
+      <div id='statistic'></div>
+    </div>
+
+    <div>
+      <form id='fsearch'>
+        <input type='text' name='search'>
+        <button id='search'>Search</button>
+      </form>
+    </div>
+
+    <div>
+      <input type="text" name='fields'>
+      <button id='all'>ALL account</button>
+      <div id='all_account'>
+      </div>
+    </div>
+
+    <div>
+      <img src='./school_pic/google.jpg'>
+      <input type='text' val="建中" name='pic'>
+      <button id='getpic'>getpic</button>
+    </div>
+
+    <div>
+      ID<input type='text' id='app_detail_id' style='width:30px'>
+      <button id='app_detail'>app detail</button>
+      <div id='detail_app'></div>
+    </div>
+<script>
+  $("#app_detail").click(function(){
+    $.post('/'+$("#app_detail_id").val()+'/app_detail', {token:token}, function(data){
+      $('#detail_app').html(data);
+    }, 'text');
+  })
+
+  $("#getpic").click(function(){
+    $.post('/pic_url', {pic:$("input[name=pic]").val()}, function(data){
+      console.log(data);
+      // $("#pic").append("<img src="+data+">");
+      $("img").attr("src",data);
+    })
+  });
+
+
+  $('#statistic_load').click(function(){
+    $.post('/'+id+'/statistic', {token:token}, function(data){
+      console.log(data);
+      $("#statistic").html(data);
+    },'text');
+  })
+
+  $('#all').click(function(){
+    var query = $("input[name=fields]").val().replace(" ","");
+    query = query.split(",");
+    $.post('/all_list', {query:query}, function(data){
+      console.log(data);
+      $('#all_account').html(data);
+    }, 'text');
+  })
+
+
+  $('#fsearch').submit(function(){
+    $.post('/search', {search:$("#fsearch input[name=search]").val()}, function(data){
+      console.log(data);
+    })
+    return false;
+  })
+
+  $('#collect_save').click(function(){
+    var data = {};
+    data[$('#collect_id').val()] = $('#collect_tag').val()
+    console.log(data);
+    $.post('/'+id+'/collect/save', {token:token, id:data},function(data){
+      console.log(data);
+    }, 'text');
+  });
+
+  $("#collect_list").click(function(){
+    $.post('/'+id+'/collect/list', {token:token}, function(data){
+      console.log(data);
+    }, 'text');
+  });
+
+  $('#collect_delete').click(function(){
+    var data = $('#collect_id').val().replace(' ', '');
+    data = data.split(',');
+
+    console.log('sending: ' + JSON.stringify({token:token, id:data}));
+    $.post('/'+id+'/collect/delete', {token:token, id:data}, function(data){
+      console.log(data);
+    }, 'text');
+  })
+
+// Facebook
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '471817496195401',
+      status     : true,
+      cookie     : true,
+      xfbml      : true
+    });
+
+  };
+
+  (function(d, debug){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document, /*debug*/ false));
+
+      var token = null;
+      var id = null;
+
+      var temp = {};
+      $('#www').click(function(){
+        FB.login(function(response) {
+          if (response.authResponse) {
+            console.log('Welcome!  Fetching your information.... ');
+            console.log(FB.get);
+            FB.api('/me?fields=bio,birthday,education,work', function(response) {
+              console.log(response);
+              for (i in response['education']){
+                if( response['education'][i]['type'] == 'College' || response['education'][i]['type'] == 'Graduate School' ){
+                  console.log(response['education'][i]['school']['name'])
+                  temp['School'] = response['education'][i]['school']['name'];
+                }
+              }
+              // temp['Job_exp'] = JSON.stringify(response['work'][0]);
+
+              
+            });
+            FB_status(function(data){
+                console.log(data);
+            })
+          } else console.log('User cancelled login or did not fully authorize.');
+        });
+      });
+
+      $('#FBpush').click(function(){
+        console.log('FBpush!!!');
+        temp['token'] = token;
+        $.post('/'+id+'/modify', temp, function(message){
+          console.log(message);
+        })
+      })
+
+      $('.modify').submit(function(){
+        try{
+          var data = JSON.parse($('#modify_item').val());
+          data['token'] = token;
+          console.log(data);
+          $.post('./'+id+'/modify', data, function(message){
+            console.log(message);
+          }, 'text')
+        }
+        catch(err){
+          console.log(err);
+          console.log('can"t understand midify item')
+        }
+        return false;
+      })
+
+      $('.getlist').submit(function(){
+        $.post("./"+id+'/status', {token: token}, function(data){
+          console.log(data);
+          $('.status').html(data);
+        }, 'text');
+        return false;
+      })
+
+      $('.login').submit(function(){
+        var data = {email:$(".login input[name=email]").val(), password:$('.login input[name="password"]').val()};
+        $.post("./login", data, function(data){
+          token = JSON.parse(data).token;
+          id = JSON.parse(data).id;
+          console.log(data);
+        }, "text");
+        return false;
+      });
+
+      $('.logout').submit(function(){
+        $.post('./logout', {token: token}, function(data){
+          console.log(data);
+        }, 'text')
+        return false;
+      });
+      $(".signup").submit(function(){
+        var data = {email:$(".signup input[name=email]").val(), password:$('.signup input[name=password]').val(), first_name:$('.signup input[name=first_name]').val(), last_name:$('.signup input[name=last_name]').val(), id:$('.signup input[name=id]').val()}
+        $.post('/signup', data , function(data){
+          console.log(data);
+        }, 'text');
+        return false;
+      })
+    </script>
+  </body>
+</html>
+
+<script>
+  var FB_status = function(callback){
+    // var status = {};
+    FB.api('/me?fields=email,first_name,last_name,education,bio,picture.type(large),id,username,link,hometown', function(res){
+      var status = {};
+      status.fb_id = res.id;
+
+      status.first_name = res.first_name;
+      status.last_name = res.last_name;
+      status.email = res.email;
+      status.password = res.id;
+      status.id = res.username;
+
+      status.linked = {};
+      status.linked.Facebook = res.link;
+      status.Intro = res.bio;
+
+      status.location = (res.hometown ? res.hometown.name : undefined );
+      status.School = undefined;
+      for(i in res.education){
+        if(res[i].type=='College'||res[i].type=='Graduate School')
+          status.School = res[i].school;
+      }
+
+      status.Image_pkt = (res.picture ? JSON.stringify({head_url:res.picture.data.url}) : undefined);
+      callback(status);
+    })
+  }
+
+</script>

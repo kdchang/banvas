@@ -1,0 +1,12 @@
+exports.SUCCESS = 0
+exports.NOT_LOGIN = 1
+exports.DATA_INCOM = 2
+exports.CONFIRM_FAIL = 3
+exports.TOKEN_UNMATCH = 4
+exports.USER_FIND_ERROR = 5
+exports.CONFIRM_ERR = 6
+exports.INVALID_OP = 7
+exports.DB_SAVE_ERROR = 8
+exports.PERMISSION_DENIED = 9
+exports.DATA_FORMAT = 10
+exports.DUPLICATE = 11

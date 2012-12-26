@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Banvas 行動名片夾</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/slides.css">
+    <link rel="stylesheet" href="/lib/PhotoStack/css/style.css" type="text/css" media="screen"/>
+    <style type="text/css">
+      body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        position: relative;
+      }
+ /*     #fix-nav-bar{
+        background: rgba(90%, 90%, 90%,0.8);
+      }*/
+
+      /*Gallery*/  
+      <style>
+      span.reference{
+            position:fixed;
+            top:10px;
+            right:10px;
+            font-size:9px;
+      }
+      span.reference a{
+            color:#aaa;
+            text-decoration:none;
+            text-transform:uppercase;
+            margin-left:10px;
+      }
+      span.reference a:hover{
+            color:#ddd;
+      }
+      h1.title{
+          text-indent:-9000px;
+          background:transparent url(title.png) no-repeat top left;
+          width:640px;
+          height:52px;
+          position:absolute;
+          top:15px;
+          left:15px;
+      }  
+      </style>
+    </style>
+    <link href="/stylesheets/style.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <!--<link rel="shortcut icon" href="/material/favicon.ico"> !-->
+	<link rel="stylesheet" href="stylesheets/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/signup.css" />
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="../assets/ico/favicon.png">
+	<link href="stylesheets/jquery.fancybox.css" rel="stylesheet">
+	<link href="/stylesheets/index.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+<!--Nav Fixed Bar!-->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container" id="fix-nav-bar">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/"><strong>Banvas 行動名片夾(Beta)</strong></a>
+            <form class="navbar-form pull-right">
+          	<div class="btn-group">
+			<a class="btn login">登入</a>
+				<ul class="dropdown-menu account">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Email</label>
+							<div class="controls">
+								<input type="text" id="email" placeholder="Email">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Password</label>
+							<div class="controls">
+								<input type="password" id="password" placeholder="Password">
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="controls">
+								<label class="checkbox">
+									<input type="checkbox"> Remember me
+								</label>
+								<div id="sign_in_msg"></div><button type="submit" id="submit" class="btn">Sign in</button>
+				    			<button class="btn btn-primary" id="FB_login">
+				    				<span>Facebook login</span>
+				    			</button> 
+							</div>
+						</div>
+				</ul>
+			</div>
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+	<div id="backboard">
+	</div>
+
+
+    <!--Main Contain!-->
+    <!-- Main hero unit for a primary marketing message or call to action -->
+    <!-- Slide Show index !-->
+<script type="text/template" id="index-view">
+    <div id="container">
+    <div id="example">
+      <div id="slides">
+        <div class="slides_container">
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/jliba/4665625073/" title="145.365 - Happy Bokeh Thursday! | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-1.jpg" width="570" height="270" alt="Slide 1"></a>
+            <div class="caption" style="bottom:0">
+              <p>Happy Bokeh Thursday!</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/stephangeyer/3020487807/" title="Taxi | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-2.jpg" width="570" height="270" alt="Slide 2"></a>
+            <div class="caption">
+              <p>Taxi</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/childofwar/2984345060/" title="Happy Bokeh raining Day | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-3.jpg" width="570" height="270" alt="Slide 3"></a>
+            <div class="caption">
+              <p>Happy Bokeh raining Day</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/b-tal/117037943/" title="We Eat Light | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-4.jpg" width="570" height="270" alt="Slide 4"></a>
+            <div class="caption">
+              <p>We Eat Light</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/bu7amd/3447416780/" title="&ldquo;I must go down to the sea again, to the lonely sea and the sky; and all I ask is a tall ship and a star to steer her by.&rdquo; | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-5.jpg" width="570" height="270" alt="Slide 5"></a>
+            <div class="caption">
+              <p>&ldquo;I must go down to the sea again, to the lonely sea and the sky...&rdquo;</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/streetpreacher/2078765853/" title="twelve.inch | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-6.jpg" width="570" height="270" alt="Slide 6"></a>
+            <div class="caption">
+              <p>twelve.inch</p>
+            </div>
+          </div>
+          <div class="slide">
+            <a href="http://www.flickr.com/photos/aftab/3152515428/" title="Save my love for loneliness | Flickr - Photo Sharing!" target="_blank"><img src="images/slides/slide-7.jpg" width="570" height="270" alt="Slide 7"></a>
+            <div class="caption">
+              <p>Save my love for loneliness</p>
+            </div>
+          </div>
+        </div>
+        <a href="#" class="prev"><img src="images/slides/arrow-prev.png" width="24" height="43" alt="Arrow Prev"></a>
+        <a href="#" class="next"><img src="images/slides/arrow-next.png" width="24" height="43" alt="Arrow Next"></a>
+      </div>
+      <img src="images/slides/example-frame.png" width="739" height="341" alt="Example Frame" id="frame">
+    </div>
+
+</script>
+
+
+  <!--Center Box Container!-->
+    <div class="container" id="mainbody">     
+      <div id="space"></div>  
+    <div class="container">  
+      <div class="container slide_container"> 
+      </div>  
+     
+
+
+
+    <!--Register Form!-->
+<script type="text/template" id="register-view">  
+    <div class="container">
+      <section class="main">
+        <form class="form clearfix">
+          <h1><span class="sign-up">免費註冊一個自己的名片</span></h1>
+            <p class="reg">    
+                <label for="firstName"><i class="icon-user"></i>Username</label>
+                <input type="text" class="name" id="firstname" placeholder="First Name">
+                <input type="text" class="name" id="lastname" placeholder="Last name">
+                <label for="email"><i class="icon-envelope"></i>Email</label>
+                <input type="email" id="email" placeholder="Email Address">
+                <label for="password"><i class="icon-lock"></i>Password</label>
+                <input type="password" id="password" placeholder="New Password" name="Password">
+                <label for="check"><i class="icon-check-empty"></i>Confirm Password</label>
+                <input type="password" id="check" placeholder="Confirm Password" name="Password"> 
+            </p>
+          <div id="reg_error"></div>
+            <button class="sign" id="register">
+              <span>Sign in</span>
+            </button>
+            <button class="log-fb">
+              <span>Facebook login</span>
+            </button> 
+        </form>
+      </section>
+    </div>
+</script>
+
+<!--Gallery Show!-->
+<div id="space"></div> 
+<div id="space"></div>  
+<!--Sing Up Button!-->
+    <div style="margin-left:565px;"><a href="/signup"><button class="btn btn-large btn-primary" type="button">建立自己的名片</button></a></div>
+    <div id="space"></div>
+
+<div class="container">
+</div>
+    <div id="ps_slider" class="ps_slider">
+      <a class="prev disabled"></a>
+      <a class="next disabled"></a>
+      <div id="ps_albums">
+        <div class="ps_album thumbnail" style="opacity:0;"> 
+     <img src="/uploads/thumbnails/KD.Chang.png" alt=""><div class="ps_desc"><h2>張凱迪</h2><span>Growth Hacker</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/uploads/thumbnails/lin.png" alt=""/><div class="ps_desc"><h2>林則如</h2><span>iOS Developer</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/uploads/thumbnails/lucien.png" alt=""/><div class="ps_desc"><h2>李柏緯</h2><span>Font-end Developer</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/uploads/thumbnails/wang.png" alt=""/><div class="ps_desc"><h2>王柏軒</h2><span>Back-end Hacker</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/uploads/thumbnails/welly.png" alt=""/><div class="ps_desc"><h2>魏佑霖</h2><span>Crash Maker</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/lib/PhotoStack/albums/album6/thumb/thumb.jpg" alt=""/><div class="ps_desc"><h2>Run away</h2><span>Without contraries is no progression. Attraction and repulsion, reason and energy, love and hate, are necessary to human existence.</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/lib/PhotoStack/albums/album7/thumb/thumb.jpg" alt=""/><div class="ps_desc"><h2>Longing</h2><span>So hath under years itself seasons life divided signs light were god fruitful evening a. Fruitful.</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/lib/PhotoStack/albums/album8/thumb/thumb.jpg" alt=""/><div class="ps_desc"><h2>Heartbreaks</h2><span>A light moving. Moved was abundantly created, over sixth above grass after grass.</span></div></div>
+        <div class="ps_album" style="opacity:0;"><img src="/lib/PhotoStack/albums/album9/thumb/thumb.jpg" alt=""/><div class="ps_desc"><h2>Fearful Water</h2><span>If the doors of perception were cleansed everything would appear to man as it is, infinite.</span></div></div>
+      </div>  
+    </div>
+    
+    <div id="ps_overlay" class="ps_overlay" style="display:none;"></div>
+    <a id="ps_close" class="ps_close" style="display:none;"></a>
+    <div id="ps_container" class="ps_container" style="display:none;">
+      <a id="ps_next_photo" class="ps_next_photo" style="display:none;"></a>
+    </div>
+</div>
+<div id="space"></div> 
+<div id="space"></div> 
+<div id="space"></div> 
+<div id="space"></div> 
+<div id="space"></div> 
+<div id="space"></div> 
+
+    <!-- Example row of columns -->
+// <script type="text/template" id="index-columns">    
+//       <div class="row">
+//         <div class="span4">
+//           <i>	
+//           <h2>個人品牌</h2>
+//           <div id="brand">
+//           	<image src="/images/brand.png"></image>
+//           </div>
+//           <i>
+//           <p>透過編輯您的個人頁面，可以呈現您過去的經歷和專案作品，讓自己的專業能力被看到，進而行銷個人品牌</p>
+//           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+//         </div>
+//         <div class="span4">
+//           <h2>專業連結</h2>
+//           <div id="link">
+//           	<image src="/images/link.png"></image>
+//           </div>
+//           <i>
+//           <p>編輯自己的個人頁面後可快速產生QR CODE名片送印，讓收到您名片的朋友可透過我們的app收藏您的名片</p>
+//           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+//        </div>
+//         <div class="span4">
+//           <h2>隨時瀏覽</h2>
+//           <div id="mobile">
+//           	<image src="/images/mobile.png"></image>
+//           </div>
+//           <i>
+//           <p>透過雲端管理收到的名片資料，可以跨平台隨時瀏覽收藏的名片資訊，方便洽公前先行瀏覽</p>
+//           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+//         </div>
+//     </div>
+// </script>  
+
+      <hr>
+
+      <footer>
+        <p>&copy; Copyright Banvas 行動名片夾 All rights reserved.</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+	  <script type="text/javascript" src="/js/jquery-1.8.3.js"></script>
+	  <script type="text/javascript" src="/js/jquery-ui-1.9.2.custom.js"></script>
+    <script src="/assets/js/bootstrap-transition.js"></script>
+    <script src="/assets/js/bootstrap-alert.js"></script>
+    <script src="/assets/js/bootstrap-modal.js"></script>
+    <script src="/assets/js/bootstrap-dropdown.js"></script>
+    <script src="/assets/js/bootstrap-scrollspy.js"></script>
+    <script src="/assets/js/bootstrap-tab.js"></script>
+    <script src="/assets/js/bootstrap-tooltip.js"></script>
+    <script src="/assets/js/bootstrap-popover.js"></script>
+    <script src="/assets/js/bootstrap-button.js"></script>
+    <script src="/assets/js/bootstrap-collapse.js"></script>
+    <script src="/assets/js/bootstrap-carousel.js"></script>
+    <script src="/assets/js/bootstrap-typeahead.js"></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
+    <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
+    <script type="text/javascript" src="/js/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script src="/js/slides.jquery.js"></script>
+    <script src="/js/slides.min.jquery.js"></script>
+    <!--<script src="/js/gallery.js"></script>!-->
+    <!--jQuery Slider!-->
+    <script>
+    $(function(){
+      $('#slides').slides({
+        preload: true,
+        preloadImage: '/images/slides/loading.gif',
+        play: 5000,
+        pause: 2500,
+        hoverPause: true,
+        animationStart: function(current){
+          $('.caption').animate({
+            bottom:-35
+          },100);
+          if (window.console && console.log) {
+            // example return of current slide number
+            console.log('animationStart on slide: ', current);
+          };
+        },
+        animationComplete: function(current){
+          $('.caption').animate({
+            bottom:0
+          },200);
+          if (window.console && console.log) {
+            // example return of current slide number
+            console.log('animationComplete on slide: ', current);
+          };
+        },
+        slidesLoaded: function() {
+          $('.caption').animate({
+            bottom:0
+          },200);
+        }
+      });
+    });
+  </script>
+  
+<script type="text/javascript">
+            $(function() {
+        /**
+        * navR,navL are flags for controlling the albums navigation
+        * first gives us the position of the album on the left
+        * positions are the left positions for each of the 5 albums displayed at a time
+        */
+                var navR,navL = false;
+        var first   = 1;
+        var positions   = {
+          '0'   : 0,
+          '1'   : 170,
+          '2'   : 340,
+          '3'   : 510,
+          '4'   : 680
+        }
+        var $ps_albums    = $('#ps_albums');
+        /**
+        * number of albums available
+        */
+        var elems     = $ps_albums.children().length;
+        var $ps_slider    = $('#ps_slider');
+        
+        /**
+        * let's position all the albums on the right side of the window
+        */
+        var hiddenRight   = $(window).width() - $ps_albums.offset().left;
+        $ps_albums.children('div').css('left',hiddenRight + 'px');
+        
+        /**
+        * move the first 5 albums to the viewport
+        */
+        $ps_albums.children('div:lt(5)').each(
+          function(i){
+            var $elem = $(this);
+            $elem.animate({'left': positions[i] + 'px','opacity':1},800,function(){
+              if(elems > 5)
+                enableNavRight();
+            });
+          }
+        );
+        
+        /**
+        * next album
+        */
+        $ps_slider.find('.next').bind('click',function(){
+          if(!$ps_albums.children('div:nth-child('+parseInt(first+5)+')').length || !navR) return;
+          disableNavRight();
+          disableNavLeft();
+          moveRight();
+        });
+        
+        /**
+        * we move the first album (the one on the left) to the left side of the window
+        * the next 4 albums slide one position, and finally the next one in the list
+        * slides in, to fill the space of the first one
+        */
+        function moveRight () {
+          var hiddenLeft  = $ps_albums.offset().left + 163;
+          
+          var cnt = 0;
+          $ps_albums.children('div:nth-child('+first+')').animate({'left': - hiddenLeft + 'px','opacity':0},500,function(){
+              var $this = $(this);
+              $ps_albums.children('div').slice(first,parseInt(first+4)).each(
+                function(i){
+                  var $elem = $(this);
+                  $elem.animate({'left': positions[i] + 'px'},800,function(){
+                    ++cnt;
+                    if(cnt == 4){
+                      $ps_albums.children('div:nth-child('+parseInt(first+5)+')').animate({'left': positions[cnt] + 'px','opacity':1},500,function(){
+                        //$this.hide();
+                        ++first;
+                        if(parseInt(first + 4) < elems)
+                          enableNavRight();
+                        enableNavLeft();
+                      });
+                    }   
+                  });
+                }
+              );    
+          });
+        }
+        
+        /**
+        * previous album
+        */
+        $ps_slider.find('.prev').bind('click',function(){
+          if(first==1  || !navL) return;
+          disableNavRight();
+          disableNavLeft();
+          moveLeft();
+        });
+        
+        /**
+        * we move the last album (the one on the right) to the right side of the window
+        * the previous 4 albums slide one position, and finally the previous one in the list
+        * slides in, to fill the space of the last one
+        */
+        function moveLeft () {
+          var hiddenRight   = $(window).width() - $ps_albums.offset().left;
+        
+          var cnt = 0;
+          var last= first+4;
+          $ps_albums.children('div:nth-child('+last+')').animate({'left': hiddenRight + 'px','opacity':0},500,function(){
+              var $this = $(this);
+              $ps_albums.children('div').slice(parseInt(last-5),parseInt(last-1)).each(
+                function(i){
+                  var $elem = $(this);
+                  $elem.animate({'left': positions[i+1] + 'px'},800,function(){
+                    ++cnt;
+                    if(cnt == 4){
+                      $ps_albums.children('div:nth-child('+parseInt(last-5)+')').animate({'left': positions[0] + 'px','opacity':1},500,function(){
+                        //$this.hide();
+                        --first;
+                        enableNavRight();
+                        if(first > 1)
+                          enableNavLeft();
+                      });
+                    }                   
+                  });
+                }
+              );
+          });
+        }
+        
+        /**
+        * disable or enable albums navigation
+        */
+        function disableNavRight () {
+          navR = false;
+          $ps_slider.find('.next').addClass('disabled');
+        }
+        function disableNavLeft () {
+          navL = false;
+          $ps_slider.find('.prev').addClass('disabled');
+        }
+        function enableNavRight () {
+          navR = true;
+          $ps_slider.find('.next').removeClass('disabled');
+        }
+        function enableNavLeft () {
+          navL = true;
+          $ps_slider.find('.prev').removeClass('disabled');
+        }   
+        
+        var $ps_container   = $('#ps_container');
+        var $ps_overlay   = $('#ps_overlay');
+        var $ps_close   = $('#ps_close');
+        /**
+        * when we click on an album,
+        * we load with AJAX the list of pictures for that album.
+        * we randomly rotate them except the last one, which is
+        * the one the User sees first. We also resize and center each image.
+        */
+        $ps_albums.children('div').bind('click',function(){
+          var $elem = $(this);
+          var album_name  = 'album' + parseInt($elem.index() + 1);
+          var $loading  = $('<div />',{className:'loading'});
+          $elem.append($loading);
+          $ps_container.find('img').remove();
+          $.get('photostack.php', {album_name:album_name} , function(data) {
+            var items_count = data.length;
+            for(var i = 0; i < items_count; ++i){
+              var item_source = data[i];
+              var cnt     = 0;
+              $('<img />').load(function(){
+                var $image = $(this);
+                ++cnt;
+                resizeCenterImage($image);
+                $ps_container.append($image);
+                var r   = Math.floor(Math.random()*41)-20;
+                if(cnt < items_count){
+                  $image.css({
+                    '-moz-transform'  :'rotate('+r+'deg)',
+                    '-webkit-transform' :'rotate('+r+'deg)',
+                    'transform'     :'rotate('+r+'deg)'
+                  });
+                }
+                if(cnt == items_count){
+                  $loading.remove();
+                  $ps_container.show();
+                  $ps_close.show();
+                  $ps_overlay.show();
+                }
+              }).attr('src',item_source);
+            }
+          },'json');
+        });
+        
+        /**
+        * when hovering each one of the images, 
+        * we show the button to navigate through them
+        */
+        $ps_container.live('mouseenter',function(){
+          $('#ps_next_photo').show();
+        }).live('mouseleave',function(){
+          $('#ps_next_photo').hide();
+        });
+        
+        /**
+        * navigate through the images: 
+        * the last one (the visible one) becomes the first one.
+        * we also rotate 0 degrees the new visible picture 
+        */
+        $('#ps_next_photo').bind('click',function(){
+          var $current  = $ps_container.find('img:last');
+          var r     = Math.floor(Math.random()*41)-20;
+          
+          var currentPositions = {
+            marginLeft  : $current.css('margin-left'),
+            marginTop : $current.css('margin-top')
+          }
+          var $new_current = $current.prev();
+          
+          $current.animate({
+            'marginLeft':'250px',
+            'marginTop':'-385px'
+          },250,function(){
+            $(this).insertBefore($ps_container.find('img:first'))
+                 .css({
+                  '-moz-transform'  :'rotate('+r+'deg)',
+                  '-webkit-transform' :'rotate('+r+'deg)',
+                  'transform'     :'rotate('+r+'deg)'
+                })
+                 .animate({
+                  'marginLeft':currentPositions.marginLeft,
+                  'marginTop' :currentPositions.marginTop
+                  },250,function(){
+                    $new_current.css({
+                      '-moz-transform'  :'rotate(0deg)',
+                      '-webkit-transform' :'rotate(0deg)',
+                      'transform'     :'rotate(0deg)'
+                    });
+                 });
+          });
+        });
+        
+        /**
+        * close the images view, and go back to albums
+        */
+        $('#ps_close').bind('click',function(){
+          $ps_container.hide();
+          $ps_close.hide();
+          $ps_overlay.fadeOut(400);
+        });
+        
+        /**
+        * resize and center the images
+        */
+        function resizeCenterImage($image){
+          var theImage  = new Image();
+          theImage.src  = $image.attr("src");
+          var imgwidth  = theImage.width;
+          var imgheight   = theImage.height;
+          
+          var containerwidth  = 460;
+          var containerheight = 330;
+          
+          if(imgwidth > containerwidth){
+            var newwidth = containerwidth;
+            var ratio = imgwidth / containerwidth;
+            var newheight = imgheight / ratio;
+            if(newheight > containerheight){
+              var newnewheight = containerheight;
+              var newratio = newheight/containerheight;
+              var newnewwidth =newwidth/newratio;
+              theImage.width = newnewwidth;
+              theImage.height= newnewheight;
+            }
+            else{
+              theImage.width = newwidth;
+              theImage.height= newheight;
+            }
+          }
+          else if(imgheight > containerheight){
+            var newheight = containerheight;
+            var ratio = imgheight / containerheight;
+            var newwidth = imgwidth / ratio;
+            if(newwidth > containerwidth){
+              var newnewwidth = containerwidth;
+              var newratio = newwidth/containerwidth;
+              var newnewheight =newheight/newratio;
+              theImage.height = newnewheight;
+              theImage.width= newnewwidth;
+            }
+            else{
+              theImage.width = newwidth;
+              theImage.height= newheight;
+            }
+          }
+          $image.css({
+            'width'     :theImage.width,
+            'height'    :theImage.height,
+            'margin-top'  :-(theImage.height/2)-10+'px',
+            'margin-left' :-(theImage.width/2)-10+'px'  
+          });
+        }
+            });
+</script>
+
+
+  </body>
+
+<script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/OutTAeuvZEaub5vIbvDXjw.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
+
+<script>
+	$(window).ready(function(){
+		window.fbAsyncInit = function() {
+			FB.init({
+			appId      : '471817496195401',
+			status     : true,
+			cookie     : true,
+			xfbml      : true
+			});
+	  	};
+
+		(function(d, debug){
+			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+			ref.parentNode.insertBefore(js, ref);
+			}(document, /*debug*/ false));
+		
+		console.log('asd');
+		console.log($('#FB_login'));
+		$("#FB_login").click(function(){
+			FB.login(function(data){
+				if(data.status === 'connected'){
+					FB.api('me', function(res){
+						$.post('/login', {email: res.username, password: data.authResponse.accessToken}, function(data){
+							console.log(data);
+						}, 'text');
+					});
+				}
+			})
+			return false;
+		});
+	});
+</script>
+
+</html>
+
+
