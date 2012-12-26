@@ -8,19 +8,19 @@ var async = require('async')
     , gm = require('gm')
     , imageMagick = gm.subClass({ imageMagick: true })
     , jsdom = require('jsdom')
-    , http_get = require('http-get');   
+    , http_get = require('http-get')
+    , request = require('request');   
 
-// jsdom.env({
-//   html: "http://news.ycombinator.com/",
-//   scripts: ["http://code.jquery.com/jquery.js"],
-//   done: function (errors, window) {
-//     var $ = window.$;
-//     console.log("HN Links");
-//     $("td.title:not(:last) a").each(function() {
-//       console.log(" -", $(this).text());
-//     });
-//   }
-// });
+request( "https://www.facebook.com/poshien.wang", function(error, response, body){
+                        if(!error && response.statusCode == 200){
+                            var jsdom = require('jsdom');
+                            jsdom.env(body, ["http://code.jquery.com/jquery.js"], function(errors,window){
+                                    console.log(window.$('.profilePic').attr('src'));
+                                    console.log(window.$('a').html());
+                            })
+                        }
+                    });
+
 
 
 var err_code = require('./err')
@@ -191,8 +191,11 @@ app.post('/fb_signup', function(req, res){
                         resume.push(temp);
                     }
                     data.resume = JSON.stringify(resume);
-
                     data.register_date = Date.now();
+
+
+
+                    
                     console.log(data);
                     data.save();
                     res.end(JSON.stringify({err:err_code.SUCCESS}));

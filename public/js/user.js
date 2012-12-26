@@ -343,7 +343,11 @@ function show_card(event){
 					$(".static").unbind('click');
 					$(".drag").draggable('destroy').css('cursor','');
 					$("canvas").draggable('destroy');
-					$('#drag-bound').html2canvas();
+					html2canvas($('div#drag-bound'),{
+						onrendered: function( canvas ) {
+							canvas.appendTo('div#drag-bound');
+						}
+					});
 					$(this).html("編輯");
 					edit_status=1;
 				}

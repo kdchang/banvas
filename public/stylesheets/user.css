@@ -49,6 +49,9 @@ ul li{
 	height : 25px;
 	width: 70%;
 }
+ul.resume li{
+	height : 40px;
+}
 td{
 	height: 4px;
 	width: 4px;
