@@ -80,10 +80,10 @@
           <div class="person block">
 			<img class="head img-polaroid" src='/uploads/<%= pkt.Image_pkt.picture %>'>
 			<span class="id">
-				<h1 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h1>
+				<h4 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h4>
 				<% var resume_temp=JSON.parse(pkt.resume); 
 				 if(resume_temp.length!=0 && resume_temp[0].Company.length!=0 ){ %>
-				<span ><p>現職</p></span>
+				<span ><p>現職：</p></span>
 				<p class="school static"><%= resume_temp[0].Company %></p><br>
 				<% } %>
 				<% if(resume_temp.length!=0 && resume_temp[0].Position.length!=0 ){ %>
@@ -101,7 +101,7 @@
 			</a>                        
 		</div>
 		<div class="block">
-			<h1>Resume</h1>
+			<h3>背景：</h3>
 			<h4 class="resume_header">學歷與工作經歷:</h4>
 			<ul class="resume">
 			<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
