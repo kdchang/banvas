@@ -6,6 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        
+    <link rel="shortcut icon" href="../favicon.ico"> 
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    
+    <style> 
+      @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700|Handlee);
+      body {
+        background: #eedfcc url(images/bg3.jpg) no-repeat center top;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+      }
+      .container > header h1,
+      .container > header h2 {
+        color: #fff;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+      }
+    </style>
     <!-- Le styles -->
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
     <link href="/stylesheets/style.css" rel="stylesheet">
@@ -43,27 +64,6 @@
 
     </style>
     <link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
-    <link rel="shortcut icon" href="../favicon.ico"> 
-    <link rel="stylesheet" type="text/css" href="lib/sign up/css/style.css" />
-    
-    <style> 
-      @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700|Handlee);
-      body {
-        background: #eedfcc url(images/bg3.jpg) no-repeat center top;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        background-size: cover;
-      }
-      .container > header h1,
-      .container > header h2 {
-        color: #fff;
-        text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-      }
-    </style>
-    <!-- Le styles -->
-
-    <!--<link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">!-->
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -78,54 +78,46 @@
                                    <link rel="shortcut icon" href="/assets/ico/favicon.png">
   </head>
 
-<<<<<<< HEAD
-  <body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
 
-    <div class="container">
-
-      <form class="form-signin">
-        <h3 class="form-signin-heading">快速創造自己的Banvas</h2>
-        <div><a href="#"><img id="fblogin" src=/images/fblogin.png><img><a></div> 
-        <div id="space"></div> 
-        <input type="text" class="input-block-level" placeholder="Email address">
-        <input type="text" class="input-inline-level" placeholder="First Name">
-        <input type="text" class="input-inline-level" placeholder="Last Name">
-        <input type="password" class="input-block-level" placeholder="Password">
-        <input type="password" class="input-block-level" placeholder="Password Confirm">
-        <div>http://banvas.com/<input type="text" class="input-inline-level" placeholder="個人化網址"></div>
-        <button class="btn btn-large btn-primary" type="submit">免費註冊</button>
-      </form>
-
-    </div> <!-- /container -->
-=======
-
-    <div class="container">
+    </head>
+    <body>
+        <div class="container">
+    
+      
+  
+      
       <section class="main">
         <form class="form clearfix">
-          <h1><span class="sign-up">免費建立自己的名片</span></h1>
-            <p class="reg">    
+          <h1><span class="sign-up">註冊一個自己的名片</span></h1>
+          <p>你的名片位置</p>
+          <p class="address">http://banvas.herokuapp.com/<span></span></p>            
+            <p>    
                 <label for="firstName"><i class="icon-user"></i>Username</label>
-                <input type="text" class="name" id="firstname" placeholder="First Name">
-                <input type="text" class="name" id="lastname" placeholder="Last name">
+                <input type="text" id="firstName" name="firstName" placeholder="First Name">
+                <input type="text" id="lastName" name="lastName" placeholder="Last name">
                 <label for="email"><i class="icon-envelope"></i>Email</label>
-                <input type="email" id="email" placeholder="Email Address">
+                <input type="email" id="email" nane="email" placeholder="Email Address">
                 <label for="password"><i class="icon-lock"></i>Password</label>
-                <input type="password" id="password" placeholder="New Password" name="Password">
+                <input type="password" name="password" id="password" placeholder="Password">
                 <label for="check"><i class="icon-check-empty"></i>Confirm Password</label>
-                <input type="password" id="check" placeholder="Confirm Password" name="Password"> 
+                <input type="password" name="check" id="check" placeholder="Confirm Password"> 
             </p>
-          <div id="reg_error"></div>
-            <button class="sign" id="register">
+            <button class="sign" type="submit" name="submit">
               <span>Sign in</span>
             </button>
-            <button class="log-fb">
+            <button class="log-fb" type="submit" name="submit">
               <span>Facebook login</span>
             </button> 
-        </form>
+        </form>​​​​
       </section>
-    </div>
+      
+        </div>
     <!-- jQuery if needed -->
-        <script type="text/javascript" src="/lib/sign up/js/jquery.placeholder.min.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery.placeholder.min.js"></script>
     <script type="text/javascript">
 
     $(function(){
@@ -158,7 +150,6 @@
 
     </script>
 
->>>>>>> 2f435d54be7231141c47379f268cc178a61f4371
 
     <!-- Le javascript
     ================================================== -->
@@ -176,12 +167,6 @@
     <script src="/assets/js/bootstrap-collapse.js"></script>
     <script src="/assets/js/bootstrap-carousel.js"></script>
     <script src="/assets/js/bootstrap-typeahead.js"></script>
-<<<<<<< HEAD
-=======
-    <script type="text/javascript" src='https://raw.github.com/documentcloud/underscore/master/underscore.js'></script>
-    <script type="text/javascript" src='https://raw.github.com/documentcloud/backbone/master/backbone.js'></script>
-    <script type="text/javascript" src="/js/index.js"></script>
->>>>>>> 2f435d54be7231141c47379f268cc178a61f4371
 
   </body>
 </html>

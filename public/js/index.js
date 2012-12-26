@@ -53,7 +53,6 @@ var auditspace = Backbone.View.extend({
 			$('div#reg_error').removeClass('alert alert-error').empty();
 			var id = $('.reg input#email').val().split('@');
 			var reg_obj = {email: $('.reg input#email').val(), password:$('.reg #password').val() , first_name: $('.reg #firstname').val(), last_name: $('.reg #lastname').val(), id: id[0]};
-			console.log(reg_obj);
 			$.post('/signup',reg_obj,function(data){
 				console.log(data);
 				var temp = JSON.parse(data);

@@ -83,7 +83,7 @@
 				<h1 class="name"><span class="first static"><%= pkt.name.first %></span>&nbsp;<span class="last static"><%= pkt.name.last %></span></h1>
 				<% var resume_temp=JSON.parse(pkt.resume); 
 				 if(resume_temp.length!=0 && resume_temp[0].Company.length!=0 ){ %>
-				<span >Company:</span>
+				<span ><p>現職</p></span>
 				<p class="school static"><%= resume_temp[0].Company %></p><br>
 				<% } %>
 				<% if(resume_temp.length!=0 && resume_temp[0].Position.length!=0 ){ %>
@@ -92,7 +92,7 @@
 				<% } %>
 				<% if( pkt.About_me.length!=0 ){ %>
 				<br>
-				<span>Intro:</span><p class="intro static"><%= pkt.About_me %></p>
+				<span>關於我:</span><p class="intro static"><%= pkt.About_me %></p>
 				<% } %>
 			</span>
 		  </div>
@@ -102,7 +102,7 @@
 		</div>
 		<div class="block">
 			<h1 class="resume_header">Resume</h1>
-			<ul class="resume">
+			<h4 class="resume_header">學歷與工作經歷:</h4>
 				<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
 				<!--<li><img class="icon" id="company" src="/material/ntulogo.jpg" >-->
 				<p class="company static"><%= resume_temp[i].Company %></p></li>
@@ -110,16 +110,17 @@
 			</ul>
 		</div>
 		<div class="block">
-			<h1 class="skill_header">Skill</h1>
+			<h4 class="skill_header">專長：</h4>
 			<ul class="skill">
 				<% var skill_temp = JSON.parse(pkt.Skill);
 				 for(var k in skill_temp ) { %>
 				<list stlye="position:relative;"><p class="static"><%= k %></p><%= skill_temp[k] %></li>
+			<ul class="skill">
 				<% } %>
 			</ul>
 		</div>
 		<div class="block" id="timeline">
-			<h1>Timeline</h1>
+			<h4>專案作品：</h4>
 			<div id="timeline-embed"></div>
 		</div>
 		<div class='block'>
@@ -128,14 +129,6 @@
 		</div>
 		</div>
 		  </div>
-	      <!--<div class="hero-unit">
-	        <h1>Welcome to Banvas!</h1>
-	        <p>快速製作您的QR CODE個人名片，用更聰明的方式管理您的專業人際網絡，行銷個人品牌</p>
-	        <p><a href="signup" class="btn btn-primary btn-large">免費註冊 &raquo;</a></p>
-	        
-		  </div>-->
-		  
-
 	<div>
       <hr>
 
@@ -285,4 +278,3 @@
   })();
 </script>
 </html>
-

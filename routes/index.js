@@ -30,7 +30,6 @@ module.exports = function(app, accountdb){
     app.get('/:id', function(req, res){
 		accountdb.findOne({id: req.params.id},{_id:0,__v:0}, function(err,data){
 			if(err) throw err;
-		
 			if(data) 
 				res.render('user', {userid: req.params.id,pkt : data,timeline : (data.TimeLine.length==0)?{}: JSON.parse(data.TimeLine)});
 			else 
