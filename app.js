@@ -7,7 +7,21 @@ var async = require('async')
     , fs = require('fs')
     , gm = require('gm')
     , imageMagick = gm.subClass({ imageMagick: true })
-    , jsdom = require('jsdom');
+    , jsdom = require('jsdom')
+    , http_get = require('http-get');   
+
+// jsdom.env({
+//   html: "http://news.ycombinator.com/",
+//   scripts: ["http://code.jquery.com/jquery.js"],
+//   done: function (errors, window) {
+//     var $ = window.$;
+//     console.log("HN Links");
+//     $("td.title:not(:last) a").each(function() {
+//       console.log(" -", $(this).text());
+//     });
+//   }
+// });
+
 
 var err_code = require('./err')
     , skill_app = require('./skill_app')
@@ -494,6 +508,7 @@ app.post('/:id/ios/status', function(req, res){
                             }
                             res.end(JSON.stringify({err:err_code.SUCCESS,data:result}));
                         }
+                        else if(id.length == 0) res.end(JSON.stringify({err:err_code.SUCCESS, data:[]}));
                         else res.end(JSON.stringify({err:err_code.USER_FIND_ERROR}));
                     })
                 }
