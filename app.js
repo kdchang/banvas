@@ -6,7 +6,8 @@ var async = require('async')
     , mongoose = require('mongoose')
     , fs = require('fs')
     , gm = require('gm')
-    , imageMagick = gm.subClass({ imageMagick: true });
+    , imageMagick = gm.subClass({ imageMagick: true })
+    , jsdom = require('jsdom');
 
 var err_code = require('./err')
     , skill_app = require('./skill_app')
@@ -147,7 +148,7 @@ app.post('/fb_signup', function(req, res){
                 else{
                     var data = new accountdb();
                     data.email = email;
-                    data.password = token;
+                    data.password = fb.id;
                     data.last_name = fb.last_name;
                     data.first_name = fb.first_name;
                     data.id = fb.username;
@@ -264,7 +265,7 @@ app.post('/:id/mod_img', function(req, res) {
     console.log(req.body);
     
     var head_url = req.files.file.path.replace(app.get('uploads_prefix'), '');
-    console.log(req.files.file.path);
+    console.log(req.files);
     accountdb.findOne({'id':req.params.id}).exec(function(err, data){
         if(err) throw err;
         if(data){
@@ -283,11 +284,13 @@ app.post('/:id/mod_img', function(req, res) {
             imageMagick(req.files.file.path)
                 .resize(60, 60)
                 .noProfile()
-                .write('public/uploads/'+req.params.id+'_small.jpg', function (err) {
+                .write(__dirname+'/public/uploads/'+req.params.id+'_small.jpg', function (err) {
                     if (!err) console.log('done');
                 });
+
             data.Image_pkt.picture = head_url;
-            data.Image_pkt.pictureSmall = 'public/uploads/'+req.params.id+'_small.jpg';
+            data.Image_pkt.pictureSmall = req.params.id+'_small.jpg';
+
             data.save();
             res.redirect('/'+req.params.id);
         }

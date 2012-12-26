@@ -698,7 +698,7 @@
           FB.api('me', function(fb){
             console.log(fb);
             var email = fb.email ? fb.email : fb.username;
-            try_login(email, fb_login.authResponse.accessToken, function(err){
+            try_login(email, fb.id, function(err){
               if(err.err == 0){
                 setCookie("Banvas_token",err.token,100);
                 setCookie("Banvas_id",err.id,100);
@@ -708,7 +708,7 @@
                 $.post('/fb_signup',{fb:JSON.stringify(fb), token:fb_login.authResponse.accessToken}, function(err){
                   var err = JSON.parse(err);
                   if(err.err == 0){
-                    try_login(email, fb_login.authResponse.accessToken, function(err){
+                    try_login(email, fb.id, function(err){
                       if(err.err == 0){
                         setCookie("Banvas_token",err.token,100);
                         setCookie("Banvas_id",err.id,100);

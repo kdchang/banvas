@@ -101,11 +101,12 @@
 			</a>                        
 		</div>
 		<div class="block">
-			<h1 class="resume_header">Resume</h1>
+			<h1>Resume</h1>
 			<h4 class="resume_header">學歷與工作經歷:</h4>
-				<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
-				<!--<li><img class="icon" id="company" src="/material/ntulogo.jpg" >-->
-				<p class="company static"><%= resume_temp[i].Company %></p></li>
+			<ul class="resume">
+			<% for(var i = 0; i < resume_temp.length ;i++ ) { %>
+				<li><img class="icon" id="company" src="/material/ntulogo.jpg" >
+				<li><p class="company static"><%= resume_temp[i].Company %></p></li>
 			<% } %>
 			</ul>
 		</div>
@@ -114,8 +115,7 @@
 			<ul class="skill">
 				<% var skill_temp = JSON.parse(pkt.Skill);
 				 for(var k in skill_temp ) { %>
-				<list stlye="position:relative;"><p class="static"><%= k %></p><%= skill_temp[k] %></li>
-			<ul class="skill">
+				<li stlye="position:relative;"><p class="static"><%= k %></p><span class="approve"><%= skill_temp[k] %></span></li>
 				<% } %>
 			</ul>
 		</div>

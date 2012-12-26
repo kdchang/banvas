@@ -124,6 +124,11 @@ function edit_mode(event){
 					console.log(data);
 				});
 			});
+			$('.resume p').each(function(){
+				$.post('/'+Banvas_id+'/resume/add',{'token':Banvas_token,'skill':$(this).html()},function(data){	
+					cosole.log(data);
+				});
+			});
 			var name={"first":$('.first').html(),"last":$('.last').html()};
 			var post_data = {"token": Banvas_token,"name": name,"About_me":$('.intro').html(),"linked":{"Facebook":$('a.FB').attr('href'),"Blogger":'#',"Linkedin":'#'},"TimeLine":JSON.stringify(timeline)}; 
 			$.post('/'+Banvas_id+'/modify',post_data,function(data){
@@ -133,7 +138,7 @@ function edit_mode(event){
 			$(this).unbind('click').bind('click',edit_mode);
 		});
 		if($('.school.static').length==0){
-			$('<br><span>公司</span><p class="school changing"></p>').appendTo('span.id');
+			$('<br><span>公司：</span><p class="school changing"></p>').appendTo('span.id');
 			$('<input autofocus="autofocus" class="editing" type="text" placeholder="公司">').appendTo('p.school').bind('focusout',save);
 		}
 		if($('.intro.static').length==0){
@@ -311,7 +316,7 @@ function show_card(event){
 	//$(b_card).qrcode(document.URL);
 	$.fancybox.open($('<div id="drag-bound" style="width:600px;height:366px;background-image:url(/material/card-front.png);"></div>').append(b_card),{
 		afterShow : function(){
-			$('.qr_container').qrcode({width:200,height:200,text:document.URL});
+			$('.qr_container').qrcode({render:'table',width:200,height:200,text:document.URL});
 			$('#back').click(function(){
 				if(front){
 					b_card_temp=$('.b_card_content').html();
