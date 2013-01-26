@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 All response returned is descripted in class attribute named 'err', ex: {err:0}
 
 the error codes are referenced below
@@ -124,3 +125,9 @@ STATUS number
 9                    : permission denied, can't change other person's status   
 10                   : Data format is not correct, please check above README & EXAMPLE for   correct data format
 11                   : Data duplicate occured!!!   
+=======
+banvas
+======
+
+a service to create social business card website 
+>>>>>>> ef92937a0cc3de350c409fcd3a173a58b9dc45c9
